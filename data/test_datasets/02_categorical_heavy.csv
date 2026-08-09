@@ -1,0 +1,13 @@
+department,education_level,city,gender,is_manager,subscribed
+Sales,Bachelor,Chicago,Male,True,Yes
+Engineering,Master,New York,Female,False,Yes
+Sales,High School,Chicago,Male,False,No
+HR,Bachelor,San Francisco,Female,True,No
+Engineering,PhD,New York,Male,True,Yes
+Marketing,Bachelor,Chicago,Female,False,Yes
+Sales,Master,San Francisco,Male,False,No
+HR,High School,New York,Female,False,No
+Marketing,Master,Chicago,Male,True,Yes
+Engineering,Bachelor,San Francisco,Female,False,Yes
+Sales,High School,New York,Male,False,No
+HR,Master,Chicago,Female,False,No

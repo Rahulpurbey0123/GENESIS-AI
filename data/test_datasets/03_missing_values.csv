@@ -1,0 +1,11 @@
+feature_a,feature_b,feature_c,category_x,label
+10.5,100,0.5,Low,0
+12.0,,0.7,Medium,0
+,120,0.6,,1
+15.2,130,,High,1
+18.0,,0.9,Low,1
+,150,0.2,Medium,0
+22.4,160,,High,0
+25.0,170,0.1,,1
+,180,0.4,Low,0
+30.1,,0.8,High,1

@@ -1,0 +1,420 @@
+{
+  "01_numerical_classification.csv": {
+    "dip_version": "1.1",
+    "dataset_hash": "cf953949b9e1838795bb00a1f9f634990f97e9a18f4d94c98ee434d1f31f01fe",
+    "dataset": {
+      "name": "01_numerical_classification.csv",
+      "rows": 20,
+      "columns": 6,
+      "feature_count": 5,
+      "memory_bytes": 1092
+    },
+    "schema": {
+      "numeric_features": 5,
+      "categorical_features": 0,
+      "binary_features": 0,
+      "boolean_features": 0,
+      "datetime_features": 0,
+      "numeric_ratio": 1.0,
+      "categorical_ratio": 0.0,
+      "binary_ratio": 0.0
+    },
+    "quality": {
+      "total_missing": 0,
+      "missing_rate": 0.0,
+      "columns_with_missing": 0,
+      "max_column_missing_rate": 0.0,
+      "feature_missingness": {
+        "total_missing": 0,
+        "missing_rate": 0.0,
+        "columns_with_missing": 0,
+        "max_column_missing_rate": 0.0,
+        "per_feature_missing_rates": {
+          "age": 0.0,
+          "trestbps": 0.0,
+          "chol": 0.0,
+          "thalach": 0.0,
+          "oldpeak": 0.0
+        }
+      },
+      "target_missingness": {
+        "missing_count": 0,
+        "missing_rate": 0.0
+      },
+      "duplicate_rows": 0,
+      "duplicate_rate": 0.0
+    },
+    "statistics": {
+      "total_outliers": 6,
+      "outlier_rate": 0.06,
+      "columns_with_outliers": 5,
+      "mean_absolute_skewness": 0.7362,
+      "max_absolute_skewness": 1.0806,
+      "high_correlation_pairs": 0,
+      "max_absolute_correlation": 0.5276
+    },
+    "target": {
+      "name": "target",
+      "task_type": "classification",
+      "class_count": 2,
+      "imbalance_ratio": 1.0,
+      "minority_percentage": 50.0,
+      "class_entropy": 1.0,
+      "regression_stats": null
+    },
+    "complexity_score": 2.17,
+    "complexity_detail": {
+      "label": "Low",
+      "normalized_components": {
+        "missingness": 0.0,
+        "outliers": 0.4,
+        "skewness": 0.2454,
+        "imbalance": 0.0,
+        "dimensionality": 0.5
+      },
+      "weights": {
+        "missingness": 0.2,
+        "outliers": 0.2,
+        "skewness": 0.15,
+        "imbalance": 0.25,
+        "dimensionality": 0.2
+      }
+    },
+    "profiling_time_ms": 52.19
+  },
+  "02_categorical_heavy.csv": {
+    "dip_version": "1.1",
+    "dataset_hash": "c87376d30a74467053c00316619d7fcfeb4e4b73764ebf17b627f79a8192d605",
+    "dataset": {
+      "name": "02_categorical_heavy.csv",
+      "rows": 12,
+      "columns": 6,
+      "feature_count": 5,
+      "memory_bytes": 3449
+    },
+    "schema": {
+      "numeric_features": 0,
+      "categorical_features": 3,
+      "binary_features": 2,
+      "boolean_features": 1,
+      "datetime_features": 0,
+      "numeric_ratio": 0.0,
+      "categorical_ratio": 0.6,
+      "binary_ratio": 0.4
+    },
+    "quality": {
+      "total_missing": 0,
+      "missing_rate": 0.0,
+      "columns_with_missing": 0,
+      "max_column_missing_rate": 0.0,
+      "feature_missingness": {
+        "total_missing": 0,
+        "missing_rate": 0.0,
+        "columns_with_missing": 0,
+        "max_column_missing_rate": 0.0,
+        "per_feature_missing_rates": {
+          "department": 0.0,
+          "education_level": 0.0,
+          "city": 0.0,
+          "gender": 0.0,
+          "is_manager": 0.0
+        }
+      },
+      "target_missingness": {
+        "missing_count": 0,
+        "missing_rate": 0.0
+      },
+      "duplicate_rows": 0,
+      "duplicate_rate": 0.0
+    },
+    "statistics": {
+      "total_outliers": 0,
+      "outlier_rate": 0.0,
+      "columns_with_outliers": 0,
+      "mean_absolute_skewness": 0.0,
+      "max_absolute_skewness": 0.0,
+      "high_correlation_pairs": 0,
+      "max_absolute_correlation": 0.0
+    },
+    "target": {
+      "name": "subscribed",
+      "task_type": "classification",
+      "class_count": 2,
+      "imbalance_ratio": 1.0,
+      "minority_percentage": 50.0,
+      "class_entropy": 1.0,
+      "regression_stats": null
+    },
+    "complexity_score": 1.67,
+    "complexity_detail": {
+      "label": "Low",
+      "normalized_components": {
+        "missingness": 0.0,
+        "outliers": 0.0,
+        "skewness": 0.0,
+        "imbalance": 0.0,
+        "dimensionality": 0.8333
+      },
+      "weights": {
+        "missingness": 0.2,
+        "outliers": 0.2,
+        "skewness": 0.15,
+        "imbalance": 0.25,
+        "dimensionality": 0.2
+      }
+    },
+    "profiling_time_ms": 17.34
+  },
+  "03_missing_values.csv": {
+    "dip_version": "1.1",
+    "dataset_hash": "13fb4dfed49021342270c2ee30fb2209660ebc5a030cbf44bd76cc58f21c69ea",
+    "dataset": {
+      "name": "03_missing_values.csv",
+      "rows": 10,
+      "columns": 5,
+      "feature_count": 4,
+      "memory_bytes": 941
+    },
+    "schema": {
+      "numeric_features": 3,
+      "categorical_features": 1,
+      "binary_features": 0,
+      "boolean_features": 0,
+      "datetime_features": 0,
+      "numeric_ratio": 0.75,
+      "categorical_ratio": 0.25,
+      "binary_ratio": 0.0
+    },
+    "quality": {
+      "total_missing": 10,
+      "missing_rate": 0.25,
+      "columns_with_missing": 4,
+      "max_column_missing_rate": 0.3,
+      "feature_missingness": {
+        "total_missing": 10,
+        "missing_rate": 0.25,
+        "columns_with_missing": 4,
+        "max_column_missing_rate": 0.3,
+        "per_feature_missing_rates": {
+          "feature_a": 0.3,
+          "feature_b": 0.3,
+          "feature_c": 0.2,
+          "category_x": 0.2
+        }
+      },
+      "target_missingness": {
+        "missing_count": 0,
+        "missing_rate": 0.0
+      },
+      "duplicate_rows": 0,
+      "duplicate_rate": 0.0
+    },
+    "statistics": {
+      "total_outliers": 0,
+      "outlier_rate": 0.0,
+      "columns_with_outliers": 0,
+      "mean_absolute_skewness": 0.3419,
+      "max_absolute_skewness": 0.3712,
+      "high_correlation_pairs": 1,
+      "max_absolute_correlation": 0.9942
+    },
+    "target": {
+      "name": "label",
+      "task_type": "classification",
+      "class_count": 2,
+      "imbalance_ratio": 1.0,
+      "minority_percentage": 50.0,
+      "class_entropy": 1.0,
+      "regression_stats": null
+    },
+    "complexity_score": 3.44,
+    "complexity_detail": {
+      "label": "Medium",
+      "normalized_components": {
+        "missingness": 0.8333,
+        "outliers": 0.0,
+        "skewness": 0.114,
+        "imbalance": 0.0,
+        "dimensionality": 0.8
+      },
+      "weights": {
+        "missingness": 0.2,
+        "outliers": 0.2,
+        "skewness": 0.15,
+        "imbalance": 0.25,
+        "dimensionality": 0.2
+      }
+    },
+    "profiling_time_ms": 12.67
+  },
+  "04_imbalanced_classification.csv": {
+    "dip_version": "1.1",
+    "dataset_hash": "2567b9359765690a23ccdb83449a2cf0bdf3eeda263ef795754abc61fe70b62c",
+    "dataset": {
+      "name": "04_imbalanced_classification.csv",
+      "rows": 20,
+      "columns": 4,
+      "feature_count": 3,
+      "memory_bytes": 772
+    },
+    "schema": {
+      "numeric_features": 3,
+      "categorical_features": 0,
+      "binary_features": 0,
+      "boolean_features": 0,
+      "datetime_features": 0,
+      "numeric_ratio": 1.0,
+      "categorical_ratio": 0.0,
+      "binary_ratio": 0.0
+    },
+    "quality": {
+      "total_missing": 0,
+      "missing_rate": 0.0,
+      "columns_with_missing": 0,
+      "max_column_missing_rate": 0.0,
+      "feature_missingness": {
+        "total_missing": 0,
+        "missing_rate": 0.0,
+        "columns_with_missing": 0,
+        "max_column_missing_rate": 0.0,
+        "per_feature_missing_rates": {
+          "amount": 0.0,
+          "v1": 0.0,
+          "v2": 0.0
+        }
+      },
+      "target_missingness": {
+        "missing_count": 0,
+        "missing_rate": 0.0
+      },
+      "duplicate_rows": 0,
+      "duplicate_rate": 0.0
+    },
+    "statistics": {
+      "total_outliers": 6,
+      "outlier_rate": 0.1,
+      "columns_with_outliers": 3,
+      "mean_absolute_skewness": 2.8224,
+      "max_absolute_skewness": 2.8933,
+      "high_correlation_pairs": 3,
+      "max_absolute_correlation": 0.9968
+    },
+    "target": {
+      "name": "is_fraud",
+      "task_type": "classification",
+      "class_count": 2,
+      "imbalance_ratio": 9.0,
+      "minority_percentage": 10.0,
+      "class_entropy": 0.469,
+      "regression_stats": null
+    },
+    "complexity_score": 4.4,
+    "complexity_detail": {
+      "label": "Medium",
+      "normalized_components": {
+        "missingness": 0.0,
+        "outliers": 0.6667,
+        "skewness": 0.9408,
+        "imbalance": 0.4211,
+        "dimensionality": 0.3
+      },
+      "weights": {
+        "missingness": 0.2,
+        "outliers": 0.2,
+        "skewness": 0.15,
+        "imbalance": 0.25,
+        "dimensionality": 0.2
+      }
+    },
+    "profiling_time_ms": 6.12
+  },
+  "05_regression.csv": {
+    "dip_version": "1.1",
+    "dataset_hash": "1ff50a62b3ac009c2bef01a30d422668d612286c56d2425278e35cf0313b87f1",
+    "dataset": {
+      "name": "05_regression.csv",
+      "rows": 15,
+      "columns": 5,
+      "feature_count": 4,
+      "memory_bytes": 732
+    },
+    "schema": {
+      "numeric_features": 4,
+      "categorical_features": 0,
+      "binary_features": 0,
+      "boolean_features": 0,
+      "datetime_features": 0,
+      "numeric_ratio": 1.0,
+      "categorical_ratio": 0.0,
+      "binary_ratio": 0.0
+    },
+    "quality": {
+      "total_missing": 0,
+      "missing_rate": 0.0,
+      "columns_with_missing": 0,
+      "max_column_missing_rate": 0.0,
+      "feature_missingness": {
+        "total_missing": 0,
+        "missing_rate": 0.0,
+        "columns_with_missing": 0,
+        "max_column_missing_rate": 0.0,
+        "per_feature_missing_rates": {
+          "square_feet": 0.0,
+          "bedrooms": 0.0,
+          "bathrooms": 0.0,
+          "age": 0.0
+        }
+      },
+      "target_missingness": {
+        "missing_count": 0,
+        "missing_rate": 0.0
+      },
+      "duplicate_rows": 0,
+      "duplicate_rate": 0.0
+    },
+    "statistics": {
+      "total_outliers": 0,
+      "outlier_rate": 0.0,
+      "columns_with_outliers": 0,
+      "mean_absolute_skewness": 0.348,
+      "max_absolute_skewness": 0.5304,
+      "high_correlation_pairs": 6,
+      "max_absolute_correlation": 0.9845
+    },
+    "target": {
+      "name": "price",
+      "task_type": "regression",
+      "class_count": null,
+      "imbalance_ratio": null,
+      "minority_percentage": null,
+      "class_entropy": null,
+      "regression_stats": {
+        "mean": 327000.0,
+        "std": 144095.7023,
+        "median": 300000.0,
+        "min": 130000.0,
+        "max": 600000.0,
+        "skewness": 0.4821
+      }
+    },
+    "complexity_score": 1.24,
+    "complexity_detail": {
+      "label": "Low",
+      "normalized_components": {
+        "missingness": 0.0,
+        "outliers": 0.0,
+        "skewness": 0.116,
+        "imbalance": 0.0,
+        "dimensionality": 0.5333
+      },
+      "weights": {
+        "missingness": 0.2,
+        "outliers": 0.2,
+        "skewness": 0.15,
+        "imbalance": 0.25,
+        "dimensionality": 0.2
+      }
+    },
+    "profiling_time_ms": 10.31
+  }
+}
