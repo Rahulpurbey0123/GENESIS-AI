@@ -1,0 +1,1972 @@
+{
+  "01_numerical_classification.csv": {
+    "recommendation_version": "1.1",
+    "task_type": "classification",
+    "candidate_count_before": 10,
+    "candidate_count_after_filtering": 5,
+    "filtering_reduction": 0.5,
+    "top_k": 5,
+    "recommended_count": 5,
+    "top_k_selection_ratio": 1.0,
+    "search_space_reduction": 0.5,
+    "recommendations": [
+      {
+        "rank": 1,
+        "pipeline_id": "classification_logistic_regression",
+        "name": "Logistic Regression Pipeline",
+        "model_family": "linear",
+        "model_name": "LogisticRegression",
+        "score": 0.9775,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.95,
+          "feature_type": 0.95,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.95,
+          "computational": 1.0
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_HIGH_SUITABILITY",
+            "reason": "Logistic Regression Pipeline receives higher suitability under the configured small-dataset heuristic (20 rows)."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_LINEAR_SVM",
+            "reason": "Dataset is predominantly numerical (100.0%), boosting linear suitability under configured rules."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_LINEAR_REGULARIZATION",
+            "reason": "Linear models receive higher suitability under the configured high-dimensional heuristic (dimensionality ratio: 0.2500)."
+          },
+          {
+            "rule_id": "RULE_COMP_LOW_FOOTPRINT",
+            "reason": "Low computational resource footprint enables rapid pipeline evaluation under configured rules."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_logistic_regression",
+          "name": "Logistic Regression Pipeline",
+          "task": "classification",
+          "model_family": "linear",
+          "model_name": "LogisticRegression",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Logistic Regression Classifier",
+              "class_name": "sklearn.linear_model.LogisticRegression"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": false,
+          "computational_cost": "low",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": true
+        }
+      },
+      {
+        "rank": 2,
+        "pipeline_id": "classification_svc",
+        "name": "Support Vector Classifier Pipeline",
+        "model_family": "svm",
+        "model_name": "SVC",
+        "score": 0.95,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.95,
+          "feature_type": 0.95,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.9,
+          "computational": 0.85
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_HIGH_SUITABILITY",
+            "reason": "Support Vector Classifier Pipeline receives higher suitability under the configured small-dataset heuristic (20 rows)."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_LINEAR_SVM",
+            "reason": "Dataset is predominantly numerical (100.0%), boosting svm suitability under configured rules."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_SVM_SUITABILITY",
+            "reason": "SVM receives higher suitability under the configured high-dimensional rule."
+          },
+          {
+            "rule_id": "RULE_COMP_HIGH_SMALL_DATA",
+            "reason": "Higher training complexity offset by small to medium dataset volume."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_svc",
+          "name": "Support Vector Classifier Pipeline",
+          "task": "classification",
+          "model_family": "svm",
+          "model_name": "SVC",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Support Vector Classifier",
+              "class_name": "sklearn.svm.SVC"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "high",
+          "small_data_suitable": true,
+          "large_data_suitable": false,
+          "high_dimensional_suitable": true
+        }
+      },
+      {
+        "rank": 3,
+        "pipeline_id": "classification_hist_gradient_boosting",
+        "name": "HistGradientBoosting Classifier Pipeline",
+        "model_family": "tree_ensemble",
+        "model_name": "HistGradientBoostingClassifier",
+        "score": 0.945,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.8,
+          "computational": 1.0
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "HistGradientBoosting Classifier Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_STANDARD",
+            "reason": "Predominantly numerical feature space (100.0%) is suitable for candidate execution."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_TREE_MODERATE",
+            "reason": "Tree methods receive moderate suitability in high-dimensional feature spaces."
+          },
+          {
+            "rule_id": "RULE_COMP_LOW_FOOTPRINT",
+            "reason": "Low computational resource footprint enables rapid pipeline evaluation under configured rules."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_hist_gradient_boosting",
+          "name": "HistGradientBoosting Classifier Pipeline",
+          "task": "classification",
+          "model_family": "tree_ensemble",
+          "model_name": "HistGradientBoostingClassifier",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "Ordinal Encoder",
+              "class_name": "sklearn.preprocessing.OrdinalEncoder"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "HistGradientBoosting Classifier",
+              "class_name": "sklearn.ensemble.HistGradientBoostingClassifier"
+            }
+          ],
+          "requires_scaling": false,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "low",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": false
+        }
+      },
+      {
+        "rank": 4,
+        "pipeline_id": "classification_random_forest",
+        "name": "Random Forest Classifier Pipeline",
+        "model_family": "tree_ensemble",
+        "model_name": "RandomForestClassifier",
+        "score": 0.93,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.8,
+          "computational": 0.9
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "Random Forest Classifier Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_STANDARD",
+            "reason": "Predominantly numerical feature space (100.0%) is suitable for candidate execution."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_TREE_MODERATE",
+            "reason": "Tree methods receive moderate suitability in high-dimensional feature spaces."
+          },
+          {
+            "rule_id": "RULE_COMP_MEDIUM_STANDARD",
+            "reason": "Moderate computational footprint suitable for standard search execution."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_random_forest",
+          "name": "Random Forest Classifier Pipeline",
+          "task": "classification",
+          "model_family": "tree_ensemble",
+          "model_name": "RandomForestClassifier",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Random Forest Classifier",
+              "class_name": "sklearn.ensemble.RandomForestClassifier"
+            }
+          ],
+          "requires_scaling": false,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "medium",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": false
+        }
+      },
+      {
+        "rank": 5,
+        "pipeline_id": "classification_k_neighbors",
+        "name": "K-Neighbors Classifier Pipeline",
+        "model_family": "knn",
+        "model_name": "KNeighborsClassifier",
+        "score": 0.9,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.5,
+          "computational": 0.9
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "K-Neighbors Classifier Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_STANDARD",
+            "reason": "Predominantly numerical feature space (100.0%) is suitable for candidate execution."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_KNN_PENALTY",
+            "reason": "KNN receives a penalty under the high-dimensionality curse rule (dimensionality ratio: 0.2500)."
+          },
+          {
+            "rule_id": "RULE_COMP_MEDIUM_STANDARD",
+            "reason": "Moderate computational footprint suitable for standard search execution."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_k_neighbors",
+          "name": "K-Neighbors Classifier Pipeline",
+          "task": "classification",
+          "model_family": "knn",
+          "model_name": "KNeighborsClassifier",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "K-Neighbors Classifier",
+              "class_name": "sklearn.neighbors.KNeighborsClassifier"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": false,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "medium",
+          "small_data_suitable": true,
+          "large_data_suitable": false,
+          "high_dimensional_suitable": false
+        }
+      }
+    ],
+    "warnings": [],
+    "dataset_summary": {
+      "name": "01_numerical_classification.csv",
+      "rows": 20,
+      "columns": 6,
+      "feature_count": 5,
+      "complexity_score": 2.17,
+      "complexity_label": "Low",
+      "dataset_size_category": "small",
+      "missingness_level": "none",
+      "imbalance_severity": "none",
+      "high_dimensional": true
+    }
+  },
+  "02_categorical_heavy.csv": {
+    "recommendation_version": "1.1",
+    "task_type": "classification",
+    "candidate_count_before": 10,
+    "candidate_count_after_filtering": 4,
+    "filtering_reduction": 0.6,
+    "top_k": 5,
+    "recommended_count": 4,
+    "top_k_selection_ratio": 1.0,
+    "search_space_reduction": 0.6,
+    "recommendations": [
+      {
+        "rank": 1,
+        "pipeline_id": "classification_hist_gradient_boosting",
+        "name": "HistGradientBoosting Classifier Pipeline",
+        "model_family": "tree_ensemble",
+        "model_name": "HistGradientBoostingClassifier",
+        "score": 0.945,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.8,
+          "computational": 1.0
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "HistGradientBoosting Classifier Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_CATEGORICAL_TREE_BOOST",
+            "reason": "Tree models receive higher suitability for categorical-heavy datasets post-encoding."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_TREE_MODERATE",
+            "reason": "Tree methods receive moderate suitability in high-dimensional feature spaces."
+          },
+          {
+            "rule_id": "RULE_COMP_LOW_FOOTPRINT",
+            "reason": "Low computational resource footprint enables rapid pipeline evaluation under configured rules."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_hist_gradient_boosting",
+          "name": "HistGradientBoosting Classifier Pipeline",
+          "task": "classification",
+          "model_family": "tree_ensemble",
+          "model_name": "HistGradientBoostingClassifier",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "Ordinal Encoder",
+              "class_name": "sklearn.preprocessing.OrdinalEncoder"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "HistGradientBoosting Classifier",
+              "class_name": "sklearn.ensemble.HistGradientBoostingClassifier"
+            }
+          ],
+          "requires_scaling": false,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "low",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": false
+        }
+      },
+      {
+        "rank": 2,
+        "pipeline_id": "classification_random_forest",
+        "name": "Random Forest Classifier Pipeline",
+        "model_family": "tree_ensemble",
+        "model_name": "RandomForestClassifier",
+        "score": 0.93,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.8,
+          "computational": 0.9
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "Random Forest Classifier Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_CATEGORICAL_TREE_BOOST",
+            "reason": "Tree models receive higher suitability for categorical-heavy datasets post-encoding."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_TREE_MODERATE",
+            "reason": "Tree methods receive moderate suitability in high-dimensional feature spaces."
+          },
+          {
+            "rule_id": "RULE_COMP_MEDIUM_STANDARD",
+            "reason": "Moderate computational footprint suitable for standard search execution."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_random_forest",
+          "name": "Random Forest Classifier Pipeline",
+          "task": "classification",
+          "model_family": "tree_ensemble",
+          "model_name": "RandomForestClassifier",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Random Forest Classifier",
+              "class_name": "sklearn.ensemble.RandomForestClassifier"
+            }
+          ],
+          "requires_scaling": false,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "medium",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": false
+        }
+      },
+      {
+        "rank": 3,
+        "pipeline_id": "classification_svc",
+        "name": "Support Vector Classifier Pipeline",
+        "model_family": "svm",
+        "model_name": "SVC",
+        "score": 0.9,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.95,
+          "feature_type": 0.7,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.9,
+          "computational": 0.85
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_HIGH_SUITABILITY",
+            "reason": "Support Vector Classifier Pipeline receives higher suitability under the configured small-dataset heuristic (12 rows)."
+          },
+          {
+            "rule_id": "RULE_FEAT_CATEGORICAL_DISTANCE_PENALTY",
+            "reason": "Encoded categorical features increase distance sparsity, resulting in a lower suitability score."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_SVM_SUITABILITY",
+            "reason": "SVM receives higher suitability under the configured high-dimensional rule."
+          },
+          {
+            "rule_id": "RULE_COMP_HIGH_SMALL_DATA",
+            "reason": "Higher training complexity offset by small to medium dataset volume."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_svc",
+          "name": "Support Vector Classifier Pipeline",
+          "task": "classification",
+          "model_family": "svm",
+          "model_name": "SVC",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Support Vector Classifier",
+              "class_name": "sklearn.svm.SVC"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "high",
+          "small_data_suitable": true,
+          "large_data_suitable": false,
+          "high_dimensional_suitable": true
+        }
+      },
+      {
+        "rank": 4,
+        "pipeline_id": "classification_k_neighbors",
+        "name": "K-Neighbors Classifier Pipeline",
+        "model_family": "knn",
+        "model_name": "KNeighborsClassifier",
+        "score": 0.86,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.7,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.5,
+          "computational": 0.9
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "K-Neighbors Classifier Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_CATEGORICAL_DISTANCE_PENALTY",
+            "reason": "Encoded categorical features increase distance sparsity, resulting in a lower suitability score."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_KNN_PENALTY",
+            "reason": "KNN receives a penalty under the high-dimensionality curse rule (dimensionality ratio: 0.4167)."
+          },
+          {
+            "rule_id": "RULE_COMP_MEDIUM_STANDARD",
+            "reason": "Moderate computational footprint suitable for standard search execution."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_k_neighbors",
+          "name": "K-Neighbors Classifier Pipeline",
+          "task": "classification",
+          "model_family": "knn",
+          "model_name": "KNeighborsClassifier",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "K-Neighbors Classifier",
+              "class_name": "sklearn.neighbors.KNeighborsClassifier"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": false,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "medium",
+          "small_data_suitable": true,
+          "large_data_suitable": false,
+          "high_dimensional_suitable": false
+        }
+      }
+    ],
+    "warnings": [],
+    "dataset_summary": {
+      "name": "02_categorical_heavy.csv",
+      "rows": 12,
+      "columns": 6,
+      "feature_count": 5,
+      "complexity_score": 1.67,
+      "complexity_label": "Low",
+      "dataset_size_category": "small",
+      "missingness_level": "none",
+      "imbalance_severity": "none",
+      "high_dimensional": true
+    }
+  },
+  "03_missing_values.csv": {
+    "recommendation_version": "1.1",
+    "task_type": "classification",
+    "candidate_count_before": 10,
+    "candidate_count_after_filtering": 4,
+    "filtering_reduction": 0.6,
+    "top_k": 5,
+    "recommended_count": 4,
+    "top_k_selection_ratio": 1.0,
+    "search_space_reduction": 0.6,
+    "recommendations": [
+      {
+        "rank": 1,
+        "pipeline_id": "classification_hist_gradient_boosting",
+        "name": "HistGradientBoosting Classifier Pipeline",
+        "model_family": "tree_ensemble",
+        "model_name": "HistGradientBoostingClassifier",
+        "score": 0.935,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 0.9,
+          "imbalance": 1.0,
+          "dimensionality": 0.8,
+          "computational": 1.0
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "HistGradientBoosting Classifier Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_STANDARD",
+            "reason": "Predominantly numerical feature space (75.0%) is suitable for candidate execution."
+          },
+          {
+            "rule_id": "RULE_MISSING_TREE_TOLERANCE",
+            "reason": "Tree-based models receive higher suitability for imputed missing features (25.0% missingness)."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_TREE_MODERATE",
+            "reason": "Tree methods receive moderate suitability in high-dimensional feature spaces."
+          },
+          {
+            "rule_id": "RULE_COMP_LOW_FOOTPRINT",
+            "reason": "Low computational resource footprint enables rapid pipeline evaluation under configured rules."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_hist_gradient_boosting",
+          "name": "HistGradientBoosting Classifier Pipeline",
+          "task": "classification",
+          "model_family": "tree_ensemble",
+          "model_name": "HistGradientBoostingClassifier",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "Ordinal Encoder",
+              "class_name": "sklearn.preprocessing.OrdinalEncoder"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "HistGradientBoosting Classifier",
+              "class_name": "sklearn.ensemble.HistGradientBoostingClassifier"
+            }
+          ],
+          "requires_scaling": false,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "low",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": false
+        }
+      },
+      {
+        "rank": 2,
+        "pipeline_id": "classification_svc",
+        "name": "Support Vector Classifier Pipeline",
+        "model_family": "svm",
+        "model_name": "SVC",
+        "score": 0.93,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.95,
+          "feature_type": 0.95,
+          "missingness": 0.8,
+          "imbalance": 1.0,
+          "dimensionality": 0.9,
+          "computational": 0.85
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_HIGH_SUITABILITY",
+            "reason": "Support Vector Classifier Pipeline receives higher suitability under the configured small-dataset heuristic (10 rows)."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_LINEAR_SVM",
+            "reason": "Dataset is predominantly numerical (75.0%), boosting svm suitability under configured rules."
+          },
+          {
+            "rule_id": "RULE_MISSING_STANDARD_IMPUTE",
+            "reason": "Feature missingness (25.0%) requires mean/median imputation step."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_SVM_SUITABILITY",
+            "reason": "SVM receives higher suitability under the configured high-dimensional rule."
+          },
+          {
+            "rule_id": "RULE_COMP_HIGH_SMALL_DATA",
+            "reason": "Higher training complexity offset by small to medium dataset volume."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_svc",
+          "name": "Support Vector Classifier Pipeline",
+          "task": "classification",
+          "model_family": "svm",
+          "model_name": "SVC",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Support Vector Classifier",
+              "class_name": "sklearn.svm.SVC"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "high",
+          "small_data_suitable": true,
+          "large_data_suitable": false,
+          "high_dimensional_suitable": true
+        }
+      },
+      {
+        "rank": 3,
+        "pipeline_id": "classification_random_forest",
+        "name": "Random Forest Classifier Pipeline",
+        "model_family": "tree_ensemble",
+        "model_name": "RandomForestClassifier",
+        "score": 0.92,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 0.9,
+          "imbalance": 1.0,
+          "dimensionality": 0.8,
+          "computational": 0.9
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "Random Forest Classifier Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_STANDARD",
+            "reason": "Predominantly numerical feature space (75.0%) is suitable for candidate execution."
+          },
+          {
+            "rule_id": "RULE_MISSING_TREE_TOLERANCE",
+            "reason": "Tree-based models receive higher suitability for imputed missing features (25.0% missingness)."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_TREE_MODERATE",
+            "reason": "Tree methods receive moderate suitability in high-dimensional feature spaces."
+          },
+          {
+            "rule_id": "RULE_COMP_MEDIUM_STANDARD",
+            "reason": "Moderate computational footprint suitable for standard search execution."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_random_forest",
+          "name": "Random Forest Classifier Pipeline",
+          "task": "classification",
+          "model_family": "tree_ensemble",
+          "model_name": "RandomForestClassifier",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Random Forest Classifier",
+              "class_name": "sklearn.ensemble.RandomForestClassifier"
+            }
+          ],
+          "requires_scaling": false,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "medium",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": false
+        }
+      },
+      {
+        "rank": 4,
+        "pipeline_id": "classification_k_neighbors",
+        "name": "K-Neighbors Classifier Pipeline",
+        "model_family": "knn",
+        "model_name": "KNeighborsClassifier",
+        "score": 0.88,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 0.8,
+          "imbalance": 1.0,
+          "dimensionality": 0.5,
+          "computational": 0.9
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "K-Neighbors Classifier Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_STANDARD",
+            "reason": "Predominantly numerical feature space (75.0%) is suitable for candidate execution."
+          },
+          {
+            "rule_id": "RULE_MISSING_STANDARD_IMPUTE",
+            "reason": "Feature missingness (25.0%) requires mean/median imputation step."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_BALANCED",
+            "reason": "Class distribution is balanced, receiving maximum imbalance suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_KNN_PENALTY",
+            "reason": "KNN receives a penalty under the high-dimensionality curse rule (dimensionality ratio: 0.4000)."
+          },
+          {
+            "rule_id": "RULE_COMP_MEDIUM_STANDARD",
+            "reason": "Moderate computational footprint suitable for standard search execution."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_k_neighbors",
+          "name": "K-Neighbors Classifier Pipeline",
+          "task": "classification",
+          "model_family": "knn",
+          "model_name": "KNeighborsClassifier",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "K-Neighbors Classifier",
+              "class_name": "sklearn.neighbors.KNeighborsClassifier"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": false,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "medium",
+          "small_data_suitable": true,
+          "large_data_suitable": false,
+          "high_dimensional_suitable": false
+        }
+      }
+    ],
+    "warnings": [],
+    "dataset_summary": {
+      "name": "03_missing_values.csv",
+      "rows": 10,
+      "columns": 5,
+      "feature_count": 4,
+      "complexity_score": 3.44,
+      "complexity_label": "Medium",
+      "dataset_size_category": "small",
+      "missingness_level": "high",
+      "imbalance_severity": "none",
+      "high_dimensional": true
+    }
+  },
+  "04_imbalanced_classification.csv": {
+    "recommendation_version": "1.1",
+    "task_type": "classification",
+    "candidate_count_before": 10,
+    "candidate_count_after_filtering": 5,
+    "filtering_reduction": 0.5,
+    "top_k": 5,
+    "recommended_count": 5,
+    "top_k_selection_ratio": 1.0,
+    "search_space_reduction": 0.5,
+    "recommendations": [
+      {
+        "rank": 1,
+        "pipeline_id": "classification_logistic_regression",
+        "name": "Logistic Regression Pipeline",
+        "model_family": "linear",
+        "model_name": "LogisticRegression",
+        "score": 0.9725,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.95,
+          "feature_type": 0.95,
+          "missingness": 1.0,
+          "imbalance": 0.95,
+          "dimensionality": 0.95,
+          "computational": 1.0
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_HIGH_SUITABILITY",
+            "reason": "Logistic Regression Pipeline receives higher suitability under the configured small-dataset heuristic (20 rows)."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_LINEAR_SVM",
+            "reason": "Dataset is predominantly numerical (100.0%), boosting linear suitability under configured rules."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_CLASS_WEIGHT_BOOST",
+            "reason": "Class-weight-capable candidates receive higher suitability under the configured imbalance heuristic (imbalance ratio: 9.00)."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_LINEAR_REGULARIZATION",
+            "reason": "Linear models receive higher suitability under the configured high-dimensional heuristic (dimensionality ratio: 0.1500)."
+          },
+          {
+            "rule_id": "RULE_COMP_LOW_FOOTPRINT",
+            "reason": "Low computational resource footprint enables rapid pipeline evaluation under configured rules."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_logistic_regression",
+          "name": "Logistic Regression Pipeline",
+          "task": "classification",
+          "model_family": "linear",
+          "model_name": "LogisticRegression",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Logistic Regression Classifier",
+              "class_name": "sklearn.linear_model.LogisticRegression"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": false,
+          "computational_cost": "low",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": true
+        }
+      },
+      {
+        "rank": 2,
+        "pipeline_id": "classification_svc",
+        "name": "Support Vector Classifier Pipeline",
+        "model_family": "svm",
+        "model_name": "SVC",
+        "score": 0.945,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.95,
+          "feature_type": 0.95,
+          "missingness": 1.0,
+          "imbalance": 0.95,
+          "dimensionality": 0.9,
+          "computational": 0.85
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_HIGH_SUITABILITY",
+            "reason": "Support Vector Classifier Pipeline receives higher suitability under the configured small-dataset heuristic (20 rows)."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_LINEAR_SVM",
+            "reason": "Dataset is predominantly numerical (100.0%), boosting svm suitability under configured rules."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_CLASS_WEIGHT_BOOST",
+            "reason": "Class-weight-capable candidates receive higher suitability under the configured imbalance heuristic (imbalance ratio: 9.00)."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_SVM_SUITABILITY",
+            "reason": "SVM receives higher suitability under the configured high-dimensional rule."
+          },
+          {
+            "rule_id": "RULE_COMP_HIGH_SMALL_DATA",
+            "reason": "Higher training complexity offset by small to medium dataset volume."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_svc",
+          "name": "Support Vector Classifier Pipeline",
+          "task": "classification",
+          "model_family": "svm",
+          "model_name": "SVC",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Support Vector Classifier",
+              "class_name": "sklearn.svm.SVC"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "high",
+          "small_data_suitable": true,
+          "large_data_suitable": false,
+          "high_dimensional_suitable": true
+        }
+      },
+      {
+        "rank": 3,
+        "pipeline_id": "classification_hist_gradient_boosting",
+        "name": "HistGradientBoosting Classifier Pipeline",
+        "model_family": "tree_ensemble",
+        "model_name": "HistGradientBoostingClassifier",
+        "score": 0.94,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 1.0,
+          "imbalance": 0.95,
+          "dimensionality": 0.8,
+          "computational": 1.0
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "HistGradientBoosting Classifier Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_STANDARD",
+            "reason": "Predominantly numerical feature space (100.0%) is suitable for candidate execution."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_CLASS_WEIGHT_BOOST",
+            "reason": "Class-weight-capable candidates receive higher suitability under the configured imbalance heuristic (imbalance ratio: 9.00)."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_TREE_MODERATE",
+            "reason": "Tree methods receive moderate suitability in high-dimensional feature spaces."
+          },
+          {
+            "rule_id": "RULE_COMP_LOW_FOOTPRINT",
+            "reason": "Low computational resource footprint enables rapid pipeline evaluation under configured rules."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_hist_gradient_boosting",
+          "name": "HistGradientBoosting Classifier Pipeline",
+          "task": "classification",
+          "model_family": "tree_ensemble",
+          "model_name": "HistGradientBoostingClassifier",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "Ordinal Encoder",
+              "class_name": "sklearn.preprocessing.OrdinalEncoder"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "HistGradientBoosting Classifier",
+              "class_name": "sklearn.ensemble.HistGradientBoostingClassifier"
+            }
+          ],
+          "requires_scaling": false,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "low",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": false
+        }
+      },
+      {
+        "rank": 4,
+        "pipeline_id": "classification_random_forest",
+        "name": "Random Forest Classifier Pipeline",
+        "model_family": "tree_ensemble",
+        "model_name": "RandomForestClassifier",
+        "score": 0.925,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 1.0,
+          "imbalance": 0.95,
+          "dimensionality": 0.8,
+          "computational": 0.9
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "Random Forest Classifier Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_STANDARD",
+            "reason": "Predominantly numerical feature space (100.0%) is suitable for candidate execution."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_CLASS_WEIGHT_BOOST",
+            "reason": "Class-weight-capable candidates receive higher suitability under the configured imbalance heuristic (imbalance ratio: 9.00)."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_TREE_MODERATE",
+            "reason": "Tree methods receive moderate suitability in high-dimensional feature spaces."
+          },
+          {
+            "rule_id": "RULE_COMP_MEDIUM_STANDARD",
+            "reason": "Moderate computational footprint suitable for standard search execution."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_random_forest",
+          "name": "Random Forest Classifier Pipeline",
+          "task": "classification",
+          "model_family": "tree_ensemble",
+          "model_name": "RandomForestClassifier",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Random Forest Classifier",
+              "class_name": "sklearn.ensemble.RandomForestClassifier"
+            }
+          ],
+          "requires_scaling": false,
+          "supports_class_weight": true,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "medium",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": false
+        }
+      },
+      {
+        "rank": 5,
+        "pipeline_id": "classification_k_neighbors",
+        "name": "K-Neighbors Classifier Pipeline",
+        "model_family": "knn",
+        "model_name": "KNeighborsClassifier",
+        "score": 0.86,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 1.0,
+          "imbalance": 0.6,
+          "dimensionality": 0.5,
+          "computational": 0.9
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "K-Neighbors Classifier Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_STANDARD",
+            "reason": "Predominantly numerical feature space (100.0%) is suitable for candidate execution."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_IMBALANCE_NO_CLASS_WEIGHT_PENALTY",
+            "reason": "Lacks native class-weighting support for imbalanced target (imbalance ratio: 9.00)."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_KNN_PENALTY",
+            "reason": "KNN receives a penalty under the high-dimensionality curse rule (dimensionality ratio: 0.1500)."
+          },
+          {
+            "rule_id": "RULE_COMP_MEDIUM_STANDARD",
+            "reason": "Moderate computational footprint suitable for standard search execution."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "classification_k_neighbors",
+          "name": "K-Neighbors Classifier Pipeline",
+          "task": "classification",
+          "model_family": "knn",
+          "model_name": "KNeighborsClassifier",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "K-Neighbors Classifier",
+              "class_name": "sklearn.neighbors.KNeighborsClassifier"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": false,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "medium",
+          "small_data_suitable": true,
+          "large_data_suitable": false,
+          "high_dimensional_suitable": false
+        }
+      }
+    ],
+    "warnings": [],
+    "dataset_summary": {
+      "name": "04_imbalanced_classification.csv",
+      "rows": 20,
+      "columns": 4,
+      "feature_count": 3,
+      "complexity_score": 4.4,
+      "complexity_label": "Medium",
+      "dataset_size_category": "small",
+      "missingness_level": "none",
+      "imbalance_severity": "severe",
+      "high_dimensional": true
+    }
+  },
+  "05_regression.csv": {
+    "recommendation_version": "1.1",
+    "task_type": "regression",
+    "candidate_count_before": 10,
+    "candidate_count_after_filtering": 5,
+    "filtering_reduction": 0.5,
+    "top_k": 5,
+    "recommended_count": 5,
+    "top_k_selection_ratio": 1.0,
+    "search_space_reduction": 0.5,
+    "recommendations": [
+      {
+        "rank": 1,
+        "pipeline_id": "regression_linear_regression",
+        "name": "Linear Regression Pipeline",
+        "model_family": "linear",
+        "model_name": "LinearRegression",
+        "score": 0.9775,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.95,
+          "feature_type": 0.95,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.95,
+          "computational": 1.0
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_HIGH_SUITABILITY",
+            "reason": "Linear Regression Pipeline receives higher suitability under the configured small-dataset heuristic (15 rows)."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_LINEAR_SVM",
+            "reason": "Dataset is predominantly numerical (100.0%), boosting linear suitability under configured rules."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_LINEAR_REGULARIZATION",
+            "reason": "Linear models receive higher suitability under the configured high-dimensional heuristic (dimensionality ratio: 0.2667)."
+          },
+          {
+            "rule_id": "RULE_COMP_LOW_FOOTPRINT",
+            "reason": "Low computational resource footprint enables rapid pipeline evaluation under configured rules."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "regression_linear_regression",
+          "name": "Linear Regression Pipeline",
+          "task": "regression",
+          "model_family": "linear",
+          "model_name": "LinearRegression",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Linear Regression",
+              "class_name": "sklearn.linear_model.LinearRegression"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": false,
+          "handles_categorical_natively": false,
+          "nonlinear": false,
+          "computational_cost": "low",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": true
+        }
+      },
+      {
+        "rank": 2,
+        "pipeline_id": "regression_svr",
+        "name": "Support Vector Regressor Pipeline",
+        "model_family": "svm",
+        "model_name": "SVR",
+        "score": 0.95,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.95,
+          "feature_type": 0.95,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.9,
+          "computational": 0.85
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_HIGH_SUITABILITY",
+            "reason": "Support Vector Regressor Pipeline receives higher suitability under the configured small-dataset heuristic (15 rows)."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_LINEAR_SVM",
+            "reason": "Dataset is predominantly numerical (100.0%), boosting svm suitability under configured rules."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_SVM_SUITABILITY",
+            "reason": "SVM receives higher suitability under the configured high-dimensional rule."
+          },
+          {
+            "rule_id": "RULE_COMP_HIGH_SMALL_DATA",
+            "reason": "Higher training complexity offset by small to medium dataset volume."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "regression_svr",
+          "name": "Support Vector Regressor Pipeline",
+          "task": "regression",
+          "model_family": "svm",
+          "model_name": "SVR",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Support Vector Regressor",
+              "class_name": "sklearn.svm.SVR"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": false,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "high",
+          "small_data_suitable": true,
+          "large_data_suitable": false,
+          "high_dimensional_suitable": true
+        }
+      },
+      {
+        "rank": 3,
+        "pipeline_id": "regression_hist_gradient_boosting",
+        "name": "HistGradientBoosting Regressor Pipeline",
+        "model_family": "tree_ensemble",
+        "model_name": "HistGradientBoostingRegressor",
+        "score": 0.945,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.8,
+          "computational": 1.0
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "HistGradientBoosting Regressor Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_STANDARD",
+            "reason": "Predominantly numerical feature space (100.0%) is suitable for candidate execution."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_TREE_MODERATE",
+            "reason": "Tree methods receive moderate suitability in high-dimensional feature spaces."
+          },
+          {
+            "rule_id": "RULE_COMP_LOW_FOOTPRINT",
+            "reason": "Low computational resource footprint enables rapid pipeline evaluation under configured rules."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "regression_hist_gradient_boosting",
+          "name": "HistGradientBoosting Regressor Pipeline",
+          "task": "regression",
+          "model_family": "tree_ensemble",
+          "model_name": "HistGradientBoostingRegressor",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "Ordinal Encoder",
+              "class_name": "sklearn.preprocessing.OrdinalEncoder"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "HistGradientBoosting Regressor",
+              "class_name": "sklearn.ensemble.HistGradientBoostingRegressor"
+            }
+          ],
+          "requires_scaling": false,
+          "supports_class_weight": false,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "low",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": false
+        }
+      },
+      {
+        "rank": 4,
+        "pipeline_id": "regression_random_forest",
+        "name": "Random Forest Regressor Pipeline",
+        "model_family": "tree_ensemble",
+        "model_name": "RandomForestRegressor",
+        "score": 0.93,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.8,
+          "computational": 0.9
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "Random Forest Regressor Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_STANDARD",
+            "reason": "Predominantly numerical feature space (100.0%) is suitable for candidate execution."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_TREE_MODERATE",
+            "reason": "Tree methods receive moderate suitability in high-dimensional feature spaces."
+          },
+          {
+            "rule_id": "RULE_COMP_MEDIUM_STANDARD",
+            "reason": "Moderate computational footprint suitable for standard search execution."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "regression_random_forest",
+          "name": "Random Forest Regressor Pipeline",
+          "task": "regression",
+          "model_family": "tree_ensemble",
+          "model_name": "RandomForestRegressor",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "Random Forest Regressor",
+              "class_name": "sklearn.ensemble.RandomForestRegressor"
+            }
+          ],
+          "requires_scaling": false,
+          "supports_class_weight": false,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "medium",
+          "small_data_suitable": true,
+          "large_data_suitable": true,
+          "high_dimensional_suitable": false
+        }
+      },
+      {
+        "rank": 5,
+        "pipeline_id": "regression_k_neighbors",
+        "name": "K-Neighbors Regressor Pipeline",
+        "model_family": "knn",
+        "model_name": "KNeighborsRegressor",
+        "score": 0.9,
+        "sub_scores": {
+          "task": 1.0,
+          "dataset_size": 0.9,
+          "feature_type": 0.9,
+          "missingness": 1.0,
+          "imbalance": 1.0,
+          "dimensionality": 0.5,
+          "computational": 0.9
+        },
+        "reasons": [
+          {
+            "rule_id": "RULE_SIZE_SMALL_STANDARD_SUITABILITY",
+            "reason": "K-Neighbors Regressor Pipeline receives standard suitability under the configured small-dataset rule."
+          },
+          {
+            "rule_id": "RULE_FEAT_NUMERIC_HEAVY_STANDARD",
+            "reason": "Predominantly numerical feature space (100.0%) is suitable for candidate execution."
+          },
+          {
+            "rule_id": "RULE_MISSING_NONE",
+            "reason": "Dataset contains zero missing values, receiving maximum missingness suitability."
+          },
+          {
+            "rule_id": "RULE_DIM_HIGH_KNN_PENALTY",
+            "reason": "KNN receives a penalty under the high-dimensionality curse rule (dimensionality ratio: 0.2667)."
+          },
+          {
+            "rule_id": "RULE_COMP_MEDIUM_STANDARD",
+            "reason": "Moderate computational footprint suitable for standard search execution."
+          }
+        ],
+        "pipeline_metadata": {
+          "pipeline_id": "regression_k_neighbors",
+          "name": "K-Neighbors Regressor Pipeline",
+          "task": "regression",
+          "model_family": "knn",
+          "model_name": "KNeighborsRegressor",
+          "steps": [
+            {
+              "step_id": "imputer",
+              "step_type": "imputer",
+              "name": "Simple Imputer",
+              "class_name": "sklearn.impute.SimpleImputer"
+            },
+            {
+              "step_id": "encoder",
+              "step_type": "encoder",
+              "name": "One-Hot Encoder",
+              "class_name": "sklearn.preprocessing.OneHotEncoder"
+            },
+            {
+              "step_id": "scaler",
+              "step_type": "scaler",
+              "name": "Standard Scaler",
+              "class_name": "sklearn.preprocessing.StandardScaler"
+            },
+            {
+              "step_id": "model",
+              "step_type": "model",
+              "name": "K-Neighbors Regressor",
+              "class_name": "sklearn.neighbors.KNeighborsRegressor"
+            }
+          ],
+          "requires_scaling": true,
+          "supports_class_weight": false,
+          "handles_categorical_natively": false,
+          "nonlinear": true,
+          "computational_cost": "medium",
+          "small_data_suitable": true,
+          "large_data_suitable": false,
+          "high_dimensional_suitable": false
+        }
+      }
+    ],
+    "warnings": [],
+    "dataset_summary": {
+      "name": "05_regression.csv",
+      "rows": 15,
+      "columns": 5,
+      "feature_count": 4,
+      "complexity_score": 1.24,
+      "complexity_label": "Low",
+      "dataset_size_category": "small",
+      "missingness_level": "none",
+      "imbalance_severity": "none",
+      "high_dimensional": true
+    }
+  }
+}

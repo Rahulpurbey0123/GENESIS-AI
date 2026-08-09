@@ -59,3 +59,38 @@ def test_dip_endpoint_non_csv():
     assert response.status_code == 400
     data = response.json()
     assert "Only CSV files are supported" in data["detail"]
+
+
+def test_recommend_endpoint_valid():
+    csv_path = DATA_DIR / "01_numerical_classification.csv"
+    with open(csv_path, "rb") as f:
+        response = client.post(
+            "/recommend",
+            files={"file": ("01_numerical_classification.csv", f, "text/csv")},
+            data={"target_column": "target", "top_k": "5"}
+        )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["recommendation_version"] == "1.1"
+    assert data["task_type"] == "classification"
+    assert data["candidate_count_before"] == 10
+    assert data["candidate_count_after_filtering"] == 5
+    assert data["filtering_reduction"] == 0.50
+    assert data["recommended_count"] == 5
+    assert data["top_k_selection_ratio"] == 1.0
+    assert len(data["recommendations"]) == 5
+    assert data["search_space_reduction"] == 0.50
+
+
+def test_recommend_endpoint_missing_target():
+    csv_path = DATA_DIR / "01_numerical_classification.csv"
+    with open(csv_path, "rb") as f:
+        response = client.post(
+            "/recommend",
+            files={"file": ("01_numerical_classification.csv", f, "text/csv")},
+            data={"target_column": "non_existent_column"}
+        )
+    assert response.status_code == 400
+    data = response.json()
+    assert "Target column 'non_existent_column' was not found" in data["detail"]
+

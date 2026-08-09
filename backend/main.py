@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 from backend.dataset.loader import CSVLoaderError
 from backend.dataset.validator import DatasetValidationError
 from backend.dataset.dip import generate_dip, DIP_VERSION
+from backend.recommendation.engine import RecommendationEngine, RecommendationEngineError
 
 
 # Configure logging
@@ -20,8 +21,8 @@ logging.basicConfig(
 logger = logging.getLogger("genesis.api")
 
 app = FastAPI(
-    title="GENESIS-AI DIP Engine",
-    description="Dataset Intelligence Profile (DIP) v1 REST API for tabular AutoML pre-search profiling.",
+    title="GENESIS-AI Engine",
+    description="Dataset Intelligence Profile (DIP) v1.1 & Recommendation Engine REST API.",
     version=DIP_VERSION,
 )
 
@@ -32,7 +33,7 @@ async def health_check() -> Dict[str, str]:
     return {
         "status": "ok",
         "version": DIP_VERSION,
-        "service": "GENESIS-AI Dataset Intelligence Profile Engine",
+        "service": "GENESIS-AI Dataset Intelligence & Recommendation Engine",
     }
 
 
@@ -82,3 +83,53 @@ async def create_dataset_profile(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An unexpected error occurred while generating dataset profile."
         )
+
+
+@app.post("/recommend", tags=["Recommendation"])
+async def create_recommendation(
+    file: UploadFile = File(..., description="CSV dataset file"),
+    target_column: str = Form(..., description="Target column name"),
+    top_k: int = Form(5, description="Number of top pipeline recommendations to return")
+) -> JSONResponse:
+    """
+    Generate deterministic pipeline recommendations derived from Dataset Intelligence Profile (DIP) v1.1.
+    """
+    filename = file.filename or "dataset.csv"
+    logger.info(f"Received Recommendation request for file: '{filename}', target: '{target_column}', top_k: {top_k}")
+
+    if not filename.lower().endswith(".csv"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Only CSV files are supported. Received filename: '{filename}'"
+        )
+
+    try:
+        content = await file.read()
+        if not content or len(content) == 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Dataset is empty (0 bytes)."
+            )
+
+        engine = RecommendationEngine()
+        report = engine.recommend(content, target_column=target_column, dataset_name=filename, top_k=top_k)
+        logger.info(
+            f"Successfully generated Recommendations for '{filename}'. Task: {report.task_type}, Top-K: {len(report.recommendations)}"
+        )
+        return JSONResponse(content=report.model_dump(), status_code=status.HTTP_200_OK)
+
+    except (CSVLoaderError, DatasetValidationError, RecommendationEngineError) as e:
+        logger.warning(f"Validation/Recommendation error for '{filename}': {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Internal error generating recommendations for '{filename}': {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An unexpected error occurred while generating pipeline recommendations."
+        )
+
