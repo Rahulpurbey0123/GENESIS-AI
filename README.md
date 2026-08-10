@@ -3,7 +3,7 @@
 GENESIS-AI is a research-oriented tabular AutoML framework built around the hypothesis:
 > *Can understanding a dataset before AutoML search reduce the search space and computational search cost while maintaining comparable predictive performance?*
 
-This repository contains the implementation of **Week 2: Dataset Intelligence Profile (DIP) v1.1** and **Week 3: Intelligent Pipeline Recommendation Engine**.
+This repository contains the implementation of **Week 2: Dataset Intelligence Profile (DIP) v1.1**, **Week 3: Intelligent Pipeline Recommendation Engine**, and **Week 4: Evolutionary Pipeline Optimization Engine**.
 
 ---
 
@@ -25,7 +25,14 @@ This repository contains the implementation of **Week 2: Dataset Intelligence Pr
 - **Stage 2 Multi-Criteria Suitability Scoring**: Deterministic rule-based scoring ($S \in [0.0, 1.0]$) with strict weight validation (`sum == 1.0`).
 - **Separated Filtering Reduction Metric**: Explicitly measures search-space pruning caused by compatibility filtering (`filtering_reduction`) separate from Top-K selection (`top_k_selection_ratio`).
 - **Machine-Generated Heuristic Explanations with Rule Traceability**: Structured rule explanations with unique `rule_id` codes generated deterministically without LLMs.
-- **FastAPI Endpoints**: `/health`, `/dip`, `/recommend`.
+
+### Week 4 — Evolutionary Pipeline Optimization Engine
+- **Two Operational Modes**: `GENESIS` (restricted to Week 3 Top-K candidates) vs `BASELINE` (control group using all compatible pipelines).
+- **Strict Data Isolation**: Train ($60\%$), Validation ($20\%$), and Test ($20\%$) splits. Test data is NEVER accessed during evolution and is evaluated strictly post-GA.
+- **Evaluation Cache & Hard Budget Limit**: Cache tracking requests, unique evaluations, and cache hits while strictly enforcing `max_evaluations` budget limits.
+- **Scikit-Learn Pipeline Construction**: Automatically builds and fits runnable `scikit-learn` Pipelines containing imputer, scaler/encoder, and model estimators.
+- **Reproducibility**: Guaranteed deterministic execution under configured `random_state`.
+- **FastAPI Endpoints**: `/health`, `/dip`, `/recommend`, `/optimize`.
 
 ---
 
@@ -66,6 +73,7 @@ uvicorn backend.main:app --reload --port 8000
 - Health Check: `GET http://localhost:8000/health`
 - Generate DIP: `POST http://localhost:8000/dip` (Form data: `file` [CSV], `target_column` [string])
 - Recommend Pipelines: `POST http://localhost:8000/recommend` (Form data: `file` [CSV], `target_column` [string], `top_k` [integer])
+- Evolutionary Optimization: `POST http://localhost:8000/optimize` (Form data: `file` [CSV], `target_column` [string], `mode` [genesis/baseline], `population_size` [int], `generations` [int])
 
 ---
 
@@ -83,27 +91,40 @@ python -m pytest tests/ -v
 ```text
 GENESIS-AI/
 ├── backend/
-│   ├── main.py                     # FastAPI application entrypoint (/dip, /recommend)
+│   ├── main.py                     # FastAPI application entrypoint (/dip, /recommend, /optimize)
 │   ├── dataset/
 │   │   ├── loader.py               # Safe CSV loader
 │   │   ├── validator.py            # Dataset & target validator
 │   │   ├── profiler.py             # Feature & statistical profilers
 │   │   ├── complexity.py           # DIP Complexity Score calculator
 │   │   └── dip.py                  # DIP builder and JSON serializer
-│   └── recommendation/
-│       ├── schemas.py              # Pydantic models & data contracts
-│       ├── registry.py             # Model & pipeline candidate registry
-│       ├── normalizer.py           # DIP signal normalization & derived flags
-│       ├── filters.py              # Stage 1 hard compatibility filters
-│       ├── rules.py                # Stage 2 soft recommendation rules
-│       ├── scorer.py               # Deterministic multi-criteria suitability scorer
-│       ├── ranker.py               # Deterministic Top-K ranker
-│       └── engine.py               # RecommendationEngine orchestrator
-├── tests/                          # Automated pytest suite (69 passing tests)
+│   ├── recommendation/
+│   │   ├── schemas.py              # Pydantic models & data contracts
+│   │   ├── registry.py             # Model & pipeline candidate registry
+│   │   ├── normalizer.py           # DIP signal normalization & derived flags
+│   │   ├── filters.py              # Stage 1 hard compatibility filters
+│   │   ├── rules.py                # Stage 2 soft recommendation rules
+│   │   ├── scorer.py               # Deterministic multi-criteria suitability scorer
+│   │   ├── ranker.py               # Deterministic Top-K ranker
+│   │   └── engine.py               # RecommendationEngine orchestrator
+│   └── optimization/
+│       ├── schemas.py              # Pydantic models & result contracts
+│       ├── search_space.py         # Discrete hyperparameter search grids
+│       ├── chromosome.py           # Chromosome individual structure
+│       ├── cache.py                # Evaluation cache & metric counters
+│       ├── evaluator.py            # Pipeline builder & fitness evaluator
+│       ├── population.py           # Population initializer (GENESIS vs BASELINE)
+│       ├── selection.py            # Tournament selection operator
+│       ├── crossover.py            # Structural & hyperparameter crossover
+│       ├── mutation.py             # Re-sampling mutation operator
+│       ├── fitness.py              # Fitness manager & budget enforcer
+│       ├── optimizer.py            # EvolutionaryOptimizer GA loop
+│       └── modes.py                # GENESIS & BASELINE mode wrappers
+├── tests/                          # Automated pytest suite (87 passing tests)
 ├── data/
 │   └── test_datasets/              # 5 software-validation test CSVs
 ├── experiments/                    # Exported measured JSON output results
-├── docs/                           # Documentation (DIP v1.1 & Recommendation Engine)
+├── docs/                           # Documentation (DIP, Recommendation, Evolutionary Optimization)
 └── Memory.md                       # Persistent project state tracking log
 ```
 
