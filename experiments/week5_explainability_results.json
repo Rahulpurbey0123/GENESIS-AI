@@ -1,0 +1,858 @@
+{
+  "01_numerical_classification.csv": {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "pipeline": "classification_svc",
+    "model": "Support Vector Classifier Pipeline",
+    "metric": "f1",
+    "score": 0.3333,
+    "method": "permutation_importance",
+    "top_features": [
+      {
+        "feature": "chol",
+        "importance": 1.0,
+        "rank": 1,
+        "direction": null
+      },
+      {
+        "feature": "oldpeak",
+        "importance": 0.0,
+        "rank": 2,
+        "direction": null
+      },
+      {
+        "feature": "thalach",
+        "importance": 0.0,
+        "rank": 3,
+        "direction": null
+      },
+      {
+        "feature": "trestbps",
+        "importance": 0.0,
+        "rank": 4,
+        "direction": null
+      },
+      {
+        "feature": "age",
+        "importance": 0.0,
+        "rank": 5,
+        "direction": null
+      }
+    ],
+    "local_sample_count": 0,
+    "explanation_runtime": 0.1929,
+    "warnings": [
+      "Permutation importance provides global model-level feature importance and does not provide native per-sample attribution."
+    ],
+    "full_explanation": {
+      "dataset_id": "01_numerical_classification.csv",
+      "pipeline_id": "classification_svc",
+      "model_name": "Support Vector Classifier Pipeline",
+      "task_type": "classification",
+      "metric": "f1",
+      "model_score": 0.3333,
+      "method": "permutation_importance",
+      "global_importance": [
+        {
+          "feature": "chol",
+          "importance": 1.0,
+          "rank": 1,
+          "direction": null,
+          "mean_importance": 0.0267,
+          "std_importance": 0.0533
+        },
+        {
+          "feature": "oldpeak",
+          "importance": 0.0,
+          "rank": 2,
+          "direction": null,
+          "mean_importance": -0.16,
+          "std_importance": 0.196
+        },
+        {
+          "feature": "thalach",
+          "importance": 0.0,
+          "rank": 3,
+          "direction": null,
+          "mean_importance": -0.32,
+          "std_importance": 0.16
+        },
+        {
+          "feature": "trestbps",
+          "importance": 0.0,
+          "rank": 4,
+          "direction": null,
+          "mean_importance": 0.0,
+          "std_importance": 0.0
+        },
+        {
+          "feature": "age",
+          "importance": 0.0,
+          "rank": 5,
+          "direction": null,
+          "mean_importance": 0.0,
+          "std_importance": 0.0
+        }
+      ],
+      "local_explanations": [],
+      "warnings": [
+        "Permutation importance provides global model-level feature importance and does not provide native per-sample attribution."
+      ],
+      "metadata": {
+        "scoring_metric": "f1_macro",
+        "random_state": 42,
+        "n_repeats": 5,
+        "n_samples_explained": 0,
+        "runtime_seconds": 0.1928,
+        "has_preprocessor": true
+      }
+    }
+  },
+  "02_categorical_heavy.csv": {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "pipeline": "classification_random_forest",
+    "model": "Random Forest Classifier Pipeline",
+    "metric": "f1",
+    "score": 1.0,
+    "method": "shap_tree",
+    "top_features": [
+      {
+        "feature": "department_HR",
+        "importance": 0.2515,
+        "rank": 1,
+        "direction": null
+      },
+      {
+        "feature": "department_Engineering",
+        "importance": 0.2368,
+        "rank": 2,
+        "direction": null
+      },
+      {
+        "feature": "education_level_High School",
+        "importance": 0.111,
+        "rank": 3,
+        "direction": null
+      },
+      {
+        "feature": "education_level_Bachelor",
+        "importance": 0.1068,
+        "rank": 4,
+        "direction": null
+      },
+      {
+        "feature": "city_Chicago",
+        "importance": 0.0838,
+        "rank": 5,
+        "direction": null
+      }
+    ],
+    "local_sample_count": 3,
+    "explanation_runtime": 0.0201,
+    "warnings": [],
+    "full_explanation": {
+      "dataset_id": "02_categorical_heavy.csv",
+      "pipeline_id": "classification_random_forest",
+      "model_name": "Random Forest Classifier Pipeline",
+      "task_type": "classification",
+      "metric": "f1",
+      "model_score": 1.0,
+      "method": "shap_tree",
+      "global_importance": [
+        {
+          "feature": "department_HR",
+          "importance": 0.2515,
+          "rank": 1,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "department_Engineering",
+          "importance": 0.2368,
+          "rank": 2,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "education_level_High School",
+          "importance": 0.111,
+          "rank": 3,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "education_level_Bachelor",
+          "importance": 0.1068,
+          "rank": 4,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "city_Chicago",
+          "importance": 0.0838,
+          "rank": 5,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "gender_Male",
+          "importance": 0.0448,
+          "rank": 6,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "city_New York",
+          "importance": 0.0416,
+          "rank": 7,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "is_manager_True",
+          "importance": 0.0332,
+          "rank": 8,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "is_manager_False",
+          "importance": 0.0292,
+          "rank": 9,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "education_level_Master",
+          "importance": 0.0206,
+          "rank": 10,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "gender_Female",
+          "importance": 0.0199,
+          "rank": 11,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "department_Sales",
+          "importance": 0.0116,
+          "rank": 12,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "city_San Francisco",
+          "importance": 0.0094,
+          "rank": 13,
+          "direction": null,
+          "mean_importance": null,
+          "std_importance": null
+        }
+      ],
+      "local_explanations": [
+        {
+          "sample_index": 0,
+          "category": "representative_sample",
+          "prediction": "Yes",
+          "actual_value": "Yes",
+          "base_value": 0.4917,
+          "contributions": [
+            {
+              "feature": "department_HR",
+              "feature_value": 0.0,
+              "contribution": 0.0996
+            },
+            {
+              "feature": "department_Engineering",
+              "feature_value": 0.0,
+              "contribution": -0.0806
+            },
+            {
+              "feature": "education_level_Bachelor",
+              "feature_value": 1.0,
+              "contribution": 0.0528
+            },
+            {
+              "feature": "education_level_High School",
+              "feature_value": 0.0,
+              "contribution": 0.04
+            },
+            {
+              "feature": "city_Chicago",
+              "feature_value": 1.0,
+              "contribution": -0.0282
+            },
+            {
+              "feature": "is_manager_True",
+              "feature_value": 0.0,
+              "contribution": -0.0127
+            },
+            {
+              "feature": "city_New York",
+              "feature_value": 0.0,
+              "contribution": -0.0093
+            },
+            {
+              "feature": "gender_Female",
+              "feature_value": 1.0,
+              "contribution": -0.0087
+            },
+            {
+              "feature": "gender_Male",
+              "feature_value": 0.0,
+              "contribution": 0.0084
+            },
+            {
+              "feature": "education_level_Master",
+              "feature_value": 0.0,
+              "contribution": -0.008
+            },
+            {
+              "feature": "city_San Francisco",
+              "feature_value": 0.0,
+              "contribution": 0.0027
+            },
+            {
+              "feature": "department_Sales",
+              "feature_value": 0.0,
+              "contribution": 0.0013
+            },
+            {
+              "feature": "is_manager_False",
+              "feature_value": 1.0,
+              "contribution": 0.001
+            }
+          ]
+        },
+        {
+          "sample_index": 1,
+          "category": "representative_sample",
+          "prediction": "Yes",
+          "actual_value": "Yes",
+          "base_value": 0.4917,
+          "contributions": [
+            {
+              "feature": "department_Engineering",
+              "feature_value": 1.0,
+              "contribution": 0.1018
+            },
+            {
+              "feature": "department_HR",
+              "feature_value": 0.0,
+              "contribution": 0.0869
+            },
+            {
+              "feature": "education_level_High School",
+              "feature_value": 0.0,
+              "contribution": 0.039
+            },
+            {
+              "feature": "education_level_Bachelor",
+              "feature_value": 0.0,
+              "contribution": -0.0261
+            },
+            {
+              "feature": "city_Chicago",
+              "feature_value": 0.0,
+              "contribution": 0.0231
+            },
+            {
+              "feature": "city_New York",
+              "feature_value": 1.0,
+              "contribution": 0.0212
+            },
+            {
+              "feature": "gender_Male",
+              "feature_value": 1.0,
+              "contribution": -0.0199
+            },
+            {
+              "feature": "is_manager_False",
+              "feature_value": 0.0,
+              "contribution": -0.0148
+            },
+            {
+              "feature": "education_level_Master",
+              "feature_value": 0.0,
+              "contribution": -0.012
+            },
+            {
+              "feature": "is_manager_True",
+              "feature_value": 1.0,
+              "contribution": 0.0104
+            },
+            {
+              "feature": "gender_Female",
+              "feature_value": 0.0,
+              "contribution": 0.0097
+            },
+            {
+              "feature": "department_Sales",
+              "feature_value": 0.0,
+              "contribution": -0.0049
+            },
+            {
+              "feature": "city_San Francisco",
+              "feature_value": 0.0,
+              "contribution": 0.004
+            }
+          ]
+        },
+        {
+          "sample_index": 2,
+          "category": "representative_sample",
+          "prediction": "No",
+          "actual_value": "No",
+          "base_value": 0.4917,
+          "contributions": [
+            {
+              "feature": "department_HR",
+              "feature_value": 0.0,
+              "contribution": 0.0876
+            },
+            {
+              "feature": "department_Engineering",
+              "feature_value": 0.0,
+              "contribution": -0.0757
+            },
+            {
+              "feature": "education_level_High School",
+              "feature_value": 0.0,
+              "contribution": 0.0421
+            },
+            {
+              "feature": "city_Chicago",
+              "feature_value": 0.0,
+              "contribution": 0.04
+            },
+            {
+              "feature": "education_level_Bachelor",
+              "feature_value": 0.0,
+              "contribution": -0.0375
+            },
+            {
+              "feature": "gender_Male",
+              "feature_value": 1.0,
+              "contribution": -0.0205
+            },
+            {
+              "feature": "is_manager_False",
+              "feature_value": 1.0,
+              "contribution": -0.016
+            },
+            {
+              "feature": "city_New York",
+              "feature_value": 0.0,
+              "contribution": -0.0149
+            },
+            {
+              "feature": "is_manager_True",
+              "feature_value": 0.0,
+              "contribution": -0.0131
+            },
+            {
+              "feature": "department_Sales",
+              "feature_value": 1.0,
+              "contribution": -0.0064
+            },
+            {
+              "feature": "city_San Francisco",
+              "feature_value": 1.0,
+              "contribution": 0.0035
+            },
+            {
+              "feature": "gender_Female",
+              "feature_value": 0.0,
+              "contribution": -0.0032
+            },
+            {
+              "feature": "education_level_Master",
+              "feature_value": 1.0,
+              "contribution": 0.0025
+            }
+          ]
+        }
+      ],
+      "warnings": [],
+      "metadata": {
+        "scoring_metric": "f1_macro",
+        "random_state": 42,
+        "n_repeats": 5,
+        "n_samples_explained": 3,
+        "runtime_seconds": 0.0199,
+        "has_preprocessor": true
+      }
+    }
+  },
+  "03_missing_values.csv": {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "pipeline": "classification_svc",
+    "model": "Support Vector Classifier Pipeline",
+    "metric": "f1",
+    "score": 0.3333,
+    "method": "permutation_importance",
+    "top_features": [
+      {
+        "feature": "category_x",
+        "importance": 0.0,
+        "rank": 1,
+        "direction": null
+      },
+      {
+        "feature": "feature_c",
+        "importance": 0.0,
+        "rank": 2,
+        "direction": null
+      },
+      {
+        "feature": "feature_b",
+        "importance": 0.0,
+        "rank": 3,
+        "direction": null
+      },
+      {
+        "feature": "feature_a",
+        "importance": 0.0,
+        "rank": 4,
+        "direction": null
+      }
+    ],
+    "local_sample_count": 0,
+    "explanation_runtime": 0.1667,
+    "warnings": [
+      "Permutation importance provides global model-level feature importance and does not provide native per-sample attribution."
+    ],
+    "full_explanation": {
+      "dataset_id": "03_missing_values.csv",
+      "pipeline_id": "classification_svc",
+      "model_name": "Support Vector Classifier Pipeline",
+      "task_type": "classification",
+      "metric": "f1",
+      "model_score": 0.3333,
+      "method": "permutation_importance",
+      "global_importance": [
+        {
+          "feature": "category_x",
+          "importance": 0.0,
+          "rank": 1,
+          "direction": null,
+          "mean_importance": 0.0,
+          "std_importance": 0.0
+        },
+        {
+          "feature": "feature_c",
+          "importance": 0.0,
+          "rank": 2,
+          "direction": null,
+          "mean_importance": 0.0,
+          "std_importance": 0.0
+        },
+        {
+          "feature": "feature_b",
+          "importance": 0.0,
+          "rank": 3,
+          "direction": null,
+          "mean_importance": 0.0,
+          "std_importance": 0.0
+        },
+        {
+          "feature": "feature_a",
+          "importance": 0.0,
+          "rank": 4,
+          "direction": null,
+          "mean_importance": 0.0,
+          "std_importance": 0.0
+        }
+      ],
+      "local_explanations": [],
+      "warnings": [
+        "Permutation importance provides global model-level feature importance and does not provide native per-sample attribution."
+      ],
+      "metadata": {
+        "scoring_metric": "f1_macro",
+        "random_state": 42,
+        "n_repeats": 5,
+        "n_samples_explained": 0,
+        "runtime_seconds": 0.1666,
+        "has_preprocessor": true
+      }
+    }
+  },
+  "04_imbalanced_classification.csv": {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "pipeline": "classification_svc",
+    "model": "Support Vector Classifier Pipeline",
+    "metric": "f1",
+    "score": 1.0,
+    "method": "permutation_importance",
+    "top_features": [
+      {
+        "feature": "v2",
+        "importance": 0.0,
+        "rank": 1,
+        "direction": null
+      },
+      {
+        "feature": "v1",
+        "importance": 0.0,
+        "rank": 2,
+        "direction": null
+      },
+      {
+        "feature": "amount",
+        "importance": 0.0,
+        "rank": 3,
+        "direction": null
+      }
+    ],
+    "local_sample_count": 0,
+    "explanation_runtime": 0.0773,
+    "warnings": [
+      "Permutation importance provides global model-level feature importance and does not provide native per-sample attribution."
+    ],
+    "full_explanation": {
+      "dataset_id": "04_imbalanced_classification.csv",
+      "pipeline_id": "classification_svc",
+      "model_name": "Support Vector Classifier Pipeline",
+      "task_type": "classification",
+      "metric": "f1",
+      "model_score": 1.0,
+      "method": "permutation_importance",
+      "global_importance": [
+        {
+          "feature": "v2",
+          "importance": 0.0,
+          "rank": 1,
+          "direction": null,
+          "mean_importance": 0.0,
+          "std_importance": 0.0
+        },
+        {
+          "feature": "v1",
+          "importance": 0.0,
+          "rank": 2,
+          "direction": null,
+          "mean_importance": 0.0,
+          "std_importance": 0.0
+        },
+        {
+          "feature": "amount",
+          "importance": 0.0,
+          "rank": 3,
+          "direction": null,
+          "mean_importance": 0.0,
+          "std_importance": 0.0
+        }
+      ],
+      "local_explanations": [],
+      "warnings": [
+        "Permutation importance provides global model-level feature importance and does not provide native per-sample attribution."
+      ],
+      "metadata": {
+        "scoring_metric": "f1_macro",
+        "random_state": 42,
+        "n_repeats": 5,
+        "n_samples_explained": 0,
+        "runtime_seconds": 0.0773,
+        "has_preprocessor": true
+      }
+    }
+  },
+  "05_regression.csv": {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "pipeline": "regression_linear_regression",
+    "model": "Linear Regression Pipeline",
+    "metric": "rmse",
+    "score": -8302.4758,
+    "method": "linear_coefficients",
+    "top_features": [
+      {
+        "feature": "square_feet",
+        "importance": 0.7203,
+        "rank": 1,
+        "direction": 1
+      },
+      {
+        "feature": "bathrooms",
+        "importance": 0.1901,
+        "rank": 2,
+        "direction": 1
+      },
+      {
+        "feature": "bedrooms",
+        "importance": 0.0833,
+        "rank": 3,
+        "direction": -1
+      },
+      {
+        "feature": "age",
+        "importance": 0.0063,
+        "rank": 4,
+        "direction": -1
+      }
+    ],
+    "local_sample_count": 3,
+    "explanation_runtime": 0.0064,
+    "warnings": [],
+    "full_explanation": {
+      "dataset_id": "05_regression.csv",
+      "pipeline_id": "regression_linear_regression",
+      "model_name": "Linear Regression Pipeline",
+      "task_type": "regression",
+      "metric": "rmse",
+      "model_score": -8302.4758,
+      "method": "linear_coefficients",
+      "global_importance": [
+        {
+          "feature": "square_feet",
+          "importance": 0.7203,
+          "rank": 1,
+          "direction": 1,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "bathrooms",
+          "importance": 0.1901,
+          "rank": 2,
+          "direction": 1,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "bedrooms",
+          "importance": 0.0833,
+          "rank": 3,
+          "direction": -1,
+          "mean_importance": null,
+          "std_importance": null
+        },
+        {
+          "feature": "age",
+          "importance": 0.0063,
+          "rank": 4,
+          "direction": -1,
+          "mean_importance": null,
+          "std_importance": null
+        }
+      ],
+      "local_explanations": [
+        {
+          "sample_index": 0,
+          "category": "low_residual",
+          "prediction": 413661.7816,
+          "actual_value": 410000.0,
+          "base_value": 298333.3333,
+          "contributions": [
+            {
+              "feature": "square_feet",
+              "feature_value": 0.7795,
+              "contribution": 91589.1695
+            },
+            {
+              "feature": "bathrooms",
+              "feature_value": 0.9881,
+              "contribution": 30632.4148
+            },
+            {
+              "feature": "bedrooms",
+              "feature_value": 0.5916,
+              "contribution": -8038.1839
+            },
+            {
+              "feature": "age",
+              "feature_value": -1.1164,
+              "contribution": 1145.0478
+            }
+          ]
+        },
+        {
+          "sample_index": 2,
+          "category": "high_residual",
+          "prediction": 222763.5578,
+          "actual_value": 210000.0,
+          "base_value": 298333.3333,
+          "contributions": [
+            {
+              "feature": "square_feet",
+              "feature_value": -0.5914,
+              "contribution": -69481.439
+            },
+            {
+              "feature": "bathrooms",
+              "feature_value": -0.5812,
+              "contribution": -18019.0676
+            },
+            {
+              "feature": "bedrooms",
+              "feature_value": -0.9297,
+              "contribution": 12631.4318
+            },
+            {
+              "feature": "age",
+              "feature_value": 0.6831,
+              "contribution": -700.7009
+            }
+          ]
+        },
+        {
+          "sample_index": 1,
+          "category": "median_residual",
+          "prediction": 305520.5308,
+          "actual_value": 300000.0,
+          "base_value": 298333.3333,
+          "contributions": [
+            {
+              "feature": "square_feet",
+              "feature_value": 0.0538,
+              "contribution": 6316.4945
+            },
+            {
+              "feature": "bedrooms",
+              "feature_value": -0.169,
+              "contribution": 2296.624
+            },
+            {
+              "feature": "bathrooms",
+              "feature_value": -0.0581,
+              "contribution": -1801.9068
+            },
+            {
+              "feature": "age",
+              "feature_value": -0.3666,
+              "contribution": 375.9858
+            }
+          ]
+        }
+      ],
+      "warnings": [],
+      "metadata": {
+        "scoring_metric": "neg_root_mean_squared_error",
+        "random_state": 42,
+        "n_repeats": 5,
+        "n_samples_explained": 3,
+        "runtime_seconds": 0.0063,
+        "has_preprocessor": true
+      }
+    }
+  }
+}
