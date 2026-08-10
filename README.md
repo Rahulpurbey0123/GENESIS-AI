@@ -8,6 +8,7 @@ This repository contains the implementation of:
 - **Week 3: Intelligent Pipeline Recommendation Engine**
 - **Week 4: Evolutionary Pipeline Optimization Engine**
 - **Week 5: Explainability & Model Insight Engine**
+- **Week 6: Evidence-Grounded LLM Explanation Layer**
 
 ---
 
@@ -44,7 +45,14 @@ This repository contains the implementation of:
   - `native_tree` $\rightarrow$ global importances only (`local_explanations = []` + warning).
 - **Representative Local Prediction Explanations**: Bounded explanations for up to 5 representative samples categorized by error type (TP, TN, FP, FN for classification; low/high/median residual for regression).
 - **Row Alignment & Prediction Indexing**: Consistent mapping connecting prediction, actual target, and feature values to exact dataset row index `orig_row_idx`.
-- **Schema & Validation Safety**: Strict Pydantic v2 data models, rank validation, non-finite (NaN/Inf) output protection, and test set isolation.
+
+### Week 6 — Evidence-Grounded LLM Explanation Layer
+- **Strict ML Facts vs LLM Interpretation Separation**: Weeks 2–5 compute ML facts; Week 6 interprets facts in natural language without LLM metric computation.
+- **Provider-Independent Abstraction**: `LLMClient` interface supporting `MockLLMClient` (deterministic offline testing) and `OpenRouterClient` (OpenRouter API).
+- **Zero Secret Exposure**: Read credentials strictly from `OPENROUTER_API_KEY` in environment variables. Zero hardcoded secrets in code, JSON, logs, or Git. `.env` files ignored via `.gitignore`.
+- **Evidence Allowlist & Injection Resistance**: `ALLOWED_EVIDENCE_FIELDS` allowlist encloses evidence inside `BEGIN VERIFIED EVIDENCE` ... `END VERIFIED EVIDENCE` blocks, instructing LLM that evidence data is untrusted data.
+- **5 Explanation Modes**: `simple`, `technical`, `prediction`, `research`, and `pipeline`.
+- **Response Guardrails**: `ResponseValidator` enforces numerical claim protection (rejects ungrounded metrics), feature claim protection (rejects hallucinated features), and causality protection (converts causal phrasing to statistical attribution).
 
 ---
 
@@ -74,7 +82,7 @@ cd GENESIS-AI
 # Install dependencies
 pip install -r requirements.txt
 
-# Run full test suite (132 passed)
+# Run full test suite (156 passed)
 python -m pytest tests/ -q
 ```
 
@@ -94,13 +102,17 @@ python -m experiments.generate_optimization_results
 
 # Run Week 5 Explainability Experiment
 python -m experiments.generate_explainability_results
+
+# Run Week 6 LLM Explanation Experiment
+python -m experiments.generate_llm_explanations
 ```
 
 ---
 
 ## Verification & Test Suite
-The codebase is covered by **132 unit and integration tests** passing with 0 failures:
+The codebase is covered by **156 unit and integration tests** passing with 0 failures:
 - Week 2 Tests: 38 passing tests
 - Week 3 Tests: 31 passing tests
 - Week 4 Tests: 30 passing tests
-- Week 5 Tests: 33 passing tests (including methodological corrections & row-alignment verification)
+- Week 5 Tests: 33 passing tests
+- Week 6 Tests: 24 passing tests (including provider abstraction, evidence validation, prompt injection resistance, guardrails, and mode verification)

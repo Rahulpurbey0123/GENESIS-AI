@@ -4,7 +4,7 @@ FastAPI application entrypoint for GENESIS-AI Dataset Intelligence Profile (DIP)
 
 import logging
 from typing import Dict, Any
-from fastapi import FastAPI, File, Form, UploadFile, HTTPException, status
+from fastapi import FastAPI, File, Form, UploadFile, HTTPException, status, Body
 from fastapi.responses import JSONResponse
 
 from backend.dataset.loader import CSVLoaderError
@@ -13,6 +13,8 @@ from backend.dataset.dip import generate_dip, DIP_VERSION
 from backend.recommendation.engine import RecommendationEngine, RecommendationEngineError
 from backend.optimization.schemas import OptimizationConfig
 from backend.optimization.optimizer import EvolutionaryOptimizer, EvolutionaryOptimizerError
+from backend.llm.service import LLMService
+from backend.llm.schemas import LLMExplanationRequest, LLMExplanationOutput
 
 
 # Configure logging
@@ -24,7 +26,7 @@ logger = logging.getLogger("genesis.api")
 
 app = FastAPI(
     title="GENESIS-AI Engine",
-    description="Dataset Intelligence Profile (DIP) v1.1, Recommendation, & Evolutionary Optimization API.",
+    description="Dataset Intelligence Profile (DIP) v1.1, Recommendation, Optimization, & LLM Explanation API.",
     version=DIP_VERSION,
 )
 
@@ -35,7 +37,7 @@ async def health_check() -> Dict[str, str]:
     return {
         "status": "ok",
         "version": DIP_VERSION,
-        "service": "GENESIS-AI Dataset Intelligence, Recommendation & Optimization Engine",
+        "service": "GENESIS-AI Dataset Intelligence, Recommendation, Optimization & LLM Engine",
     }
 
 
@@ -203,3 +205,26 @@ async def create_optimization(
         )
 
 
+@app.post("/explain/llm", tags=["LLM Explanation"])
+async def generate_llm_explanation_endpoint(
+    request: LLMExplanationRequest = Body(..., description="LLM Explanation Request payload with evidence and mode")
+) -> JSONResponse:
+    """
+    Generate an evidence-grounded LLM interpretation for Week 5 structured output.
+    """
+    logger.info(f"Received LLM Explanation request for mode: '{request.mode}'")
+    try:
+        service = LLMService()
+        output = service.explain(
+            raw_evidence=request.evidence,
+            mode=request.mode,
+            provider_override=request.provider_override,
+            model_override=request.model_override
+        )
+        return JSONResponse(content=output.model_dump(), status_code=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(f"Internal error generating LLM explanation: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An unexpected error occurred generating LLM explanation: {str(e)}"
+        )

@@ -1,0 +1,832 @@
+{
+  "01_numerical_classification.csv": {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "pipeline": "classification_svc",
+    "model": "Support Vector Classifier Pipeline",
+    "metric": "f1",
+    "score": 0.3333,
+    "explanation_method": "permutation_importance",
+    "llm_provider": "mock",
+    "llm_model": "google/gemini-2.0-flash-001",
+    "modes_evaluated": [
+      "simple",
+      "technical",
+      "prediction",
+      "research",
+      "pipeline"
+    ],
+    "explanations_by_mode": {
+      "simple": {
+        "explanation_mode": "simple",
+        "validation_status": "PASSED",
+        "summary": "GENESIS-AI analyzed '01_numerical_classification.csv' and selected the 'Support Vector Classifier Pipeline' pipeline, achieving a validation f1 score of 0.3333.",
+        "model_explanation": "The model relies primarily on key features to make its decisions. Features were ranked using the permutation_importance strategy.",
+        "prediction_explanation": "Individual sample predictions reflect these top feature influences.",
+        "important_features": [
+          "chol",
+          "oldpeak",
+          "thalach",
+          "trestbps",
+          "age"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0005
+      },
+      "technical": {
+        "explanation_mode": "technical",
+        "validation_status": "PASSED",
+        "summary": "Technical interpretation for dataset '01_numerical_classification.csv': Pipeline 'Support Vector Classifier Pipeline' achieved a validation score of 0.3333 (f1).",
+        "model_explanation": "The fitted model was explained using 'permutation_importance'. Global feature rankings reflect empirical model attribution.",
+        "prediction_explanation": "Local prediction explanations identify sample-level feature contributions for representative validation instances.",
+        "important_features": [
+          "chol",
+          "oldpeak",
+          "thalach",
+          "trestbps",
+          "age"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "prediction": {
+        "explanation_mode": "prediction",
+        "validation_status": "PASSED",
+        "summary": "Representative prediction explanations for dataset '01_numerical_classification.csv' using model 'Support Vector Classifier Pipeline'.",
+        "model_explanation": "Global model structure evaluated via permutation_importance strategy.",
+        "prediction_explanation": "Local attributions highlight individual feature influences for selected representative samples, comparing predictions against actual targets.",
+        "important_features": [
+          "chol",
+          "oldpeak",
+          "thalach",
+          "trestbps",
+          "age"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "research": {
+        "explanation_mode": "research",
+        "validation_status": "PASSED",
+        "summary": "Empirical evaluation on dataset '01_numerical_classification.csv' selected candidate model 'Support Vector Classifier Pipeline' with validation score 0.3333 (f1).",
+        "model_explanation": "Post-hoc attribution executed via 'permutation_importance' strategy without model retraining. Ranked feature importances preserve strictly non-negative standardized bounds.",
+        "prediction_explanation": "Local sample explanations evaluate representative predictions against ground truth targets.",
+        "important_features": [
+          "chol",
+          "oldpeak",
+          "thalach",
+          "trestbps",
+          "age"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "pipeline": {
+        "explanation_mode": "pipeline",
+        "validation_status": "PASSED",
+        "summary": "GENESIS-AI pipeline selection for '01_numerical_classification.csv' identified 'Support Vector Classifier Pipeline' as the top candidate algorithm.",
+        "model_explanation": "Selection was guided by Dataset Intelligence Profile (DIP) compatibility rules and evolutionary optimization search.",
+        "prediction_explanation": "Pipeline selection process evaluated feature compatibility and model complexity bounds.",
+        "important_features": [
+          "chol",
+          "oldpeak",
+          "thalach",
+          "trestbps",
+          "age"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      }
+    }
+  },
+  "02_categorical_heavy.csv": {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "pipeline": "classification_random_forest",
+    "model": "Random Forest Classifier Pipeline",
+    "metric": "f1",
+    "score": 1.0,
+    "explanation_method": "shap_tree",
+    "llm_provider": "mock",
+    "llm_model": "google/gemini-2.0-flash-001",
+    "modes_evaluated": [
+      "simple",
+      "technical",
+      "prediction",
+      "research",
+      "pipeline"
+    ],
+    "explanations_by_mode": {
+      "simple": {
+        "explanation_mode": "simple",
+        "validation_status": "PASSED",
+        "summary": "GENESIS-AI analyzed '02_categorical_heavy.csv' and selected the 'Random Forest Classifier Pipeline' pipeline, achieving a validation f1 score of 1.0.",
+        "model_explanation": "The model relies primarily on key features to make its decisions. Features were ranked using the shap_tree strategy.",
+        "prediction_explanation": "Individual sample predictions reflect these top feature influences.",
+        "important_features": [
+          "department_HR",
+          "department_Engineering",
+          "education_level_High School",
+          "education_level_Bachelor",
+          "city_Chicago"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0002
+      },
+      "technical": {
+        "explanation_mode": "technical",
+        "validation_status": "PASSED",
+        "summary": "Technical interpretation for dataset '02_categorical_heavy.csv': Pipeline 'Random Forest Classifier Pipeline' achieved a validation score of 1.0 (f1).",
+        "model_explanation": "The fitted model was explained using 'shap_tree'. Global feature rankings reflect empirical model attribution.",
+        "prediction_explanation": "Local prediction explanations identify sample-level feature contributions for representative validation instances.",
+        "important_features": [
+          "department_HR",
+          "department_Engineering",
+          "education_level_High School",
+          "education_level_Bachelor",
+          "city_Chicago"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0002
+      },
+      "prediction": {
+        "explanation_mode": "prediction",
+        "validation_status": "PASSED",
+        "summary": "Representative prediction explanations for dataset '02_categorical_heavy.csv' using model 'Random Forest Classifier Pipeline'.",
+        "model_explanation": "Global model structure evaluated via shap_tree strategy.",
+        "prediction_explanation": "Local attributions highlight individual feature influences for selected representative samples, comparing predictions against actual targets.",
+        "important_features": [
+          "department_HR",
+          "department_Engineering",
+          "education_level_High School",
+          "education_level_Bachelor",
+          "city_Chicago"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "research": {
+        "explanation_mode": "research",
+        "validation_status": "PASSED",
+        "summary": "Empirical evaluation on dataset '02_categorical_heavy.csv' selected candidate model 'Random Forest Classifier Pipeline' with validation score 1.0 (f1).",
+        "model_explanation": "Post-hoc attribution executed via 'shap_tree' strategy without model retraining. Ranked feature importances preserve strictly non-negative standardized bounds.",
+        "prediction_explanation": "Local sample explanations evaluate representative predictions against ground truth targets.",
+        "important_features": [
+          "department_HR",
+          "department_Engineering",
+          "education_level_High School",
+          "education_level_Bachelor",
+          "city_Chicago"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0002
+      },
+      "pipeline": {
+        "explanation_mode": "pipeline",
+        "validation_status": "PASSED",
+        "summary": "GENESIS-AI pipeline selection for '02_categorical_heavy.csv' identified 'Random Forest Classifier Pipeline' as the top candidate algorithm.",
+        "model_explanation": "Selection was guided by Dataset Intelligence Profile (DIP) compatibility rules and evolutionary optimization search.",
+        "prediction_explanation": "Pipeline selection process evaluated feature compatibility and model complexity bounds.",
+        "important_features": [
+          "department_HR",
+          "department_Engineering",
+          "education_level_High School",
+          "education_level_Bachelor",
+          "city_Chicago"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0002
+      }
+    }
+  },
+  "03_missing_values.csv": {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "pipeline": "classification_svc",
+    "model": "Support Vector Classifier Pipeline",
+    "metric": "f1",
+    "score": 0.3333,
+    "explanation_method": "permutation_importance",
+    "llm_provider": "mock",
+    "llm_model": "google/gemini-2.0-flash-001",
+    "modes_evaluated": [
+      "simple",
+      "technical",
+      "prediction",
+      "research",
+      "pipeline"
+    ],
+    "explanations_by_mode": {
+      "simple": {
+        "explanation_mode": "simple",
+        "validation_status": "PASSED",
+        "summary": "GENESIS-AI analyzed '03_missing_values.csv' and selected the 'Support Vector Classifier Pipeline' pipeline, achieving a validation f1 score of 0.3333.",
+        "model_explanation": "The model relies primarily on key features to make its decisions. Features were ranked using the permutation_importance strategy.",
+        "prediction_explanation": "Individual sample predictions reflect these top feature influences.",
+        "important_features": [
+          "category_x",
+          "feature_c",
+          "feature_b",
+          "feature_a"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "technical": {
+        "explanation_mode": "technical",
+        "validation_status": "PASSED",
+        "summary": "Technical interpretation for dataset '03_missing_values.csv': Pipeline 'Support Vector Classifier Pipeline' achieved a validation score of 0.3333 (f1).",
+        "model_explanation": "The fitted model was explained using 'permutation_importance'. Global feature rankings reflect empirical model attribution.",
+        "prediction_explanation": "Local prediction explanations identify sample-level feature contributions for representative validation instances.",
+        "important_features": [
+          "category_x",
+          "feature_c",
+          "feature_b",
+          "feature_a"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "prediction": {
+        "explanation_mode": "prediction",
+        "validation_status": "PASSED",
+        "summary": "Representative prediction explanations for dataset '03_missing_values.csv' using model 'Support Vector Classifier Pipeline'.",
+        "model_explanation": "Global model structure evaluated via permutation_importance strategy.",
+        "prediction_explanation": "Local attributions highlight individual feature influences for selected representative samples, comparing predictions against actual targets.",
+        "important_features": [
+          "category_x",
+          "feature_c",
+          "feature_b",
+          "feature_a"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "research": {
+        "explanation_mode": "research",
+        "validation_status": "PASSED",
+        "summary": "Empirical evaluation on dataset '03_missing_values.csv' selected candidate model 'Support Vector Classifier Pipeline' with validation score 0.3333 (f1).",
+        "model_explanation": "Post-hoc attribution executed via 'permutation_importance' strategy without model retraining. Ranked feature importances preserve strictly non-negative standardized bounds.",
+        "prediction_explanation": "Local sample explanations evaluate representative predictions against ground truth targets.",
+        "important_features": [
+          "category_x",
+          "feature_c",
+          "feature_b",
+          "feature_a"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "pipeline": {
+        "explanation_mode": "pipeline",
+        "validation_status": "PASSED",
+        "summary": "GENESIS-AI pipeline selection for '03_missing_values.csv' identified 'Support Vector Classifier Pipeline' as the top candidate algorithm.",
+        "model_explanation": "Selection was guided by Dataset Intelligence Profile (DIP) compatibility rules and evolutionary optimization search.",
+        "prediction_explanation": "Pipeline selection process evaluated feature compatibility and model complexity bounds.",
+        "important_features": [
+          "category_x",
+          "feature_c",
+          "feature_b",
+          "feature_a"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      }
+    }
+  },
+  "04_imbalanced_classification.csv": {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "pipeline": "classification_svc",
+    "model": "Support Vector Classifier Pipeline",
+    "metric": "f1",
+    "score": 1.0,
+    "explanation_method": "permutation_importance",
+    "llm_provider": "mock",
+    "llm_model": "google/gemini-2.0-flash-001",
+    "modes_evaluated": [
+      "simple",
+      "technical",
+      "prediction",
+      "research",
+      "pipeline"
+    ],
+    "explanations_by_mode": {
+      "simple": {
+        "explanation_mode": "simple",
+        "validation_status": "PASSED",
+        "summary": "GENESIS-AI analyzed '04_imbalanced_classification.csv' and selected the 'Support Vector Classifier Pipeline' pipeline, achieving a validation f1 score of 1.0.",
+        "model_explanation": "The model relies primarily on key features to make its decisions. Features were ranked using the permutation_importance strategy.",
+        "prediction_explanation": "Individual sample predictions reflect these top feature influences.",
+        "important_features": [
+          "v2",
+          "v1",
+          "amount"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "technical": {
+        "explanation_mode": "technical",
+        "validation_status": "PASSED",
+        "summary": "Technical interpretation for dataset '04_imbalanced_classification.csv': Pipeline 'Support Vector Classifier Pipeline' achieved a validation score of 1.0 (f1).",
+        "model_explanation": "The fitted model was explained using 'permutation_importance'. Global feature rankings reflect empirical model attribution.",
+        "prediction_explanation": "Local prediction explanations identify sample-level feature contributions for representative validation instances.",
+        "important_features": [
+          "v2",
+          "v1",
+          "amount"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "prediction": {
+        "explanation_mode": "prediction",
+        "validation_status": "PASSED",
+        "summary": "Representative prediction explanations for dataset '04_imbalanced_classification.csv' using model 'Support Vector Classifier Pipeline'.",
+        "model_explanation": "Global model structure evaluated via permutation_importance strategy.",
+        "prediction_explanation": "Local attributions highlight individual feature influences for selected representative samples, comparing predictions against actual targets.",
+        "important_features": [
+          "v2",
+          "v1",
+          "amount"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "research": {
+        "explanation_mode": "research",
+        "validation_status": "PASSED",
+        "summary": "Empirical evaluation on dataset '04_imbalanced_classification.csv' selected candidate model 'Support Vector Classifier Pipeline' with validation score 1.0 (f1).",
+        "model_explanation": "Post-hoc attribution executed via 'permutation_importance' strategy without model retraining. Ranked feature importances preserve strictly non-negative standardized bounds.",
+        "prediction_explanation": "Local sample explanations evaluate representative predictions against ground truth targets.",
+        "important_features": [
+          "v2",
+          "v1",
+          "amount"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "pipeline": {
+        "explanation_mode": "pipeline",
+        "validation_status": "PASSED",
+        "summary": "GENESIS-AI pipeline selection for '04_imbalanced_classification.csv' identified 'Support Vector Classifier Pipeline' as the top candidate algorithm.",
+        "model_explanation": "Selection was guided by Dataset Intelligence Profile (DIP) compatibility rules and evolutionary optimization search.",
+        "prediction_explanation": "Pipeline selection process evaluated feature compatibility and model complexity bounds.",
+        "important_features": [
+          "v2",
+          "v1",
+          "amount"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0002
+      }
+    }
+  },
+  "05_regression.csv": {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "pipeline": "regression_linear_regression",
+    "model": "Linear Regression Pipeline",
+    "metric": "rmse",
+    "score": -8302.4758,
+    "explanation_method": "linear_coefficients",
+    "llm_provider": "mock",
+    "llm_model": "google/gemini-2.0-flash-001",
+    "modes_evaluated": [
+      "simple",
+      "technical",
+      "prediction",
+      "research",
+      "pipeline"
+    ],
+    "explanations_by_mode": {
+      "simple": {
+        "explanation_mode": "simple",
+        "validation_status": "PASSED",
+        "summary": "GENESIS-AI analyzed '05_regression.csv' and selected the 'Linear Regression Pipeline' pipeline, achieving a validation rmse score of -8302.4758.",
+        "model_explanation": "The model relies primarily on key features to make its decisions. Features were ranked using the linear_coefficients strategy.",
+        "prediction_explanation": "Individual sample predictions reflect these top feature influences.",
+        "important_features": [
+          "square_feet",
+          "bathrooms",
+          "bedrooms",
+          "age"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0002
+      },
+      "technical": {
+        "explanation_mode": "technical",
+        "validation_status": "PASSED",
+        "summary": "Technical interpretation for dataset '05_regression.csv': Pipeline 'Linear Regression Pipeline' achieved a validation score of -8302.4758 (rmse).",
+        "model_explanation": "The fitted model was explained using 'linear_coefficients'. Global feature rankings reflect empirical model attribution.",
+        "prediction_explanation": "Local prediction explanations identify sample-level feature contributions for representative validation instances.",
+        "important_features": [
+          "square_feet",
+          "bathrooms",
+          "bedrooms",
+          "age"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0002
+      },
+      "prediction": {
+        "explanation_mode": "prediction",
+        "validation_status": "PASSED",
+        "summary": "Representative prediction explanations for dataset '05_regression.csv' using model 'Linear Regression Pipeline'.",
+        "model_explanation": "Global model structure evaluated via linear_coefficients strategy.",
+        "prediction_explanation": "Local attributions highlight individual feature influences for selected representative samples, comparing predictions against actual targets.",
+        "important_features": [
+          "square_feet",
+          "bathrooms",
+          "bedrooms",
+          "age"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0001
+      },
+      "research": {
+        "explanation_mode": "research",
+        "validation_status": "PASSED",
+        "summary": "Empirical evaluation on dataset '05_regression.csv' selected candidate model 'Linear Regression Pipeline' with validation score -8302.4758 (rmse).",
+        "model_explanation": "Post-hoc attribution executed via 'linear_coefficients' strategy without model retraining. Ranked feature importances preserve strictly non-negative standardized bounds.",
+        "prediction_explanation": "Local sample explanations evaluate representative predictions against ground truth targets.",
+        "important_features": [
+          "square_feet",
+          "bathrooms",
+          "bedrooms",
+          "age"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0002
+      },
+      "pipeline": {
+        "explanation_mode": "pipeline",
+        "validation_status": "PASSED",
+        "summary": "GENESIS-AI pipeline selection for '05_regression.csv' identified 'Linear Regression Pipeline' as the top candidate algorithm.",
+        "model_explanation": "Selection was guided by Dataset Intelligence Profile (DIP) compatibility rules and evolutionary optimization search.",
+        "prediction_explanation": "Pipeline selection process evaluated feature compatibility and model complexity bounds.",
+        "important_features": [
+          "square_feet",
+          "bathrooms",
+          "bedrooms",
+          "age"
+        ],
+        "limitations": [
+          "Feature importances measure statistical model dependency, not real-world causation.",
+          "Multicollinearity among features can split importance across correlated columns."
+        ],
+        "evidence_used": [
+          "dataset_id",
+          "task_type",
+          "model_name",
+          "metric",
+          "model_score",
+          "method",
+          "global_importance"
+        ],
+        "unsupported_claims": [],
+        "warnings": [],
+        "runtime_seconds": 0.0002
+      }
+    }
+  }
+}

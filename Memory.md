@@ -5,7 +5,36 @@
 - **Week 3 (Baseline)**: Completed & Frozen (Commit `cc8cc8c`, Recommendation Engine v1.1)
 - **Week 4 (Baseline)**: Completed & Frozen (Commit `5e52abf`, Evolutionary Optimization v1.2)
 - **Week 4.2.2 (Research Cleanup & Wording Hardening)**: Completed & Verified
-- **Week 5 (Explainability & Model Insight Engine)**: Completed, Corrected, & Hardened
+- **Week 5 (Explainability Engine)**: Completed & Frozen
+- **Week 6 (Evidence-Grounded LLM Explanation Layer)**: Completed & Verified
+
+---
+
+## Week 6 — Evidence-Grounded LLM Explanation Layer
+
+### Implementation Status
+Completed and fully verified with automated test suite (**156/156 passed**), 5-dataset 5-mode experiment runner (`experiments/generate_llm_explanations.py`), structured output JSON (`experiments/week6_llm_results.json`), and comprehensive technical documentation (`docs/Week6-LLM-Explanation.md`).
+
+### Architecture & Key Principles
+1. **Separation of ML Computation vs LLM Interpretation**:
+   - Week 5 = FACTS (empirical metrics, model selection, feature importances, SHAP values).
+   - Week 6 = INTERPRETATION OF FACTS (natural language explanations).
+   - The LLM NEVER calculates ML metrics or probabilities; it interprets pre-validated factual evidence.
+2. **Provider Abstraction & Environment Security**:
+   - `LLMClient` interface with `MockLLMClient` (deterministic offline testing) and `OpenRouterClient`.
+   - API keys read from `OPENROUTER_API_KEY` in environment variables; zero secret leakage in code, JSON, logs, or Git. `.env` files ignored via `.gitignore`.
+3. **Evidence Allowlist & Prompt Injection Resistance**:
+   - `ALLOWED_EVIDENCE_FIELDS` allowlist restricts evidence fields reaching the LLM.
+   - Evidence delimited inside `BEGIN VERIFIED EVIDENCE` ... `END VERIFIED EVIDENCE` blocks, instructing LLM that evidence content is untrusted DATA.
+4. **5 Explanation Modes**:
+   - `simple`, `technical`, `prediction`, `research`, `pipeline`.
+5. **Response Guardrails & Validation**:
+   - `ResponseValidator` enforces numerical claim protection (rejects ungrounded metrics), feature claim protection (rejects hallucinated feature names), and causality protection (flags direct causal statements).
+6. **Pytest Execution Status**:
+   - Total tests: **156** (38 Week 2 + 31 Week 3 + 30 Week 4 + 33 Week 5 + 24 Week 6)
+   - Passed: **156**
+   - Failed: 0
+   - Execution time: ~36.8s (100% offline)
 
 ---
 
@@ -14,25 +43,6 @@
 ### Implementation Status
 Completed and fully verified with automated test suite (**132/132 passed**), 5-dataset controlled experiment runner (`experiments/generate_explainability_results.py`), structured output JSON (`experiments/week5_explainability_results.json`), and comprehensive technical documentation (`docs/Week5-Explainability.md`).
 
-### Key Methodological Decisions & Bug Fixes
-1. **Permutation Importance Metric Enforcement**:
-   - Classification strictly evaluates macro F1 (`custom_f1_macro_scorer`) and reports metric `f1_macro`. Removed silent fallback to `accuracy`.
-   - Regression strictly evaluates negative RMSE (`custom_neg_rmse_scorer`) and reports metric `neg_root_mean_squared_error`.
-2. **Local Attribution Scientific Integrity**:
-   - Eliminated artificial local contributions (`importance * feature_value`) for `permutation_importance` and `native_tree` methods.
-   - `shap_tree` $\rightarrow$ global + local attributions.
-   - `linear_coefficients` $\rightarrow$ global + local linear contributions ($w_i \cdot x_{trans, i}$).
-   - `permutation_importance` $\rightarrow$ global importances only (`local_explanations = []` + warning).
-   - `native_tree` $\rightarrow$ global importances only (`local_explanations = []` + warning).
-3. **Local Row Alignment & Index Bug Fix**:
-   - Corrected local prediction retrieval in `local.py`: predictions and targets use exact original row index `orig_row_idx`.
-   - Refactored callback extractor signature to `contribution_extractor_fn(orig_row_idx)`.
-4. **Pytest Execution Status**:
-   - Total tests: **132** (38 Week 2 + 31 Week 3 + 30 Week 4 + 33 Week 5)
-   - Passed: **132**
-   - Failed: 0
-   - Execution time: ~36.6s
-
 ---
 
 ## Week 4.2.2 — Final Research Cleanup & Wording Hardening
@@ -40,10 +50,7 @@ Completed and fully verified with automated test suite (**132/132 passed**), 5-d
 ### Implementation Status
 Completed and fully verified with automated test suite (**99/99 passed**), 115 multi-seed experiment runs, synchronized research analysis, and cautious research interpretations.
 
-### Cautious Research Conclusion
-> *"GENESIS demonstrates controllable candidate-space reduction. The current development experiments indicate a trade-off between search-space reduction, computational efficiency, and predictive performance. Smaller Top-K values provide greater reduction but increase the risk of excluding strong candidate pipelines. Retaining a baseline-winning pipeline does not guarantee identical performance because evolutionary optimization may select different hyperparameters. Broader benchmark evaluation (Phase 8) is required before making general claims about GENESIS-AI."*
-
 ---
 
 ## Next Action
-Week 5 research correction is complete and fully verified. Awaiting project-owner review. Week 6 has NOT been implemented.
+Week 6 implementation is complete and fully verified. Awaiting project-owner review. Week 7 has NOT been implemented.
