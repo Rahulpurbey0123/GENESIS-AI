@@ -9,6 +9,7 @@ This repository contains the implementation of:
 - **Week 4: Evolutionary Pipeline Optimization Engine**
 - **Week 5: Explainability & Model Insight Engine**
 - **Week 6: Evidence-Grounded LLM Explanation Layer**
+- **Week 7: Integrated Evaluation & Ablation Framework**
 
 ---
 
@@ -54,6 +55,11 @@ This repository contains the implementation of:
 - **5 Explanation Modes**: `simple`, `technical`, `prediction`, `research`, and `pipeline`.
 - **Response Guardrails**: `ResponseValidator` enforces numerical claim protection (rejects ungrounded metrics), feature claim protection (rejects hallucinated features), and causality protection (converts causal phrasing to statistical attribution).
 
+### Week 7 — Integrated Evaluation & Ablation Framework
+- **Rigorous 5-Method Controlled Benchmark**: Evaluates Method A (Full GENESIS), Method B (Without DIP), Method C (Without Recommendation Engine), Method D (Recommendation Only), Method E (Unguided Baseline) across 5 datasets and 5 random seeds (125 benchmark observations).
+- **Task-Separated & Direction-Aware Hypothesis Evaluation**: H1 (Macro F1 & RMSE vs Unguided Baseline), H2 (Search Efficiency & Performance Maintenance vs Without DIP), H3 (GA Solution Quality vs Recommendation Only), H4 (Task-Separated Run-to-Run Stability).
+- **Strict Statistical Evidence & Fallback**: Paired t-tests ($p < 0.05$) drive status decisions without descriptive win-count shortcuts (`all_matched` removed from status logic). Zero-variance fallback prevents inferring statistical significance from raw mean differences.
+
 ---
 
 ## Software-Validation Datasets & Measured Results
@@ -82,7 +88,7 @@ cd GENESIS-AI
 # Install dependencies
 pip install -r requirements.txt
 
-# Run full test suite (156 passed)
+# Run full test suite (219 passed)
 python -m pytest tests/ -q
 ```
 
@@ -105,14 +111,19 @@ python -m experiments.generate_explainability_results
 
 # Run Week 6 LLM Explanation Experiment
 python -m experiments.generate_llm_explanations
+
+# Run Week 7 Integrated Benchmark & Research Analysis
+python experiments/run_week7_benchmarks.py
+python experiments/analyze_week7_results.py
 ```
 
 ---
 
 ## Verification & Test Suite
-The codebase is covered by **156 unit and integration tests** passing with 0 failures:
+The codebase is covered by **219 unit and integration tests** passing with 0 failures:
 - Week 2 Tests: 38 passing tests
 - Week 3 Tests: 31 passing tests
 - Week 4 Tests: 30 passing tests
 - Week 5 Tests: 33 passing tests
-- Week 6 Tests: 24 passing tests (including provider abstraction, evidence validation, prompt injection resistance, guardrails, and mode verification)
+- Week 6 Tests: 24 passing tests
+- Week 7 Tests: 63 passing tests (including baseline protocol, ablation runner, statistical testing, direction awareness, H1/H2/H3/H4 evaluations, and statistical fallback rule)

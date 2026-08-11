@@ -1,0 +1,2756 @@
+[
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 42,
+    "metric": "f1",
+    "score": 0.7333,
+    "candidate_evaluations": 28,
+    "unique_evaluations": 28,
+    "runtime_seconds": 0.29,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "kernel": "rbf",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.2,
+    "candidate_evaluations": 25,
+    "unique_evaluations": 25,
+    "runtime_seconds": 0.24,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "kernel": "linear",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 456,
+    "metric": "f1",
+    "score": 0.7333,
+    "candidate_evaluations": 30,
+    "unique_evaluations": 30,
+    "runtime_seconds": 0.29,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "solver": "lbfgs",
+        "max_iter": 1000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.5,
+    "candidate_evaluations": 29,
+    "unique_evaluations": 29,
+    "runtime_seconds": 0.26,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.7333,
+    "candidate_evaluations": 25,
+    "unique_evaluations": 25,
+    "runtime_seconds": 0.22,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "solver": "lbfgs",
+        "max_iter": 1000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 42,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 58,
+    "unique_evaluations": 58,
+    "runtime_seconds": 4.35,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 300,
+        "max_leaf_nodes": 31,
+        "max_depth": null,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.2,
+    "candidate_evaluations": 38,
+    "unique_evaluations": 38,
+    "runtime_seconds": 1.59,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "max_iter": 2000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 456,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 84,
+    "unique_evaluations": 84,
+    "runtime_seconds": 4.44,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 300,
+        "max_leaf_nodes": 63,
+        "max_depth": 10,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.5,
+    "candidate_evaluations": 46,
+    "unique_evaluations": 46,
+    "runtime_seconds": 2.12,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.7333,
+    "candidate_evaluations": 38,
+    "unique_evaluations": 38,
+    "runtime_seconds": 2.44,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "solver": "lbfgs",
+        "max_iter": 1000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 42,
+    "metric": "f1",
+    "score": 0.7333,
+    "candidate_evaluations": 49,
+    "unique_evaluations": 49,
+    "runtime_seconds": 3.86,
+    "best_configuration": {
+      "pipeline_id": "classification_k_neighbors",
+      "pipeline_name": "K-Neighbors Classifier Pipeline",
+      "hyperparameters": {
+        "n_neighbors": 11,
+        "weights": "uniform",
+        "p": 1
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.2,
+    "candidate_evaluations": 67,
+    "unique_evaluations": 67,
+    "runtime_seconds": 11.54,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "kernel": "linear",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 456,
+    "metric": "f1",
+    "score": 0.7333,
+    "candidate_evaluations": 76,
+    "unique_evaluations": 76,
+    "runtime_seconds": 14.35,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 200,
+        "max_depth": 5,
+        "min_samples_split": 5,
+        "min_samples_leaf": 1,
+        "max_features": "log2"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.0,
+    "candidate_evaluations": 48,
+    "unique_evaluations": 48,
+    "runtime_seconds": 6.58,
+    "best_configuration": {
+      "pipeline_id": "classification_k_neighbors",
+      "pipeline_name": "K-Neighbors Classifier Pipeline",
+      "hyperparameters": {
+        "n_neighbors": 11,
+        "weights": "uniform",
+        "p": 1
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 40,
+    "unique_evaluations": 40,
+    "runtime_seconds": 2.62,
+    "best_configuration": {
+      "pipeline_id": "classification_k_neighbors",
+      "pipeline_name": "K-Neighbors Classifier Pipeline",
+      "hyperparameters": {
+        "n_neighbors": 5,
+        "weights": "uniform",
+        "p": 1
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 42,
+    "metric": "f1",
+    "score": 0.5,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.06,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.2,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.06,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 456,
+    "metric": "f1",
+    "score": 0.7333,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.06,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.5,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.06,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.7333,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.05,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "kernel": "linear",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 42,
+    "metric": "f1",
+    "score": 0.7333,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 115,
+    "runtime_seconds": 48.02,
+    "best_configuration": {
+      "pipeline_id": "classification_k_neighbors",
+      "pipeline_name": "K-Neighbors Classifier Pipeline",
+      "hyperparameters": {
+        "n_neighbors": 11,
+        "weights": "uniform",
+        "p": 1
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.5,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 122,
+    "runtime_seconds": 37.7,
+    "best_configuration": {
+      "pipeline_id": "classification_k_neighbors",
+      "pipeline_name": "K-Neighbors Classifier Pipeline",
+      "hyperparameters": {
+        "n_neighbors": 5,
+        "weights": "uniform",
+        "p": 1
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 456,
+    "metric": "f1",
+    "score": 0.7333,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 117,
+    "runtime_seconds": 29.78,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 300,
+        "max_depth": 30,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "max_features": "sqrt"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.0,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 115,
+    "runtime_seconds": 17.56,
+    "best_configuration": {
+      "pipeline_id": "classification_k_neighbors",
+      "pipeline_name": "K-Neighbors Classifier Pipeline",
+      "hyperparameters": {
+        "n_neighbors": 11,
+        "weights": "uniform",
+        "p": 1
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "01_numerical_classification.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.5,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 128,
+    "runtime_seconds": 19.64,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 1.0,
+        "kernel": "linear",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 42,
+    "metric": "f1",
+    "score": 0.4,
+    "candidate_evaluations": 78,
+    "unique_evaluations": 78,
+    "runtime_seconds": 17.44,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 10,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "max_features": "log2"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.25,
+    "candidate_evaluations": 86,
+    "unique_evaluations": 86,
+    "runtime_seconds": 22.45,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 500,
+        "max_depth": 10,
+        "min_samples_split": 5,
+        "min_samples_leaf": 1,
+        "max_features": "log2"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 456,
+    "metric": "f1",
+    "score": 0.25,
+    "candidate_evaluations": 92,
+    "unique_evaluations": 92,
+    "runtime_seconds": 25.89,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 200,
+        "max_depth": 5,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "max_features": "sqrt"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.25,
+    "candidate_evaluations": 78,
+    "unique_evaluations": 78,
+    "runtime_seconds": 50.53,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 20,
+        "min_samples_split": 2,
+        "min_samples_leaf": 2,
+        "max_features": "log2"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.0,
+    "candidate_evaluations": 109,
+    "unique_evaluations": 109,
+    "runtime_seconds": 37.55,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 200,
+        "max_depth": 30,
+        "min_samples_split": 5,
+        "min_samples_leaf": 1,
+        "max_features": "log2"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 42,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 35,
+    "unique_evaluations": 35,
+    "runtime_seconds": 2.46,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 100.0,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.25,
+    "candidate_evaluations": 38,
+    "unique_evaluations": 38,
+    "runtime_seconds": 3.21,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "max_iter": 2000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 456,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 42,
+    "unique_evaluations": 42,
+    "runtime_seconds": 3.8,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "solver": "lbfgs",
+        "max_iter": 1000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.6667,
+    "candidate_evaluations": 46,
+    "unique_evaluations": 46,
+    "runtime_seconds": 3.94,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 100.0,
+        "solver": "lbfgs",
+        "max_iter": 2000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.25,
+    "candidate_evaluations": 37,
+    "unique_evaluations": 37,
+    "runtime_seconds": 2.93,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 42,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 42,
+    "unique_evaluations": 42,
+    "runtime_seconds": 5.58,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 1.0,
+        "kernel": "linear",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.6667,
+    "candidate_evaluations": 46,
+    "unique_evaluations": 46,
+    "runtime_seconds": 8.9,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 100.0,
+        "kernel": "rbf",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 456,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 42,
+    "unique_evaluations": 42,
+    "runtime_seconds": 5.26,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "kernel": "rbf",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.6667,
+    "candidate_evaluations": 53,
+    "unique_evaluations": 53,
+    "runtime_seconds": 6.95,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "kernel": "rbf",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.6667,
+    "candidate_evaluations": 49,
+    "unique_evaluations": 49,
+    "runtime_seconds": 8.61,
+    "best_configuration": {
+      "pipeline_id": "classification_k_neighbors",
+      "pipeline_name": "K-Neighbors Classifier Pipeline",
+      "hyperparameters": {
+        "n_neighbors": 7,
+        "weights": "distance",
+        "p": 1
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 42,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.43,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": null,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "max_features": "sqrt"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.25,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.3,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 100,
+        "max_leaf_nodes": 15,
+        "max_depth": null,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 456,
+    "metric": "f1",
+    "score": 0.25,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.4,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 100,
+        "max_leaf_nodes": 15,
+        "max_depth": null,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.25,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.78,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": null,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "max_features": "sqrt"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.25,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.92,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": null,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "max_features": "sqrt"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 42,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 115,
+    "runtime_seconds": 24.86,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 100.0,
+        "solver": "lbfgs",
+        "max_iter": 2000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 123,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 122,
+    "runtime_seconds": 13.6,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 1.0,
+        "solver": "lbfgs",
+        "max_iter": 1000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 456,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 117,
+    "runtime_seconds": 12.8,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 100.0,
+        "kernel": "rbf",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.6667,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 115,
+    "runtime_seconds": 11.44,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 1.0,
+        "kernel": "linear",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "02_categorical_heavy.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.6667,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 128,
+    "runtime_seconds": 14.35,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 1.0,
+        "kernel": "rbf",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 42,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 57,
+    "unique_evaluations": 57,
+    "runtime_seconds": 2.72,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "kernel": "rbf",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 71,
+    "unique_evaluations": 71,
+    "runtime_seconds": 3.89,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "kernel": "linear",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 456,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 58,
+    "unique_evaluations": 58,
+    "runtime_seconds": 3.02,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "kernel": "linear",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.0,
+    "candidate_evaluations": 44,
+    "unique_evaluations": 44,
+    "runtime_seconds": 2.35,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 100.0,
+        "kernel": "linear",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 51,
+    "unique_evaluations": 51,
+    "runtime_seconds": 2.76,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.05,
+        "max_iter": 300,
+        "max_leaf_nodes": 63,
+        "max_depth": 5,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 42,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 58,
+    "unique_evaluations": 58,
+    "runtime_seconds": 3.22,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 300,
+        "max_leaf_nodes": 31,
+        "max_depth": null,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 69,
+    "unique_evaluations": 69,
+    "runtime_seconds": 3.43,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.1,
+        "max_iter": 100,
+        "max_leaf_nodes": 31,
+        "max_depth": 5,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 456,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 42,
+    "unique_evaluations": 42,
+    "runtime_seconds": 2.09,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "solver": "lbfgs",
+        "max_iter": 1000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.0,
+    "candidate_evaluations": 40,
+    "unique_evaluations": 40,
+    "runtime_seconds": 1.84,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 100.0,
+        "solver": "lbfgs",
+        "max_iter": 2000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.0,
+    "candidate_evaluations": 72,
+    "unique_evaluations": 72,
+    "runtime_seconds": 3.52,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 42,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 71,
+    "unique_evaluations": 71,
+    "runtime_seconds": 7.12,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 1.0,
+        "kernel": "linear",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 85,
+    "unique_evaluations": 85,
+    "runtime_seconds": 12.02,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 100.0,
+        "kernel": "rbf",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 456,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 66,
+    "unique_evaluations": 66,
+    "runtime_seconds": 10.47,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 200,
+        "max_depth": 5,
+        "min_samples_split": 5,
+        "min_samples_leaf": 1,
+        "max_features": "log2"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.0,
+    "candidate_evaluations": 48,
+    "unique_evaluations": 48,
+    "runtime_seconds": 3.44,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "kernel": "rbf",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.0,
+    "candidate_evaluations": 74,
+    "unique_evaluations": 74,
+    "runtime_seconds": 12.29,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 500,
+        "max_depth": 5,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "max_features": "sqrt"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 42,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.12,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 100,
+        "max_leaf_nodes": 15,
+        "max_depth": null,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.1,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 100,
+        "max_leaf_nodes": 15,
+        "max_depth": null,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 456,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.08,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "kernel": "linear",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.12,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 100,
+        "max_leaf_nodes": 15,
+        "max_depth": null,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.11,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 100,
+        "max_leaf_nodes": 15,
+        "max_depth": null,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 42,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 115,
+    "runtime_seconds": 14.07,
+    "best_configuration": {
+      "pipeline_id": "classification_k_neighbors",
+      "pipeline_name": "K-Neighbors Classifier Pipeline",
+      "hyperparameters": {
+        "n_neighbors": 3,
+        "weights": "uniform",
+        "p": 2
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 123,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 122,
+    "runtime_seconds": 12.46,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 1.0,
+        "solver": "lbfgs",
+        "max_iter": 1000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 456,
+    "metric": "f1",
+    "score": 0.3333,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 117,
+    "runtime_seconds": 14.38,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 100.0,
+        "solver": "lbfgs",
+        "max_iter": 1000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 789,
+    "metric": "f1",
+    "score": 0.0,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 115,
+    "runtime_seconds": 11.97,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 1.0,
+        "kernel": "linear",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "03_missing_values.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 0.0,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 128,
+    "runtime_seconds": 14.71,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 500,
+        "max_depth": 10,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "max_features": "log2"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 42,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 28,
+    "unique_evaluations": 28,
+    "runtime_seconds": 0.27,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "kernel": "rbf",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 123,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 27,
+    "unique_evaluations": 27,
+    "runtime_seconds": 0.23,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "kernel": "linear",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 456,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 29,
+    "unique_evaluations": 29,
+    "runtime_seconds": 0.23,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "solver": "lbfgs",
+        "max_iter": 1000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 789,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 28,
+    "unique_evaluations": 28,
+    "runtime_seconds": 0.24,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 100.0,
+        "kernel": "rbf",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_a_full_genesis",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 28,
+    "unique_evaluations": 28,
+    "runtime_seconds": 0.24,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 42,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 58,
+    "unique_evaluations": 58,
+    "runtime_seconds": 2.87,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.01,
+        "max_iter": 300,
+        "max_leaf_nodes": 31,
+        "max_depth": null,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 123,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 69,
+    "unique_evaluations": 69,
+    "runtime_seconds": 3.07,
+    "best_configuration": {
+      "pipeline_id": "classification_hist_gradient_boosting",
+      "pipeline_name": "HistGradientBoosting Classifier Pipeline",
+      "hyperparameters": {
+        "learning_rate": 0.1,
+        "max_iter": 100,
+        "max_leaf_nodes": 31,
+        "max_depth": 5,
+        "l2_regularization": 0.0
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 456,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 42,
+    "unique_evaluations": 42,
+    "runtime_seconds": 1.87,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "solver": "lbfgs",
+        "max_iter": 1000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 789,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 47,
+    "unique_evaluations": 47,
+    "runtime_seconds": 2.08,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 100.0,
+        "solver": "lbfgs",
+        "max_iter": 2000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_b_without_dip",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 72,
+    "unique_evaluations": 72,
+    "runtime_seconds": 3.32,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 42,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 69,
+    "unique_evaluations": 69,
+    "runtime_seconds": 4.07,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 1.0,
+        "kernel": "linear",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 123,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 49,
+    "unique_evaluations": 49,
+    "runtime_seconds": 2.62,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "kernel": "linear",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 456,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 55,
+    "unique_evaluations": 55,
+    "runtime_seconds": 5.87,
+    "best_configuration": {
+      "pipeline_id": "classification_random_forest",
+      "pipeline_name": "Random Forest Classifier Pipeline",
+      "hyperparameters": {
+        "n_estimators": 500,
+        "max_depth": null,
+        "min_samples_split": 5,
+        "min_samples_leaf": 1,
+        "max_features": "sqrt"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 789,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 50,
+    "unique_evaluations": 50,
+    "runtime_seconds": 3.07,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 1.0,
+        "kernel": "rbf",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_c_without_recommendation",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 71,
+    "unique_evaluations": 71,
+    "runtime_seconds": 6.73,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "solver": "lbfgs",
+        "max_iter": 2000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 42,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.05,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 123,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.04,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 456,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.04,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "kernel": "linear",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 789,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.04,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 0.1,
+        "kernel": "linear",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_d_recommendation_only",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.04,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 42,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 115,
+    "runtime_seconds": 13.84,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "max_iter": 500
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 123,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 122,
+    "runtime_seconds": 12.13,
+    "best_configuration": {
+      "pipeline_id": "classification_logistic_regression",
+      "pipeline_name": "Logistic Regression Pipeline",
+      "hyperparameters": {
+        "C": 1.0,
+        "solver": "lbfgs",
+        "max_iter": 1000
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 456,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 117,
+    "runtime_seconds": 13.58,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 100.0,
+        "kernel": "rbf",
+        "gamma": "auto"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 789,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 115,
+    "runtime_seconds": 11.41,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 10.0,
+        "kernel": "rbf",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "04_imbalanced_classification.csv",
+    "task_type": "classification",
+    "method": "method_e_unguided_baseline",
+    "seed": 2024,
+    "metric": "f1",
+    "score": 1.0,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 128,
+    "runtime_seconds": 13.9,
+    "best_configuration": {
+      "pipeline_id": "classification_svc",
+      "pipeline_name": "Support Vector Classifier Pipeline",
+      "hyperparameters": {
+        "C": 1.0,
+        "kernel": "rbf",
+        "gamma": "scale"
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_a_full_genesis",
+    "seed": 42,
+    "metric": "rmse",
+    "score": 10131.5098,
+    "candidate_evaluations": 26,
+    "unique_evaluations": 26,
+    "runtime_seconds": 0.21,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_a_full_genesis",
+    "seed": 123,
+    "metric": "rmse",
+    "score": 7799.0503,
+    "candidate_evaluations": 28,
+    "unique_evaluations": 28,
+    "runtime_seconds": 0.19,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_a_full_genesis",
+    "seed": 456,
+    "metric": "rmse",
+    "score": 7356.685,
+    "candidate_evaluations": 23,
+    "unique_evaluations": 23,
+    "runtime_seconds": 0.18,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_a_full_genesis",
+    "seed": 789,
+    "metric": "rmse",
+    "score": 7886.09,
+    "candidate_evaluations": 26,
+    "unique_evaluations": 26,
+    "runtime_seconds": 0.18,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_a_full_genesis",
+    "seed": 2024,
+    "metric": "rmse",
+    "score": 8063.3432,
+    "candidate_evaluations": 24,
+    "unique_evaluations": 24,
+    "runtime_seconds": 0.16,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_b_without_dip",
+    "seed": 42,
+    "metric": "rmse",
+    "score": 10131.5098,
+    "candidate_evaluations": 33,
+    "unique_evaluations": 33,
+    "runtime_seconds": 1.83,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_b_without_dip",
+    "seed": 123,
+    "metric": "rmse",
+    "score": 7799.0503,
+    "candidate_evaluations": 32,
+    "unique_evaluations": 32,
+    "runtime_seconds": 1.79,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_b_without_dip",
+    "seed": 456,
+    "metric": "rmse",
+    "score": 7356.685,
+    "candidate_evaluations": 34,
+    "unique_evaluations": 34,
+    "runtime_seconds": 1.75,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_b_without_dip",
+    "seed": 789,
+    "metric": "rmse",
+    "score": 7886.09,
+    "candidate_evaluations": 28,
+    "unique_evaluations": 28,
+    "runtime_seconds": 1.48,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_b_without_dip",
+    "seed": 2024,
+    "metric": "rmse",
+    "score": 8063.3432,
+    "candidate_evaluations": 29,
+    "unique_evaluations": 29,
+    "runtime_seconds": 1.6,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_c_without_recommendation",
+    "seed": 42,
+    "metric": "rmse",
+    "score": 10131.5098,
+    "candidate_evaluations": 40,
+    "unique_evaluations": 40,
+    "runtime_seconds": 2.98,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_c_without_recommendation",
+    "seed": 123,
+    "metric": "rmse",
+    "score": 7799.0503,
+    "candidate_evaluations": 39,
+    "unique_evaluations": 39,
+    "runtime_seconds": 2.82,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_c_without_recommendation",
+    "seed": 456,
+    "metric": "rmse",
+    "score": 7356.685,
+    "candidate_evaluations": 31,
+    "unique_evaluations": 31,
+    "runtime_seconds": 2.74,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_c_without_recommendation",
+    "seed": 789,
+    "metric": "rmse",
+    "score": 7886.09,
+    "candidate_evaluations": 37,
+    "unique_evaluations": 37,
+    "runtime_seconds": 2.13,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_c_without_recommendation",
+    "seed": 2024,
+    "metric": "rmse",
+    "score": 8063.3432,
+    "candidate_evaluations": 39,
+    "unique_evaluations": 39,
+    "runtime_seconds": 2.46,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_d_recommendation_only",
+    "seed": 42,
+    "metric": "rmse",
+    "score": 10131.5098,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.04,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_d_recommendation_only",
+    "seed": 123,
+    "metric": "rmse",
+    "score": 7799.0503,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.03,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_d_recommendation_only",
+    "seed": 456,
+    "metric": "rmse",
+    "score": 7356.685,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.03,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_d_recommendation_only",
+    "seed": 789,
+    "metric": "rmse",
+    "score": 7886.09,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.03,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_d_recommendation_only",
+    "seed": 2024,
+    "metric": "rmse",
+    "score": 8063.3432,
+    "candidate_evaluations": 2,
+    "unique_evaluations": 2,
+    "runtime_seconds": 0.03,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_e_unguided_baseline",
+    "seed": 42,
+    "metric": "rmse",
+    "score": 10131.5098,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 124,
+    "runtime_seconds": 10.6,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_e_unguided_baseline",
+    "seed": 123,
+    "metric": "rmse",
+    "score": 7799.0503,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 125,
+    "runtime_seconds": 10.2,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_e_unguided_baseline",
+    "seed": 456,
+    "metric": "rmse",
+    "score": 7356.685,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 125,
+    "runtime_seconds": 9.85,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_e_unguided_baseline",
+    "seed": 789,
+    "metric": "rmse",
+    "score": 7886.09,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 113,
+    "runtime_seconds": 12.2,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  },
+  {
+    "dataset": "05_regression.csv",
+    "task_type": "regression",
+    "method": "method_e_unguided_baseline",
+    "seed": 2024,
+    "metric": "rmse",
+    "score": 8063.3432,
+    "candidate_evaluations": 200,
+    "unique_evaluations": 124,
+    "runtime_seconds": 10.91,
+    "best_configuration": {
+      "pipeline_id": "regression_linear_regression",
+      "pipeline_name": "Linear Regression Pipeline",
+      "hyperparameters": {
+        "fit_intercept": true
+      }
+    },
+    "status": "success",
+    "error": null
+  }
+]

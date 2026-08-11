@@ -1,0 +1,67 @@
+[
+  {
+    "method_code": "A",
+    "method": "method_a_full_genesis",
+    "description": "DIP + Recommendation (Top-K=2) + Evolutionary Optimization",
+    "has_dip": true,
+    "has_recommendation": true,
+    "has_optimization": true,
+    "mean_classification_f1": 0.5192,
+    "mean_regression_rmse": 8247.3357,
+    "mean_candidate_evaluations": 45.1,
+    "mean_runtime_seconds": 6.88,
+    "relative_efficiency_gain": 77.44
+  },
+  {
+    "method_code": "B",
+    "method": "method_b_without_dip",
+    "description": "Recommendation (Uniform/Static Ranking) + Evolutionary Optimization",
+    "has_dip": false,
+    "has_recommendation": true,
+    "has_optimization": true,
+    "mean_classification_f1": 0.5633,
+    "mean_regression_rmse": 8247.3357,
+    "mean_candidate_evaluations": 47.5,
+    "mean_runtime_seconds": 2.68,
+    "relative_efficiency_gain": 76.26
+  },
+  {
+    "method_code": "C",
+    "method": "method_c_without_recommendation",
+    "description": "DIP Compatibility Filtering + Evolutionary Optimization (All Candidates)",
+    "has_dip": true,
+    "has_recommendation": false,
+    "has_optimization": true,
+    "mean_classification_f1": 0.6,
+    "mean_regression_rmse": 8247.3357,
+    "mean_candidate_evaluations": 53.4,
+    "mean_runtime_seconds": 6.2,
+    "relative_efficiency_gain": 73.28
+  },
+  {
+    "method_code": "D",
+    "method": "method_d_recommendation_only",
+    "description": "Top Recommended Pipeline with Default Hyperparameters (No GA)",
+    "has_dip": true,
+    "has_recommendation": true,
+    "has_optimization": false,
+    "mean_classification_f1": 0.5667,
+    "mean_regression_rmse": 8247.3357,
+    "mean_candidate_evaluations": 2.0,
+    "mean_runtime_seconds": 0.16,
+    "relative_efficiency_gain": 99.0
+  },
+  {
+    "method_code": "E",
+    "method": "method_e_unguided_baseline",
+    "description": "Random Search over Compatible Search Space (Equal Evaluation Budget)",
+    "has_dip": false,
+    "has_recommendation": false,
+    "has_optimization": false,
+    "mean_classification_f1": 0.64,
+    "mean_regression_rmse": 8247.3357,
+    "mean_candidate_evaluations": 200.0,
+    "mean_runtime_seconds": 16.64,
+    "relative_efficiency_gain": 0.0
+  }
+]
