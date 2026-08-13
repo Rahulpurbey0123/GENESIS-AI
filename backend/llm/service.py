@@ -36,7 +36,8 @@ class LLMService:
         raw_evidence: Any,
         mode: str = "technical",
         provider_override: Optional[str] = None,
-        model_override: Optional[str] = None
+        model_override: Optional[str] = None,
+        user_prompt: Optional[str] = None
     ) -> LLMExplanationOutput:
         """
         Generate an evidence-grounded LLM explanation for Week 5 structured output.
@@ -46,6 +47,7 @@ class LLMService:
             mode: Explanation mode ('simple', 'technical', 'prediction', 'research', 'pipeline').
             provider_override: Optional provider override ('mock' or 'openrouter').
             model_override: Optional model identifier override.
+            user_prompt: Optional user question to address specifically.
 
         Returns:
             Structured LLMExplanationOutput object.
@@ -79,23 +81,51 @@ class LLMService:
 
         # Step 3: Build system instruction & controlled user prompt
         system_instruction = PromptBuilder.build_system_instruction()
-        user_prompt = PromptBuilder.build_prompt(cleaned_evidence, mode=norm_mode)
+        full_user_prompt = PromptBuilder.build_prompt(cleaned_evidence, mode=norm_mode, user_prompt=user_prompt)
 
         # Step 4: Execute LLM provider call
         try:
-            raw_llm_response = effective_client.generate(prompt=user_prompt, system_instruction=system_instruction)
+            raw_llm_response = effective_client.generate(prompt=full_user_prompt, system_instruction=system_instruction)
         except Exception as e:
             all_warnings.append(f"LLM provider generation error ({effective_client.provider_name}): {str(e)}")
-            # Return graceful error output
+            # Detect question intent for question-aware fallback
+            from backend.llm.client import MockLLMClient
+            intent_detector = MockLLMClient()
+            intent = intent_detector._detect_intent(user_prompt or "")
+
+            ds_name = cleaned_evidence.get('dataset_id', 'dataset')
+            m_name = cleaned_evidence.get('model_name', 'Unknown')
+            metric_name = cleaned_evidence.get('metric', 'score')
+            score_val = cleaned_evidence.get('model_score', 'N/A')
+            top_feats = [r.get("feature") for r in cleaned_evidence.get("global_importance", [])[:3] if isinstance(r, dict)]
+
+            if intent == "PERFORMANCE":
+                fallback_summary = f"Performance fallback for '{ds_name}': Model '{m_name}' recorded validation score {score_val} ({metric_name})."
+                fallback_model_exp = f"Model '{m_name}' generalization evaluated via metric '{metric_name}'."
+            elif intent == "FEATURE_IMPORTANCE":
+                fallback_summary = f"Feature attributions fallback for '{ds_name}': Top features include {', '.join(top_feats) if top_feats else 'unspecified'}."
+                fallback_model_exp = f"Feature ranking calculated via empirical attributions."
+            elif intent == "METRIC_DEFINITION":
+                fallback_summary = f"Metric concept fallback: '{metric_name}' measures prediction quality. Stored experiment score is {score_val}."
+                fallback_model_exp = f"F1 macro is the unweighted average of per-class F1 scores. Verified result: {score_val}."
+            elif intent == "RECOMMENDATION":
+                fallback_summary = f"Recommendation fallback for '{ds_name}': Model '{m_name}' was selected via dataset DIP rules."
+                fallback_model_exp = f"DIP rules prioritized '{m_name}' based on dataset feature complexity."
+            else:
+                fallback_summary = f"Grounded fallback for '{ds_name}': Model '{m_name}' achieved score {score_val} ({metric_name})."
+                fallback_model_exp = f"Model '{m_name}' evaluated on dataset '{ds_name}'."
+
             fallback_response = LLMStructuredResponse(
-                summary="LLM explanation generation failed due to a provider communication error.",
-                model_explanation=f"Model '{cleaned_evidence.get('model_name', 'Unknown')}' was evaluated on dataset '{cleaned_evidence.get('dataset_id', 'dataset')}'.",
+                summary=fallback_summary,
+                model_explanation=fallback_model_exp,
                 prediction_explanation="Local prediction explanations unavailable due to provider error.",
-                important_features=[r.get("feature") for r in cleaned_evidence.get("global_importance", [])[:3] if isinstance(r, dict)],
-                limitations=["Provider call failed; output contains fallback evidence summary."],
+                important_features=top_feats,
+                limitations=["Provider call failed; output contains question-aware fallback evidence summary."],
                 evidence_used=["dataset_id", "model_name", "metric", "model_score"],
-                unsupported_claims=[f"Provider error: {str(e)}"]
+                unsupported_claims=[f"Provider error: {str(e)}"],
+                question_intent=intent
             )
+
 
             end_time = time.perf_counter()
             return LLMExplanationOutput(

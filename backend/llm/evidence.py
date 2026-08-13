@@ -28,8 +28,15 @@ ALLOWED_EVIDENCE_FIELDS: Set[str] = {
     "prediction",
     "actual_value",
     "warnings",
-    "metadata"
+    "metadata",
+    "recommendation_summary",
+    "efficiency",
+    "metrics",
+    "status",
+    "dip_summary",
+    "search_space"
 }
+
 
 VALID_TASK_TYPES: Set[str] = {"classification", "regression"}
 VALID_METRICS: Set[str] = {"f1", "f1_macro", "accuracy", "rmse", "neg_root_mean_squared_error", "r2", "mae"}
@@ -108,18 +115,22 @@ class EvidenceValidator:
 
         # Check metric & model_score
         metric = str(evidence.get("metric", "score"))
-        score_val = evidence.get("model_score", 0.0)
-        try:
-            score_float = float(score_val)
-            if math.isnan(score_float) or math.isinf(score_float):
-                warnings.append("Model score contained non-finite float. Sanitized to 0.0.")
-                score_float = 0.0
-        except (ValueError, TypeError):
-            warnings.append("Model score could not be parsed to float. Sanitized to 0.0.")
-            score_float = 0.0
+        score_val = evidence.get("model_score")
+        if score_val is not None:
+            try:
+                score_float = float(score_val)
+                if math.isnan(score_float) or math.isinf(score_float):
+                    warnings.append("Model score contained non-finite float. Excluded score (None).")
+                    cleaned["model_score"] = None
+                else:
+                    cleaned["model_score"] = round(score_float, 4)
+            except (ValueError, TypeError):
+                warnings.append("Model score could not be parsed to float. Excluded score (None).")
+                cleaned["model_score"] = None
+        else:
+            cleaned["model_score"] = None
 
         cleaned["metric"] = metric
-        cleaned["model_score"] = round(score_float, 4)
 
         # Check method
         method = str(evidence.get("method", "unsupported"))
@@ -134,20 +145,26 @@ class EvidenceValidator:
             for item in raw_global:
                 if isinstance(item, dict):
                     fname = str(item.get("feature", "unknown_feature"))
-                    imp_val = item.get("importance", 0.0)
-                    try:
-                        imp_float = float(imp_val) if imp_val is not None else 0.0
-                        if math.isnan(imp_float) or math.isinf(imp_float):
-                            imp_float = 0.0
-                    except (ValueError, TypeError):
-                        imp_float = 0.0
+                    imp_val = item.get("importance")
+                    imp_clean = None
+                    if imp_val is not None:
+                        try:
+                            imp_float = float(imp_val)
+                            if math.isnan(imp_float) or math.isinf(imp_float):
+                                warnings.append(f"Non-finite importance value for feature '{fname}'. Excluded importance.")
+                                imp_clean = None
+                            else:
+                                imp_clean = round(imp_float, 4)
+                        except (ValueError, TypeError):
+                            warnings.append(f"Invalid importance value for feature '{fname}'. Excluded importance.")
+                            imp_clean = None
 
                     rank_val = item.get("rank", len(cleaned_global) + 1)
                     dir_val = item.get("direction", None)
 
                     cleaned_global.append({
                         "feature": fname,
-                        "importance": round(imp_float, 4),
+                        "importance": imp_clean,
                         "rank": int(rank_val) if isinstance(rank_val, int) else len(cleaned_global) + 1,
                         "direction": int(dir_val) if isinstance(dir_val, int) else None
                     })
@@ -172,18 +189,24 @@ class EvidenceValidator:
                             if isinstance(c, dict):
                                 c_fname = str(c.get("feature", "unknown"))
                                 c_fval = c.get("feature_value", None)
-                                c_score = c.get("contribution", 0.0)
-                                try:
-                                    c_score_float = float(c_score) if c_score is not None else 0.0
-                                    if math.isnan(c_score_float) or math.isinf(c_score_float):
-                                        c_score_float = 0.0
-                                except (ValueError, TypeError):
-                                    c_score_float = 0.0
+                                c_score = c.get("contribution")
+                                c_clean = None
+                                if c_score is not None:
+                                    try:
+                                        c_score_float = float(c_score)
+                                        if math.isnan(c_score_float) or math.isinf(c_score_float):
+                                            warnings.append(f"Non-finite contribution for feature '{c_fname}'. Excluded contribution.")
+                                            c_clean = None
+                                        else:
+                                            c_clean = round(c_score_float, 4)
+                                    except (ValueError, TypeError):
+                                        warnings.append(f"Invalid contribution for feature '{c_fname}'. Excluded contribution.")
+                                        c_clean = None
 
                                 cleaned_contribs.append({
                                     "feature": c_fname,
                                     "feature_value": c_fval,
-                                    "contribution": round(c_score_float, 4)
+                                    "contribution": c_clean
                                 })
 
                     cleaned_local.append({
@@ -202,5 +225,10 @@ class EvidenceValidator:
 
         raw_meta = evidence.get("metadata", {})
         cleaned["metadata"] = dict(raw_meta) if isinstance(raw_meta, dict) else {}
+
+        # Preserve structured enrichment fields if present
+        for extra_k in ["recommendation_summary", "efficiency", "metrics", "status", "dip_summary", "search_space"]:
+            if extra_k in evidence:
+                cleaned[extra_k] = evidence[extra_k]
 
         return True, warnings, cleaned

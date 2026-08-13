@@ -46,8 +46,8 @@ def test_5_evidence_validation_and_sanitization():
     assert is_valid is True
     assert len(warnings) > 0
     assert cleaned["task_type"] == "classification"  # Cleaned fallback
-    assert cleaned["model_score"] == 0.0              # Cleaned NaN fallback
-    assert cleaned["global_importance"][1]["importance"] == 0.0  # Cleaned Inf fallback
+    assert cleaned["model_score"] is None             # Cleaned NaN fallback to None
+    assert cleaned["global_importance"][1]["importance"] is None  # Cleaned Inf fallback to None
 
 
 def test_12_missing_evidence_handling():

@@ -5,7 +5,7 @@ Orchestrates data splitting, candidate pool selection (GENESIS vs BASELINE), GA 
 elitism, budget enforcement, evaluation caching, and isolated test set evaluation.
 """
 
-from typing import Dict, Any, Union, Optional, List, Tuple
+from typing import Dict, Any, Union, Optional, List, Tuple, Callable
 import time
 import logging
 import random
@@ -17,6 +17,7 @@ from sklearn.metrics import accuracy_score, f1_score, mean_squared_error, mean_a
 
 from backend.dataset.loader import load_csv
 from backend.dataset.validator import validate_dataset
+from backend.dataset.cleaner import clean_dataset_for_ml
 from backend.dataset.dip import generate_dip
 from backend.recommendation.engine import RecommendationEngine
 from backend.recommendation.registry import PipelineRegistry
@@ -64,8 +65,11 @@ class EvolutionaryOptimizer:
         self,
         file_source_or_df: Union[str, Path, bytes, pd.DataFrame],
         target_column: str,
-        dataset_name: str = "dataset.csv"
+        dataset_name: str = "dataset.csv",
+        progress_callback: Optional[Callable[[int, int, int, float, float], None]] = None,
+        evaluate_test: bool = True
     ) -> OptimizationResult:
+
         """
         Execute Evolutionary Pipeline Optimization in GENESIS mode or BASELINE mode.
 
@@ -89,13 +93,20 @@ class EvolutionaryOptimizer:
         val_report = validate_dataset(df, target_column)
         target_col = val_report["target_column"]
 
+        # Clean dataset for ML (removes missing/NaN/inf target rows and replaces feature infs)
+        df = clean_dataset_for_ml(df, target_column=target_col)
+
         # Step 2: Extract DIP v1.1 Profile
         dip_dict = generate_dip(df, target_column=target_col, dataset_name=dataset_name)
         task_type = dip_dict["target"]["task_type"].lower()
 
         # Step 3: Train / Validation / Test Dataset Splitting
-        X = df.drop(columns=[target_col])
-        y = df[target_col]
+        from backend.dataset.contract import get_canonical_data_split
+        X, y, feature_names, actual_target_col, identifier_cols = get_canonical_data_split(
+            df, target_column=target_col, exclude_identifiers=True
+        )
+
+
 
         # Stratified split for classification if possible
         stratify_y = y if task_type == "classification" and y.nunique() > 1 and y.value_counts().min() >= 2 else None
@@ -218,6 +229,11 @@ class EvolutionaryOptimizer:
                 )
             )
 
+            if progress_callback:
+                elapsed_now = round(time.perf_counter() - start_time, 2)
+                cur_best = round(overall_best_fitness, 4) if overall_best_fitness != float("-inf") else 0.0
+                progress_callback(gen, self.config.generations, fitness_manager.evaluations_used, cur_best, elapsed_now)
+
             # Check evaluation budget before breeding next generation
             if fitness_manager.evaluations_used >= self.config.max_evaluations:
                 break
@@ -265,40 +281,44 @@ class EvolutionaryOptimizer:
 
             population = next_population[:self.config.population_size]
 
-        if overall_best_chrom is None:
-            overall_best_chrom = population[0]
-            overall_best_fitness = float("-inf")
-
-        # Step 8: Isolated Test Set Evaluation (Evaluated strictly ONCE post-GA)
-        test_performance: Dict[str, float] = {}
-        try:
-            best_pipeline_model = build_sklearn_pipeline(
-                pipeline_id=overall_best_chrom.pipeline_id,
-                hyperparameters=overall_best_chrom.hyperparameters,
-                X_sample=X_train_val,
-                random_state=self.config.random_state
+        if overall_best_chrom is None or overall_best_fitness == float("-inf"):
+            raise EvolutionaryOptimizerError(
+                "All candidate pipeline evaluations failed. Please check dataset feature and target validity."
             )
-            # Fit on combined Train + Validation splits
-            best_pipeline_model.fit(X_train_val, y_train_val)
-            y_test_pred = best_pipeline_model.predict(X_test)
 
-            if task_type == "classification":
-                test_acc = float(accuracy_score(y_test, y_test_pred))
-                test_f1 = float(f1_score(y_test, y_test_pred, average="macro", zero_division=0))
-                test_performance = {"f1": round(test_f1, 4), "accuracy": round(test_acc, 4)}
-            else:
-                test_mse = float(mean_squared_error(y_test, y_test_pred))
-                test_rmse = float(np.sqrt(test_mse))
-                test_mae = float(mean_absolute_error(y_test, y_test_pred))
-                test_r2 = float(r2_score(y_test, y_test_pred))
-                test_performance = {
-                    "rmse": round(test_rmse, 4),
-                    "mae": round(test_mae, 4),
-                    "r2": round(test_r2, 4)
-                }
-        except Exception as e:
-            logger.warning(f"Final test set evaluation failed: {str(e)}")
-            test_performance = {"error": -1.0}
+
+        # Step 8: Isolated Test Set Evaluation
+        test_performance: Dict[str, float] = {}
+        if evaluate_test:
+            try:
+                best_pipeline_model = build_sklearn_pipeline(
+                    pipeline_id=overall_best_chrom.pipeline_id,
+                    hyperparameters=overall_best_chrom.hyperparameters,
+                    X_sample=X_train_val,
+                    random_state=self.config.random_state
+                )
+                # Fit on combined Train + Validation splits
+                best_pipeline_model.fit(X_train_val, y_train_val)
+                y_test_pred = best_pipeline_model.predict(X_test)
+
+                if task_type == "classification":
+                    test_acc = float(accuracy_score(y_test, y_test_pred))
+                    test_f1 = float(f1_score(y_test, y_test_pred, average="macro", zero_division=0))
+                    test_performance = {"f1": round(test_f1, 4), "accuracy": round(test_acc, 4)}
+                else:
+                    test_mse = float(mean_squared_error(y_test, y_test_pred))
+                    test_rmse = float(np.sqrt(test_mse))
+                    test_mae = float(mean_absolute_error(y_test, y_test_pred))
+                    test_r2 = float(r2_score(y_test, y_test_pred))
+                    test_performance = {
+                        "rmse": round(test_rmse, 4),
+                        "mae": round(test_mae, 4),
+                        "r2": round(test_r2, 4)
+                    }
+            except Exception as e:
+                logger.warning(f"Final test set evaluation failed: {str(e)}")
+                test_performance = {"error": -1.0}
+
 
         end_time = time.perf_counter()
         elapsed_sec = round(end_time - start_time, 2)

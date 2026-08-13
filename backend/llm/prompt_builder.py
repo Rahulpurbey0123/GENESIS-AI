@@ -36,7 +36,8 @@ class PromptBuilder:
     @staticmethod
     def build_prompt(
         evidence: Dict[str, Any],
-        mode: str = "technical"
+        mode: str = "technical",
+        user_prompt: Optional[str] = None
     ) -> str:
         """
         Build controlled user prompt containing delimited evidence and mode instructions.
@@ -44,6 +45,7 @@ class PromptBuilder:
         Args:
             evidence: Validated evidence dictionary.
             mode: Explanation mode string ('simple', 'technical', 'prediction', 'research', 'pipeline').
+            user_prompt: Optional user question to specifically address.
 
         Returns:
             Formatted prompt string.
@@ -51,17 +53,51 @@ class PromptBuilder:
         norm_mode = normalize_mode(mode)
         mode_instruction = MODE_INSTRUCTIONS.get(norm_mode, MODE_INSTRUCTIONS[ExplanationMode.TECHNICAL.value])
 
+        user_question_block = ""
+        if user_prompt and user_prompt.strip():
+            user_question_block = f"""USER SPECIFIC QUESTION TO ANSWER BASED ON VERIFIED EVIDENCE:
+"{user_prompt.strip()}"
+
+Instructions for User Question:
+Address the user's question directly, clearly, and specifically using ONLY the factual evidence provided inside the VERIFIED FACTUAL EVIDENCE block. Do not invent facts or metrics outside the evidence.
+"""
+
+        # Format recommendation summary
+        rec_summary = evidence.get("recommendation_summary", {})
+        rec_summary_lines = []
+        if isinstance(rec_summary, dict) and rec_summary.get("top_recommendations"):
+            rec_summary_lines.append("RECOMMENDATION SUMMARY:")
+            for r in rec_summary["top_recommendations"]:
+                rec_summary_lines.append(f"  - Recommended Candidate: {r.get('name', 'N/A')}, Score: {r.get('score', 'N/A')}")
+            if rec_summary.get("search_space_reduction") is not None:
+                ssr = rec_summary.get("search_space_reduction")
+                rec_summary_lines.append(f"  - DIP Search Space Reduction: {ssr}")
+        else:
+            rec_summary_lines.append("RECOMMENDATION SUMMARY:\n  - (No explicit recommendation facts provided in evidence)")
+
+        # Format search space & efficiency
+        eff_summary = evidence.get("efficiency", {}) or evidence.get("search_space", {})
+        eff_summary_lines = []
+        if isinstance(eff_summary, dict) and eff_summary:
+            evals = eff_summary.get("pipelines_evaluated", eff_summary.get("evaluated_pipelines", "N/A"))
+            gens = eff_summary.get("generations", "N/A")
+            ssr = eff_summary.get("search_space_reduction", "N/A")
+            eff_summary_lines.append(f"SEARCH SPACE & EFFICIENCY:\n  - Evaluated Pipelines: {evals}, Generations: {gens}, Search Space Reduction: {ssr}")
+        else:
+            eff_summary_lines.append("SEARCH SPACE & EFFICIENCY:\n  - (Standard baseline evaluation)")
+
         # Format global feature importances for prompt
         global_imp = evidence.get("global_importance", [])
         global_summary_lines = []
         if isinstance(global_imp, list) and len(global_imp) > 0:
             for rec in global_imp[:10]:
                 feat = rec.get("feature", "unknown")
-                imp = rec.get("importance", 0.0)
+                imp = rec.get("importance")
+                imp_str = f"{imp:.4f}" if isinstance(imp, (int, float)) else "N/A"
                 rank = rec.get("rank", "-")
                 direction = rec.get("direction", None)
                 dir_str = f", Direction: {direction:+d}" if direction is not None else ""
-                global_summary_lines.append(f"  - Feature: {feat}, Normalized Importance: {imp:.4f}, Rank: {rank}{dir_str}")
+                global_summary_lines.append(f"  - Feature: {feat}, Normalized Importance: {imp_str}, Rank: {rank}{dir_str}")
         else:
             global_summary_lines.append("  - (No global feature importances provided)")
 
@@ -83,14 +119,19 @@ class PromptBuilder:
                     for c in contribs[:5]:
                         c_feat = c.get("feature", "unknown")
                         c_val = c.get("feature_value", "N/A")
-                        c_score = c.get("contribution", 0.0)
-                        local_summary_lines.append(f"    - {c_feat} (Value: {c_val}): Contribution = {c_score:+.4f}")
+                        c_score = c.get("contribution")
+                        c_score_str = f"{c_score:+.4f}" if isinstance(c_score, (int, float)) else "N/A"
+                        local_summary_lines.append(f"    - {c_feat} (Value: {c_val}): Contribution = {c_score_str}")
         else:
             local_summary_lines.append("  - (No per-sample local explanations generated for this method)")
 
         # Format warnings
         warnings = evidence.get("warnings", [])
         warn_lines = [f"  - {w}" for w in warnings] if warnings else ["  - None"]
+
+        metric_raw = str(evidence.get("metric", "score")).upper()
+        score_val = evidence.get("model_score")
+        score_str = f"{score_val:.4f}" if isinstance(score_val, (int, float)) else "N/A"
 
         # Assemble evidence block
         evidence_block = f"""
@@ -99,9 +140,13 @@ Dataset: {evidence.get("dataset_id", "unknown_dataset.csv")}
 Pipeline ID: {evidence.get("pipeline_id", "custom_pipeline")}
 Model: {evidence.get("model_name", "Unknown Estimator")}
 Task Type: {evidence.get("task_type", "classification")}
-Evaluation Metric: {evidence.get("metric", "score")}
-Validation Score: {evidence.get("model_score", 0.0)}
+Evaluation Metric: {metric_raw}
+Evaluation Score ({metric_raw}): {score_str}
 Explanation Strategy: {evidence.get("method", "unsupported")}
+
+{chr(10).join(rec_summary_lines)}
+
+{chr(10).join(eff_summary_lines)}
 
 GLOBAL FEATURE IMPORTANCES:
 {chr(10).join(global_summary_lines)}
@@ -117,6 +162,7 @@ END VERIFIED EVIDENCE
         # Assemble full user prompt
         prompt = f"""EXPLANATION MODE: {norm_mode.upper()}
 
+{user_question_block}
 MODE SPECIFIC INSTRUCTION:
 {mode_instruction}
 
@@ -126,13 +172,14 @@ VERIFIED FACTUAL EVIDENCE:
 OUTPUT FORMAT REQUIREMENT:
 Respond ONLY with a valid JSON object matching the following structure:
 {{
-  "summary": "<High-level narrative summary of the evidence>",
-  "model_explanation": "<Explanation of candidate model and global feature importances>",
-  "prediction_explanation": "<Explanation of representative prediction explanations or statement that local attributions are unavailable>",
+  "summary": "<High-level narrative summary specifically answering the user's question>",
+  "model_explanation": "<Explanation focusing on the requested topic: model performance, top features, metric concepts, recommendations, or pipeline search>",
+  "prediction_explanation": "<Explanation of representative predictions or statement that local attributions are unavailable>",
   "important_features": ["<feature_name_1>", "<feature_name_2>"],
   "limitations": ["<limitation_1>", "<limitation_2>"],
   "evidence_used": ["dataset_id", "model_name", "metric", "model_score", "method", "global_importance"],
-  "unsupported_claims": []
+  "unsupported_claims": [],
+  "question_intent": "<PERFORMANCE | FEATURE_IMPORTANCE | METRIC_DEFINITION | RECOMMENDATION | PIPELINE | PREDICTION | SEARCH_SPACE | GENERAL_EXPERIMENT>"
 }}
 """
         return prompt

@@ -112,7 +112,8 @@ class ResponseValidator:
                         evidence_features.add(str(c["feature"]))
 
         evidence_metric = str(evidence.get("metric", "")).lower()
-        evidence_score = float(evidence.get("model_score", 0.0))
+        raw_score = evidence.get("model_score")
+        evidence_score = float(raw_score) if raw_score is not None else None
 
         # Step 2: Validate feature claims (Feature Claim Protection)
         raw_features = res_dict.get("important_features", [])
@@ -159,8 +160,10 @@ class ResponseValidator:
             important_features=valid_features,
             limitations=[str(l) for l in limitations],
             evidence_used=[str(e) for e in res_dict.get("evidence_used", ["dataset_id", "model_name", "metric", "model_score"])],
-            unsupported_claims=[str(u) for u in (res_dict.get("unsupported_claims", []) + unsupported_claims)]
+            unsupported_claims=[str(u) for u in (res_dict.get("unsupported_claims", []) + unsupported_claims)],
+            question_intent=str(res_dict.get("question_intent", "GENERAL_EXPERIMENT"))
         )
+
 
         is_valid = len(unsupported_claims) == 0
         return is_valid, warnings, structured_res

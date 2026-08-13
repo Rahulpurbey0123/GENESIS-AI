@@ -14,6 +14,9 @@ htmlcov/
 # Data
 data/processed/*
 !data/processed/.gitkeep
+data/*.db
+data/uploads/
+!data/test_datasets/
 
 # IDEs
 .vscode/

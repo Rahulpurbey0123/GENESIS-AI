@@ -58,6 +58,11 @@ class LLMStructuredResponse(BaseModel):
         default_factory=list,
         description="List of flagged or rejected claims not supported by evidence."
     )
+    question_intent: Optional[str] = Field(
+        default="GENERAL_EXPERIMENT",
+        description="Detected user question intent (PERFORMANCE, FEATURE_IMPORTANCE, METRIC_DEFINITION, RECOMMENDATION, PIPELINE, PREDICTION, SEARCH_SPACE, GENERAL_EXPERIMENT)."
+    )
+
 
 
 class LLMExplanationOutput(BaseModel):

@@ -10,6 +10,7 @@ This repository contains the implementation of:
 - **Week 5: Explainability & Model Insight Engine**
 - **Week 6: Evidence-Grounded LLM Explanation Layer**
 - **Week 7: Integrated Evaluation & Ablation Framework**
+- **Week 8: Integrated React Frontend Dashboard & End-to-End Application**
 
 ---
 
@@ -55,10 +56,12 @@ This repository contains the implementation of:
 - **5 Explanation Modes**: `simple`, `technical`, `prediction`, `research`, and `pipeline`.
 - **Response Guardrails**: `ResponseValidator` enforces numerical claim protection (rejects ungrounded metrics), feature claim protection (rejects hallucinated features), and causality protection (converts causal phrasing to statistical attribution).
 
-### Week 7 — Integrated Evaluation & Ablation Framework
-- **Rigorous 5-Method Controlled Benchmark**: Evaluates Method A (Full GENESIS), Method B (Without DIP), Method C (Without Recommendation Engine), Method D (Recommendation Only), Method E (Unguided Baseline) across 5 datasets and 5 random seeds (125 benchmark observations).
-- **Task-Separated & Direction-Aware Hypothesis Evaluation**: H1 (Macro F1 & RMSE vs Unguided Baseline), H2 (Search Efficiency & Performance Maintenance vs Without DIP), H3 (GA Solution Quality vs Recommendation Only), H4 (Task-Separated Run-to-Run Stability).
-- **Strict Statistical Evidence & Fallback**: Paired t-tests ($p < 0.05$) drive status decisions without descriptive win-count shortcuts (`all_matched` removed from status logic). Zero-variance fallback prevents inferring statistical significance from raw mean differences.
+### Week 8 — Integrated React Frontend Dashboard & End-to-End Application
+- **Modern Dark-Mode Dashboard**: Sleek React + Tailwind CSS + Plotly web application covering 9 dedicated workflow screens.
+- **RESTful FastAPI Orchestration Layer**: Full REST endpoint architecture for CSV upload, DIP profiling, experiment management, search space reduction, results, SHAP, and grounded LLM chat.
+- **Thread-Safe SQLite Persistence**: Built-in SQLite store (`data/genesis.db`) for tracking datasets, DIP profiles, experiment progress, evaluation metrics, explanations, and chat history.
+- **Non-Blocking Background Experiment Manager**: Asynchronous optimization job runner with real-time status polling (`RUNNING`, `COMPLETED`, `FAILED`).
+- **Grounded AI Assistant**: Interactive Q&A interface accessing stored experiment evidence without LLM hallucination or key exposure.
 
 ---
 
@@ -74,23 +77,20 @@ This repository contains the implementation of:
 
 ---
 
-## Installation & Setup
+## Running the Application
 
-### Requirements
-- Python 3.9+
-- Dependencies: `pandas`, `numpy`, `scikit-learn`, `pydantic>=2.0`, `pytest`, `shap>=0.41.0`
-
+### Backend API Server
 ```bash
-# Clone the repository
-git clone https://github.com/Rahulpurbey0123/GENESIS-AI.git
-cd GENESIS-AI
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run full test suite (219 passed)
-python -m pytest tests/ -q
+python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```
+
+### React Frontend Dashboard
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Open `http://localhost:5173` in browser.
 
 ---
 
@@ -120,10 +120,11 @@ python experiments/analyze_week7_results.py
 ---
 
 ## Verification & Test Suite
-The codebase is covered by **219 unit and integration tests** passing with 0 failures:
+The codebase is covered by **239 unit and integration tests** passing with 0 failures:
 - Week 2 Tests: 38 passing tests
 - Week 3 Tests: 31 passing tests
 - Week 4 Tests: 30 passing tests
 - Week 5 Tests: 33 passing tests
 - Week 6 Tests: 24 passing tests
-- Week 7 Tests: 63 passing tests (including baseline protocol, ablation runner, statistical testing, direction awareness, H1/H2/H3/H4 evaluations, and statistical fallback rule)
+- Week 7 Tests: 63 passing tests
+- Week 8 Tests: 20 passing tests (REST API endpoints, dataset upload, DIP profile API, experiment job runner, read-only recommendations, test set metrics, SHAP/Permutation, grounded chat with user questions, metric-specific fallback terminology, and DIP schema hardening tests)

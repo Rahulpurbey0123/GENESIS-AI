@@ -101,7 +101,10 @@ def build_sklearn_pipeline(
     transformers = []
 
     if num_cols:
-        num_steps = [("imputer", SimpleImputer(strategy="median"))]
+        num_steps = [
+            ("imputer_median", SimpleImputer(strategy="median")),
+            ("imputer_fallback", SimpleImputer(strategy="constant", fill_value=0.0)),
+        ]
         if requires_scaling:
             num_steps.append(("scaler", StandardScaler()))
         transformers.append(("num", Pipeline(num_steps), num_cols))
@@ -109,15 +112,18 @@ def build_sklearn_pipeline(
     if cat_cols:
         if use_ordinal:
             cat_steps = [
-                ("imputer", SimpleImputer(strategy="most_frequent")),
+                ("imputer_freq", SimpleImputer(strategy="most_frequent")),
+                ("imputer_fallback", SimpleImputer(strategy="constant", fill_value="missing")),
                 ("encoder", OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-1)),
             ]
         else:
             cat_steps = [
-                ("imputer", SimpleImputer(strategy="most_frequent")),
+                ("imputer_freq", SimpleImputer(strategy="most_frequent")),
+                ("imputer_fallback", SimpleImputer(strategy="constant", fill_value="missing")),
                 ("encoder", OneHotEncoder(handle_unknown="ignore", sparse_output=False)),
             ]
         transformers.append(("cat", Pipeline(cat_steps), cat_cols))
+
 
     if transformers:
         preprocessor = ColumnTransformer(transformers=transformers, remainder="drop")

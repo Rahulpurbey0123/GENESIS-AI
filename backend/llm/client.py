@@ -54,15 +54,34 @@ class LLMClient(ABC):
 class MockLLMClient(LLMClient):
     """
     Deterministic Mock LLM Client for offline testing and benchmarking.
-    Generates structured, evidence-grounded JSON explanations without network requests or API keys.
+    Generates question-aware, evidence-grounded JSON explanations without network requests.
     """
 
     @property
     def provider_name(self) -> str:
         return "mock"
 
+    def _detect_intent(self, user_question: str) -> str:
+        q = user_question.lower()
+        if any(k in q for k in ["why did this model perform", "perform well", "performance", "accuracy", "how good", "score"]):
+            return "PERFORMANCE"
+        elif any(k in q for k in ["important feature", "most important", "feature importance", "key feature", "top feature", "variables", "drivers"]):
+            return "FEATURE_IMPORTANCE"
+        elif any(k in q for k in ["f1 macro", "f1 mean", "what does", "metric mean", "meaning of", "explain metric", "what is f1", "what is rmse", "what is accuracy", "what is r2"]):
+            return "METRIC_DEFINITION"
+        elif any(k in q for k in ["recommended", "why was this model", "recommendation", "selection reason", "dip rule"]):
+            return "RECOMMENDATION"
+        elif any(k in q for k in ["search space", "reduction", "evaluated", "pipelines evaluated", "generations"]):
+            return "SEARCH_SPACE"
+        elif any(k in q for k in ["pipeline", "hyperparameter", "architecture", "algorithm"]):
+            return "PIPELINE"
+        elif any(k in q for k in ["prediction", "sample", "row", "local"]):
+            return "PREDICTION"
+        else:
+            return "GENERAL_EXPERIMENT"
+
     def generate(self, prompt: str, system_instruction: str = "") -> str:
-        """Generate a deterministic, structured JSON explanation based on prompt evidence."""
+        """Generate a question-aware, deterministic structured JSON explanation based on prompt evidence."""
         dataset_name = "dataset.csv"
         model_name = "Candidate Pipeline"
         metric = "score"
@@ -70,17 +89,27 @@ class MockLLMClient(LLMClient):
         method_val = "explanation method"
         mode = "technical"
         top_features: List[str] = []
+        user_question = ""
+        has_rec_evidence = False
 
+        in_question = False
         for line in prompt.split("\n"):
             sline = line.strip()
-            if sline.startswith("Dataset:"):
+            if sline.startswith("USER SPECIFIC QUESTION TO ANSWER"):
+                in_question = True
+                continue
+            elif in_question and sline.startswith("Instructions for User Question:"):
+                in_question = False
+            elif in_question and sline.startswith('"') and sline.endswith('"'):
+                user_question = sline.strip('"')
+            elif sline.startswith("Dataset:"):
                 dataset_name = sline.split("Dataset:")[1].strip()
             elif sline.startswith("Model:"):
                 model_name = sline.split("Model:")[1].strip()
             elif sline.startswith("Evaluation Metric:"):
                 metric = sline.split("Evaluation Metric:")[1].strip()
-            elif sline.startswith("Validation Score:"):
-                score_val = sline.split("Validation Score:")[1].strip()
+            elif sline.startswith("Evaluation Score") or sline.startswith("Validation Score:"):
+                score_val = sline.split(":")[1].strip()
             elif sline.startswith("Explanation Strategy:"):
                 method_val = sline.split("Explanation Strategy:")[1].strip()
             elif sline.startswith("EXPLANATION MODE:"):
@@ -89,62 +118,72 @@ class MockLLMClient(LLMClient):
                 fname = sline.split("Feature:")[1].split(",")[0].strip()
                 if fname and fname not in top_features:
                     top_features.append(fname)
+            elif "Recommended Candidate:" in sline:
+                has_rec_evidence = True
 
-        # Mode-specific narrative responses
-        if mode == "simple":
+        intent = self._detect_intent(user_question)
+
+        # Question-aware narrative responses based on intent
+        if intent == "PERFORMANCE":
             summary = (
-                f"GENESIS-AI analyzed '{dataset_name}' and selected the '{model_name}' pipeline, "
-                f"achieving a validation {metric} score of {score_val}."
+                f"Model '{model_name}' achieved strong predictive validation on dataset '{dataset_name}' "
+                f"with an evaluation {metric} score of {score_val}."
             )
             model_exp = (
-                f"The model relies primarily on key features to make its decisions. "
-                f"Features were ranked using the {method_val} strategy."
+                f"Performance ({metric} = {score_val}) reflects robust generalization across cross-validation splits. "
+                f"Key decision patterns were driven by top features: {', '.join(top_features[:3]) if top_features else 'primary feature inputs'}."
             )
-            pred_exp = "Individual sample predictions reflect these top feature influences."
-        elif mode == "research":
+            pred_exp = "Evaluation metrics validate individual sample predictions against ground-truth target values."
+
+        elif intent == "FEATURE_IMPORTANCE":
+            top_str = ", ".join([f"'{f}'" for f in top_features[:3]]) if top_features else "unspecified features"
+            summary = f"The most influential feature attributions for dataset '{dataset_name}' are {top_str}."
+            model_exp = (
+                f"Global feature rankings derived via '{method_val}' identify '{top_features[0] if top_features else 'the primary feature'}' "
+                f"as having the highest relative influence on model output."
+            )
+            pred_exp = "Local sample explanations reflect how top features push individual predictions away from baseline."
+
+        elif intent == "METRIC_DEFINITION":
             summary = (
-                f"Empirical evaluation on dataset '{dataset_name}' selected candidate model '{model_name}' "
-                f"with validation score {score_val} ({metric})."
+                f"Evaluation metric '{metric}' measures predictive model quality on held-out splits. "
+                f"For dataset '{dataset_name}', the stored verified result is {score_val}."
             )
             model_exp = (
-                f"Post-hoc attribution executed via '{method_val}' strategy without model retraining. "
-                f"Ranked feature importances preserve strictly non-negative standardized bounds."
+                f"Metric Definition: {metric} evaluates prediction error/accuracy against true targets. "
+                f"In classification, F1 macro computes the unweighted mean of per-class F1 scores. "
+                f"Your experiment's stored verified score is {score_val} ({metric})."
             )
-            pred_exp = "Local sample explanations evaluate representative predictions against ground truth targets."
-        elif mode == "pipeline":
-            summary = (
-                f"GENESIS-AI pipeline selection for '{dataset_name}' identified '{model_name}' "
-                f"as the top candidate algorithm."
-            )
-            model_exp = (
-                f"Selection was guided by Dataset Intelligence Profile (DIP) compatibility rules "
-                f"and evolutionary optimization search."
-            )
-            pred_exp = "Pipeline selection process evaluated feature compatibility and model complexity bounds."
-        elif mode == "prediction":
-            summary = (
-                f"Representative prediction explanations for dataset '{dataset_name}' "
-                f"using model '{model_name}'."
-            )
-            model_exp = f"Global model structure evaluated via {method_val} strategy."
-            pred_exp = (
-                f"Local attributions highlight individual feature influences for selected representative samples, "
-                f"comparing predictions against actual targets."
-            )
-        else:
-            # technical mode (default)
-            summary = (
-                f"Technical interpretation for dataset '{dataset_name}': Pipeline '{model_name}' "
-                f"achieved a validation score of {score_val} ({metric})."
-            )
-            model_exp = (
-                f"The fitted model was explained using '{method_val}'. "
-                f"Global feature rankings reflect empirical model attribution."
-            )
-            pred_exp = (
-                "Local prediction explanations identify sample-level feature contributions "
-                "for representative validation instances."
-            )
+            pred_exp = "Metric definition concepts apply across all sample predictions in the evaluation split."
+
+        elif intent == "RECOMMENDATION":
+            if has_rec_evidence:
+                summary = f"Pipeline '{model_name}' was recommended for dataset '{dataset_name}' by DIP profiling rules."
+                model_exp = f"DIP dataset rules filtered incompatible model families and prioritized '{model_name}' based on feature counts and complexity."
+            else:
+                summary = f"Recommendation information for pipeline '{model_name}' on dataset '{dataset_name}'."
+                model_exp = f"Explicit recommendation candidate ranking facts are unavailable in the stored evidence payload for this experiment."
+            pred_exp = "Pipeline recommendation rules evaluate dataset-level characteristics rather than individual sample predictions."
+
+        elif intent == "SEARCH_SPACE":
+            summary = f"Search space optimization evaluated candidate pipelines for dataset '{dataset_name}'."
+            model_exp = f"Evolutionary optimization pruned search space complexity to select pipeline '{model_name}' with score {score_val}."
+            pred_exp = "Search space reduction focuses on global pipeline selection."
+
+        elif intent == "PREDICTION":
+            summary = f"Local prediction explanations for dataset '{dataset_name}' using model '{model_name}'."
+            model_exp = f"Global model attributions evaluated via strategy '{method_val}'."
+            pred_exp = "Local attributions highlight sample-level feature contributions for representative validation instances."
+
+        else: # GENERAL_EXPERIMENT or default mode fallback
+            if mode == "simple":
+                summary = f"GENESIS-AI analyzed '{dataset_name}' and selected '{model_name}', achieving score {score_val} ({metric})."
+                model_exp = f"The model relies primarily on key features. Features were ranked using '{method_val}'."
+                pred_exp = "Individual sample predictions reflect top feature influences."
+            else:
+                summary = f"Technical interpretation for dataset '{dataset_name}': Pipeline '{model_name}' achieved score {score_val} ({metric})."
+                model_exp = f"The fitted model was explained using '{method_val}'. Global feature rankings reflect empirical model attributions."
+                pred_exp = "Local prediction explanations identify sample-level feature contributions."
 
         response_dict = {
             "summary": summary,
@@ -156,10 +195,12 @@ class MockLLMClient(LLMClient):
                 "Multicollinearity among features can split importance across correlated columns."
             ],
             "evidence_used": ["dataset_id", "task_type", "model_name", "metric", "model_score", "method", "global_importance"],
-            "unsupported_claims": []
+            "unsupported_claims": [],
+            "question_intent": intent
         }
 
         return json.dumps(response_dict, indent=2)
+
 
 
 class OpenRouterClient(LLMClient):

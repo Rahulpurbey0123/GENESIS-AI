@@ -106,6 +106,18 @@ def detect_feature_types(df: pd.DataFrame, feature_cols: List[str]) -> Dict[str,
     }
 
 
+def _count_missing(series: pd.Series) -> int:
+    if series is None or len(series) == 0:
+        return 0
+    s = series.replace([np.inf, -np.inf], np.nan)
+    mask = s.isna()
+    if pd.api.types.is_object_dtype(s) or pd.api.types.is_string_dtype(s):
+        str_tokens = {"", "nan", "NaN", "null", "None", "NA", "N/A", "n/a", "none", "NULL", "inf", "-inf", "Infinity", "-Infinity", "?"}
+        str_mask = s.astype(str).str.strip().isin(str_tokens)
+        mask = mask | str_mask
+    return int(mask.sum())
+
+
 def analyze_missingness(df: pd.DataFrame, feature_cols: List[str], target_column: str) -> Dict[str, Any]:
     """
     Calculate missing value metrics separately for feature columns and target column.
@@ -114,7 +126,7 @@ def analyze_missingness(df: pd.DataFrame, feature_cols: List[str], target_column
     Target missingness is computed on the target column.
     """
     feature_cells = len(df) * len(feature_cols)
-    total_feature_missing = int(df[feature_cols].isna().sum().sum()) if feature_cols else 0
+    total_feature_missing = sum(_count_missing(df[col]) for col in feature_cols) if feature_cols else 0
     feature_missing_rate = round(total_feature_missing / feature_cells, 4) if feature_cells > 0 else 0.0
 
     per_feature_missing = {}
@@ -122,7 +134,7 @@ def analyze_missingness(df: pd.DataFrame, feature_cols: List[str], target_column
     max_col_missing_rate = 0.0
 
     for col in feature_cols:
-        col_missing = int(df[col].isna().sum())
+        col_missing = _count_missing(df[col])
         col_missing_rate = round(col_missing / len(df), 4) if len(df) > 0 else 0.0
         per_feature_missing[col] = col_missing_rate
         if col_missing > 0:
@@ -131,7 +143,7 @@ def analyze_missingness(df: pd.DataFrame, feature_cols: List[str], target_column
                 max_col_missing_rate = col_missing_rate
 
     # Target missingness
-    target_missing_count = int(df[target_column].isna().sum()) if target_column in df.columns else 0
+    target_missing_count = _count_missing(df[target_column]) if target_column in df.columns else 0
     target_missing_rate = round(target_missing_count / len(df), 4) if len(df) > 0 else 0.0
 
     return {
@@ -151,6 +163,7 @@ def analyze_missingness(df: pd.DataFrame, feature_cols: List[str], target_column
             "missing_rate": target_missing_rate,
         },
     }
+
 
 
 def analyze_duplicates(df: pd.DataFrame) -> Dict[str, Any]:
@@ -388,18 +401,26 @@ def analyze_correlation(
 
 def compute_dataset_profile(df: pd.DataFrame, target_column: str) -> Dict[str, Any]:
     """Orchestrate profile extraction for a validated DataFrame and target column."""
-    feature_cols = [c for c in df.columns if c != target_column]
+    from backend.dataset.contract import find_actual_column_name, detect_identifier_columns
+    actual_target = find_actual_column_name(df, target_column)
+    identifier_cols = detect_identifier_columns(df, target_column=actual_target)
+
+    feature_cols = [c for c in df.columns if c != actual_target]
 
     types = detect_feature_types(df, feature_cols)
-    missing = analyze_missingness(df, feature_cols, target_column)
+    types["identifier_features"] = len(identifier_cols)
+    types["identifiers"] = identifier_cols
+
+    missing = analyze_missingness(df, feature_cols, actual_target)
     duplicates = analyze_duplicates(df)
-    target = analyze_target(df, target_column)
-    
+    target = analyze_target(df, actual_target)
+
     # For outliers, skewness, and correlation, analyze numeric features (excluding bool dtypes)
     numeric_for_stats = [
         col for col in feature_cols
         if pd.api.types.is_numeric_dtype(df[col].dtype) and not pd.api.types.is_bool_dtype(df[col].dtype)
     ]
+
 
     outliers = analyze_outliers_iqr(df, numeric_for_stats)
     skewness = analyze_skewness(df, numeric_for_stats)
