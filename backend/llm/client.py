@@ -9,6 +9,7 @@ Defines the LLMClient interface and implementations for:
 from abc import ABC, abstractmethod
 import json
 import logging
+import os
 import time
 import urllib.request
 import urllib.error
@@ -62,7 +63,13 @@ class MockLLMClient(LLMClient):
         return "mock"
 
     def _detect_intent(self, user_question: str) -> str:
-        q = user_question.lower()
+        q = user_question.lower().strip()
+
+        # Check if the question is unrelated/unsupported by experiment evidence
+        keywords = ["limit", "metric", "f1", "rmse", "score", "accuracy", "model", "feature", "pipeline", "search", "reduction", "recommend", "local", "prediction", "explanation", "attributions", "generations", "caveat", "drawback", "boundary", "constraint", "causation"]
+        if not q or not any(k in q for k in keywords):
+            return "UNSUPPORTED"
+
         if any(k in q for k in ["why did this model perform", "perform well", "performance", "accuracy", "how good", "score"]):
             return "PERFORMANCE"
         elif any(k in q for k in ["important feature", "most important", "feature importance", "key feature", "top feature", "variables", "drivers"]):
@@ -77,6 +84,8 @@ class MockLLMClient(LLMClient):
             return "PIPELINE"
         elif any(k in q for k in ["prediction", "sample", "row", "local"]):
             return "PREDICTION"
+        elif any(k in q for k in ["limit", "caveat", "drawback", "boundary", "constraint", "causation"]):
+            return "LIMITATIONS"
         else:
             return "GENERAL_EXPERIMENT"
 
@@ -89,6 +98,9 @@ class MockLLMClient(LLMClient):
         method_val = "explanation method"
         mode = "technical"
         top_features: List[str] = []
+        experiment_id = "N/A"
+        target_column = "N/A"
+        opt_mode = "GENESIS"
         user_question = ""
         has_rec_evidence = False
 
@@ -102,12 +114,18 @@ class MockLLMClient(LLMClient):
                 in_question = False
             elif in_question and sline.startswith('"') and sline.endswith('"'):
                 user_question = sline.strip('"')
+            elif sline.startswith("Experiment ID:"):
+                experiment_id = sline.split("Experiment ID:")[1].strip()
             elif sline.startswith("Dataset:"):
                 dataset_name = sline.split("Dataset:")[1].strip()
+            elif sline.startswith("Target Column:"):
+                target_column = sline.split("Target Column:")[1].strip()
+            elif sline.startswith("Optimization Mode:"):
+                opt_mode = sline.split("Optimization Mode:")[1].strip()
             elif sline.startswith("Model:"):
                 model_name = sline.split("Model:")[1].strip()
-            elif sline.startswith("Evaluation Metric:"):
-                metric = sline.split("Evaluation Metric:")[1].strip()
+            elif sline.startswith("Evaluation Metric:") or sline.startswith("Evaluation Metrics:"):
+                metric = sline.split(":")[1].strip()
             elif sline.startswith("Evaluation Score") or sline.startswith("Validation Score:"):
                 score_val = sline.split(":")[1].strip()
             elif sline.startswith("Explanation Strategy:"):
@@ -126,63 +144,75 @@ class MockLLMClient(LLMClient):
         # Question-aware narrative responses based on intent
         if intent == "PERFORMANCE":
             summary = (
-                f"Model '{model_name}' achieved strong predictive validation on dataset '{dataset_name}' "
-                f"with an evaluation {metric} score of {score_val}."
+                f"Model '{model_name}' (Experiment {experiment_id}) achieved strong predictive validation on dataset '{dataset_name}' "
+                f"for target '{target_column}' with evaluation metric(s): {metric}."
             )
             model_exp = (
-                f"Performance ({metric} = {score_val}) reflects robust generalization across cross-validation splits. "
+                f"Performance reflects robust generalization across cross-validation splits under mode {opt_mode}. "
                 f"Key decision patterns were driven by top features: {', '.join(top_features[:3]) if top_features else 'primary feature inputs'}."
             )
             pred_exp = "Evaluation metrics validate individual sample predictions against ground-truth target values."
 
         elif intent == "FEATURE_IMPORTANCE":
             top_str = ", ".join([f"'{f}'" for f in top_features[:3]]) if top_features else "unspecified features"
-            summary = f"The most influential feature attributions for dataset '{dataset_name}' are {top_str}."
+            summary = f"The most influential feature attributions for dataset '{dataset_name}' (target '{target_column}') are {top_str}."
             model_exp = (
                 f"Global feature rankings derived via '{method_val}' identify '{top_features[0] if top_features else 'the primary feature'}' "
-                f"as having the highest relative influence on model output."
+                f"as having the highest relative influence on model output in Experiment {experiment_id}."
             )
             pred_exp = "Local sample explanations reflect how top features push individual predictions away from baseline."
 
         elif intent == "METRIC_DEFINITION":
             summary = (
-                f"Evaluation metric '{metric}' measures predictive model quality on held-out splits. "
-                f"For dataset '{dataset_name}', the stored verified result is {score_val}."
+                f"Evaluation metrics '{metric}' measure predictive model quality for target '{target_column}' in Experiment {experiment_id}."
             )
             model_exp = (
-                f"Metric Definition: {metric} evaluates prediction error/accuracy against true targets. "
-                f"In classification, F1 macro computes the unweighted mean of per-class F1 scores. "
-                f"Your experiment's stored verified score is {score_val} ({metric})."
+                f"Metric Definition: {metric} evaluates prediction error/accuracy against true target values. "
+                f"Your experiment '{experiment_id}' stored verified result metrics: {metric}."
             )
             pred_exp = "Metric definition concepts apply across all sample predictions in the evaluation split."
 
         elif intent == "RECOMMENDATION":
             if has_rec_evidence:
-                summary = f"Pipeline '{model_name}' was recommended for dataset '{dataset_name}' by DIP profiling rules."
-                model_exp = f"DIP dataset rules filtered incompatible model families and prioritized '{model_name}' based on feature counts and complexity."
+                summary = f"Pipeline '{model_name}' was recommended for dataset '{dataset_name}' (target '{target_column}') by DIP profiling rules."
+                model_exp = f"DIP dataset rules filtered incompatible model families and prioritized '{model_name}' under mode {opt_mode}."
             else:
                 summary = f"Recommendation information for pipeline '{model_name}' on dataset '{dataset_name}'."
-                model_exp = f"Explicit recommendation candidate ranking facts are unavailable in the stored evidence payload for this experiment."
+                model_exp = f"Explicit recommendation candidate ranking facts are unavailable in the stored evidence payload for experiment '{experiment_id}'."
             pred_exp = "Pipeline recommendation rules evaluate dataset-level characteristics rather than individual sample predictions."
 
         elif intent == "SEARCH_SPACE":
-            summary = f"Search space optimization evaluated candidate pipelines for dataset '{dataset_name}'."
-            model_exp = f"Evolutionary optimization pruned search space complexity to select pipeline '{model_name}' with score {score_val}."
+            summary = f"Search space optimization for Experiment {experiment_id} evaluated candidate pipelines for target '{target_column}'."
+            model_exp = f"Evolutionary optimization in {opt_mode} mode pruned search space complexity to select pipeline '{model_name}'."
             pred_exp = "Search space reduction focuses on global pipeline selection."
 
         elif intent == "PREDICTION":
-            summary = f"Local prediction explanations for dataset '{dataset_name}' using model '{model_name}'."
-            model_exp = f"Global model attributions evaluated via strategy '{method_val}'."
+            summary = f"Local prediction explanations for dataset '{dataset_name}' (target '{target_column}') using model '{model_name}'."
+            model_exp = f"Global model attributions evaluated via strategy '{method_val}' for Experiment {experiment_id}."
             pred_exp = "Local attributions highlight sample-level feature contributions for representative validation instances."
+
+        elif intent == "LIMITATIONS":
+            summary = f"The analysis of pipeline '{model_name}' on dataset '{dataset_name}' (target '{target_column}') has statistical limitations."
+            model_exp = (
+                f"Limitations: Feature importances measure statistical model dependency, not real-world causation. "
+                f"Multicollinearity among features can split importance across correlated columns. "
+                f"Evaluation metrics ({metric}) are specific to the validation split for Experiment {experiment_id}."
+            )
+            pred_exp = "Local explanations show sample attributions within model boundaries but do not represent physical causality."
+
+        elif intent == "UNSUPPORTED":
+            summary = f"The stored experiment evidence for Experiment {experiment_id} does not contain enough information to answer that reliably."
+            model_exp = "The user question is outside the scope of the stored AutoML experiment facts (such as model metrics, feature importances, and recommendations)."
+            pred_exp = "No prediction or sample validation facts are available for this topic."
 
         else: # GENERAL_EXPERIMENT or default mode fallback
             if mode == "simple":
-                summary = f"GENESIS-AI analyzed '{dataset_name}' and selected '{model_name}', achieving score {score_val} ({metric})."
+                summary = f"GENESIS-AI analyzed '{dataset_name}' for target '{target_column}' (Experiment {experiment_id}) and selected '{model_name}'."
                 model_exp = f"The model relies primarily on key features. Features were ranked using '{method_val}'."
                 pred_exp = "Individual sample predictions reflect top feature influences."
             else:
-                summary = f"Technical interpretation for dataset '{dataset_name}': Pipeline '{model_name}' achieved score {score_val} ({metric})."
-                model_exp = f"The fitted model was explained using '{method_val}'. Global feature rankings reflect empirical model attributions."
+                summary = f"Technical interpretation for dataset '{dataset_name}' (Experiment {experiment_id}): Pipeline '{model_name}' achieved metric(s) {metric}."
+                model_exp = f"The fitted model was explained using '{method_val}' in {opt_mode} mode."
                 pred_exp = "Local prediction explanations identify sample-level feature contributions."
 
         response_dict = {
@@ -194,13 +224,24 @@ class MockLLMClient(LLMClient):
                 "Feature importances measure statistical model dependency, not real-world causation.",
                 "Multicollinearity among features can split importance across correlated columns."
             ],
-            "evidence_used": ["dataset_id", "task_type", "model_name", "metric", "model_score", "method", "global_importance"],
+            "evidence_used": ["experiment_id", "dataset_id", "dataset_name", "target_column", "mode", "task_type", "model_name", "metric", "model_score", "method", "global_importance"],
             "unsupported_claims": [],
             "question_intent": intent
         }
 
         return json.dumps(response_dict, indent=2)
 
+
+
+def _sanitize_text(text: str, secret: Optional[str] = None) -> str:
+    if not text:
+        return text
+    if secret and secret in text:
+        text = text.replace(secret, "[REDACTED]")
+    env_key = os.getenv("OPENROUTER_API_KEY")
+    if env_key and len(env_key) > 3 and env_key in text:
+        text = text.replace(env_key, "[REDACTED]")
+    return text
 
 
 class OpenRouterClient(LLMClient):
@@ -256,40 +297,54 @@ class OpenRouterClient(LLMClient):
             try:
                 with urllib.request.urlopen(req, timeout=self.config.timeout_seconds) as response:
                     response_text = response.read().decode("utf-8")
-                    res_json = json.loads(response_text)
+                    try:
+                        res_json = json.loads(response_text)
+                    except json.JSONDecodeError as je:
+                        raise RuntimeError(f"OpenRouter returned malformed JSON response: {str(je)}")
 
                     choices = res_json.get("choices", [])
                     if choices and len(choices) > 0:
                         content = choices[0].get("message", {}).get("content", "")
+                        if not content:
+                            raise RuntimeError("OpenRouter API returned empty response content.")
                         return content
                     else:
                         raise RuntimeError("OpenRouter API returned empty choices array.")
 
             except urllib.error.HTTPError as e:
                 err_body = e.read().decode("utf-8", errors="ignore")
-                last_error = RuntimeError(f"OpenRouter HTTP {e.code} error: {err_body}")
+                clean_body = _sanitize_text(err_body, self.config.api_key)
+                last_error = RuntimeError(f"OpenRouter HTTP {e.code} error: {clean_body}")
                 if e.code in (401, 403):
                     raise last_error
                 elif e.code in (429, 500, 502, 503, 504):
-                    time.sleep(1.0 * attempts)
+                    time.sleep(0.1 * attempts)
                 else:
                     raise last_error
 
             except urllib.error.URLError as e:
-                last_error = RuntimeError(f"OpenRouter connection error: {str(e.reason)}")
-                time.sleep(1.0 * attempts)
+                clean_reason = _sanitize_text(str(e.reason), self.config.api_key)
+                last_error = RuntimeError(f"OpenRouter connection error: {clean_reason}")
+                time.sleep(0.1 * attempts)
 
             except Exception as e:
-                last_error = e
-                time.sleep(1.0 * attempts)
+                clean_msg = _sanitize_text(str(e), self.config.api_key)
+                last_error = RuntimeError(f"OpenRouter request error: {clean_msg}")
+                time.sleep(0.1 * attempts)
 
-        raise RuntimeError(f"OpenRouter API call failed after {self.config.max_retries + 1} attempts: {str(last_error)}")
+        clean_last = _sanitize_text(str(last_error), self.config.api_key)
+        raise RuntimeError(f"OpenRouter API call failed after {self.config.max_retries + 1} attempts: {clean_last}")
 
 
 def create_llm_client(config: Optional[LLMConfig] = None) -> LLMClient:
     """Factory function to instantiate appropriate LLMClient based on configuration."""
     cfg = config or LLMConfig()
-    if cfg.is_mock():
+    p = str(cfg.provider).lower()
+    if p in ("mock", "test", "offline"):
         return MockLLMClient(cfg)
-    else:
+    elif p == "openrouter":
         return OpenRouterClient(cfg)
+    else:
+        raise ValueError(
+            f"Unsupported LLM provider configuration: '{cfg.provider}'. Supported providers are 'mock' and 'openrouter'."
+        )

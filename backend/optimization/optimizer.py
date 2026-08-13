@@ -21,7 +21,7 @@ from backend.dataset.cleaner import clean_dataset_for_ml
 from backend.dataset.dip import generate_dip
 from backend.recommendation.engine import RecommendationEngine
 from backend.recommendation.registry import PipelineRegistry
-from backend.recommendation.filters import apply_compatibility_filters
+from backend.recommendation.filters import apply_compatibility_filters_with_reasons
 from backend.recommendation.normalizer import normalize_dip_signals
 
 from backend.optimization.schemas import (
@@ -143,25 +143,26 @@ class EvolutionaryOptimizer:
                 random_state=self.config.random_state
             )
 
-        # Step 4: Candidate Search Space Selection (GENESIS vs BASELINE mode)
+        # Step 4: Candidate Search Space Selection (GENESIS vs BASELINE vs RANDOM mode)
         rec_engine = RecommendationEngine(registry=self.registry)
         signals = normalize_dip_signals(dip_dict)
         all_registry_candidates = self.registry.get_all_pipelines()
-        compatible_candidates, filter_warns = apply_compatibility_filters(all_registry_candidates, signals)
+        compatible_candidates, filter_warns, _ = apply_compatibility_filters_with_reasons(all_registry_candidates, signals)
         warnings.extend(filter_warns)
 
         if not compatible_candidates:
             raise EvolutionaryOptimizerError("Zero compatible pipelines found for dataset task.")
 
         candidate_count_before = len(compatible_candidates)
+        opt_mode = self.config.mode.lower()
 
-        if self.config.mode.lower() == "genesis":
+        if opt_mode == "genesis":
             rec_report = rec_engine.recommend_from_dip(dip_dict, top_k=self.config.top_k)
             top_rec_ids = [r.pipeline_id for r in rec_report.recommendations]
             candidate_pool = [p for p in compatible_candidates if p.pipeline_id in top_rec_ids]
             if not candidate_pool:
                 candidate_pool = compatible_candidates
-        else:  # BASELINE mode
+        else:  # BASELINE or RANDOM mode uses all compatible candidates
             candidate_pool = compatible_candidates
 
         candidate_count_after = len(candidate_pool)
@@ -199,7 +200,12 @@ class EvolutionaryOptimizer:
         generation_found: int = 1
         history: List[GenerationHistory] = []
 
-        # Step 7: GA Generation Loop
+        logger.info(
+            f"[EXPERIMENT START] dataset='{dataset_name}' target='{target_col}' mode='{opt_mode}' "
+            f"candidates={candidate_count_after}/{candidate_count_before} pop_size={self.config.population_size} max_evals={self.config.max_evaluations}"
+        )
+
+        # Step 7: Optimization Generation Loop (GA for GENESIS/BASELINE, Random Sampling for RANDOM)
         for gen in range(1, self.config.generations + 1):
             if fitness_manager.evaluations_used >= self.config.max_evaluations:
                 warnings.append(f"Max evaluations budget ({self.config.max_evaluations}) reached at generation {gen}.")
@@ -229,57 +235,68 @@ class EvolutionaryOptimizer:
                 )
             )
 
+            logger.info(
+                f"[EXPERIMENT PROGRESS] dataset='{dataset_name}' target='{target_col}' mode='{opt_mode}' "
+                f"generation={gen}/{self.config.generations} evaluations={fitness_manager.evaluations_used} best={overall_best_fitness:.4f}"
+            )
+
             if progress_callback:
                 elapsed_now = round(time.perf_counter() - start_time, 2)
                 cur_best = round(overall_best_fitness, 4) if overall_best_fitness != float("-inf") else 0.0
                 progress_callback(gen, self.config.generations, fitness_manager.evaluations_used, cur_best, elapsed_now)
 
-            # Check evaluation budget before breeding next generation
+            # Check evaluation budget before generating next iteration
             if fitness_manager.evaluations_used >= self.config.max_evaluations:
                 break
 
-            # Elitism: Preserve best elite_size individuals
-            sorted_indices = np.argsort(fitnesses)[::-1]
-            elites = [population[idx].copy() for idx in sorted_indices[:self.config.elite_size]]
-
-            # Parent Selection
-            parents = tournament_selection(
-                population=population,
-                fitnesses=fitnesses,
-                tournament_size=self.config.tournament_size,
-                num_select=self.config.population_size,
-                rng=rng
-            )
-
-            # Crossover & Mutation to create offspring
-            next_population = list(elites)
-            parent_idx = 0
-            while len(next_population) < self.config.population_size:
-                p1 = parents[parent_idx % len(parents)]
-                p2 = parents[(parent_idx + 1) % len(parents)]
-                parent_idx += 2
-
-                off1, off2 = crossover(p1, p2, crossover_rate=self.config.crossover_rate, rng=rng)
-                off1 = mutate(
-                    off1,
-                    mutation_rate=self.config.mutation_rate,
-                    pipeline_mutation_rate=self.config.pipeline_mutation_rate,
-                    allowed_pipeline_ids=candidate_pipeline_ids,
+            if opt_mode == "random":
+                # RANDOM SEARCH: Sample fresh random candidate pipelines and hyperparameters without selection or crossover
+                population = generate_initial_population(
+                    candidate_pipelines=candidate_pool,
+                    pop_size=self.config.population_size,
                     rng=rng
                 )
-                off2 = mutate(
-                    off2,
-                    mutation_rate=self.config.mutation_rate,
-                    pipeline_mutation_rate=self.config.pipeline_mutation_rate,
-                    allowed_pipeline_ids=candidate_pipeline_ids,
+            else:
+                # GA (GENESIS / BASELINE): Elitism, Tournament Selection, Crossover & Mutation
+                sorted_indices = np.argsort(fitnesses)[::-1]
+                elites = [population[idx].copy() for idx in sorted_indices[:self.config.elite_size]]
+
+                parents = tournament_selection(
+                    population=population,
+                    fitnesses=fitnesses,
+                    tournament_size=self.config.tournament_size,
+                    num_select=self.config.population_size,
                     rng=rng
                 )
 
-                next_population.append(off1)
-                if len(next_population) < self.config.population_size:
-                    next_population.append(off2)
+                next_population = list(elites)
+                parent_idx = 0
+                while len(next_population) < self.config.population_size:
+                    p1 = parents[parent_idx % len(parents)]
+                    p2 = parents[(parent_idx + 1) % len(parents)]
+                    parent_idx += 2
 
-            population = next_population[:self.config.population_size]
+                    off1, off2 = crossover(p1, p2, crossover_rate=self.config.crossover_rate, rng=rng)
+                    off1 = mutate(
+                        off1,
+                        mutation_rate=self.config.mutation_rate,
+                        pipeline_mutation_rate=self.config.pipeline_mutation_rate,
+                        allowed_pipeline_ids=candidate_pipeline_ids,
+                        rng=rng
+                    )
+                    off2 = mutate(
+                        off2,
+                        mutation_rate=self.config.mutation_rate,
+                        pipeline_mutation_rate=self.config.pipeline_mutation_rate,
+                        allowed_pipeline_ids=candidate_pipeline_ids,
+                        rng=rng
+                    )
+
+                    next_population.append(off1)
+                    if len(next_population) < self.config.population_size:
+                        next_population.append(off2)
+
+                population = next_population[:self.config.population_size]
 
         if overall_best_chrom is None or overall_best_fitness == float("-inf"):
             raise EvolutionaryOptimizerError(

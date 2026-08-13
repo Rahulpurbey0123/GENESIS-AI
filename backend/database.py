@@ -21,7 +21,7 @@ DB_PATH = DB_DIR / "genesis.db"
 def get_db_connection() -> sqlite3.Connection:
     """Create and return a thread-safe connection to the SQLite database."""
     DB_DIR.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(str(DB_PATH), check_same_thread=False)
+    conn = sqlite3.connect(str(DB_PATH), timeout=30.0, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -45,10 +45,11 @@ def init_db() -> None:
     );
 
     CREATE TABLE IF NOT EXISTS dip_profiles (
-        dataset_id TEXT PRIMARY KEY,
+        dataset_id TEXT NOT NULL,
         target_column TEXT NOT NULL,
         profile_json TEXT NOT NULL,
         created_at TEXT NOT NULL,
+        PRIMARY KEY (dataset_id, target_column),
         FOREIGN KEY (dataset_id) REFERENCES datasets (id) ON DELETE CASCADE
     );
 
@@ -90,6 +91,30 @@ def init_db() -> None:
     );
     """)
     conn.commit()
+
+    # Migration check for existing dip_profiles schema (migrates single dataset_id PK to composite PK)
+    cursor.execute("PRAGMA table_info(dip_profiles)")
+    info = cursor.fetchall()
+    if info:
+        pk_cols = [row["name"] for row in info if row["pk"] > 0]
+        if pk_cols == ["dataset_id"]:
+            logger.info("Migrating dip_profiles table to composite primary key (dataset_id, target_column)...")
+            cursor.executescript("""
+            CREATE TABLE dip_profiles_new (
+                dataset_id TEXT NOT NULL,
+                target_column TEXT NOT NULL,
+                profile_json TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                PRIMARY KEY (dataset_id, target_column),
+                FOREIGN KEY (dataset_id) REFERENCES datasets (id) ON DELETE CASCADE
+            );
+            INSERT OR IGNORE INTO dip_profiles_new (dataset_id, target_column, profile_json, created_at)
+            SELECT dataset_id, COALESCE(target_column, ''), profile_json, created_at FROM dip_profiles;
+            DROP TABLE dip_profiles;
+            ALTER TABLE dip_profiles_new RENAME TO dip_profiles;
+            """)
+            conn.commit()
+
     conn.close()
     logger.info(f"Database initialized successfully at {DB_PATH}")
 
@@ -113,13 +138,41 @@ class DatabaseService:
         suggested_target: Optional[str]
     ) -> Dict[str, Any]:
         conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Deduplication check: return existing dataset record if content_hash matches
+        cursor.execute("SELECT * FROM datasets WHERE content_hash = ?", (content_hash,))
+        existing = cursor.fetchone()
+        if existing:
+            existing_id = existing["id"]
+            cursor.execute(
+                """
+                UPDATE datasets
+                SET name = ?, filepath = ?, rows = ?, columns = ?, features_json = ?, suggested_target = COALESCE(?, suggested_target)
+                WHERE id = ?
+                """,
+                (name, filepath, rows, columns, json.dumps(features), suggested_target, existing_id)
+            )
+            conn.commit()
+            conn.close()
+            return {
+                "id": existing_id,
+                "name": name,
+                "content_hash": content_hash,
+                "filepath": filepath,
+                "rows": rows,
+                "columns": columns,
+                "features": features,
+                "suggested_target": suggested_target or existing["suggested_target"],
+                "created_at": existing["created_at"]
+            }
+
         created_at = datetime.now(timezone.utc).isoformat()
         features_json = json.dumps(features)
         
-        cursor = conn.cursor()
         cursor.execute(
             """
-            INSERT OR REPLACE INTO datasets (id, name, content_hash, filepath, rows, columns, features_json, suggested_target, created_at)
+            INSERT INTO datasets (id, name, content_hash, filepath, rows, columns, features_json, suggested_target, created_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (dataset_id, name, content_hash, filepath, rows, columns, features_json, suggested_target, created_at)
@@ -170,27 +223,49 @@ class DatabaseService:
         
         cursor = conn.cursor()
         cursor.execute(
-            """
-            INSERT OR REPLACE INTO dip_profiles (dataset_id, target_column, profile_json, created_at)
-            VALUES (?, ?, ?, ?)
-            """,
-            (dataset_id, target_column, profile_json, created_at)
+            "SELECT dataset_id FROM dip_profiles WHERE dataset_id = ? AND target_column = ?",
+            (dataset_id, target_column)
         )
+        if cursor.fetchone():
+            cursor.execute(
+                "UPDATE dip_profiles SET profile_json = ?, created_at = ? WHERE dataset_id = ? AND target_column = ?",
+                (profile_json, created_at, dataset_id, target_column)
+            )
+        else:
+            cursor.execute(
+                "INSERT OR REPLACE INTO dip_profiles (dataset_id, target_column, profile_json, created_at) VALUES (?, ?, ?, ?)",
+                (dataset_id, target_column, profile_json, created_at)
+            )
         conn.commit()
         conn.close()
         return profile
 
     @staticmethod
-    def get_dip_profile(dataset_id: str) -> Optional[Dict[str, Any]]:
+    def get_dip_profile(dataset_id: str, target_column: Optional[str] = None) -> Optional[Dict[str, Any]]:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT profile_json FROM dip_profiles WHERE dataset_id = ?", (dataset_id,))
-        row = cursor.fetchone()
-        conn.close()
-        
-        if not row:
-            return None
-        return json.loads(row["profile_json"])
+        if target_column:
+            cursor.execute(
+                "SELECT profile_json FROM dip_profiles WHERE dataset_id = ? AND target_column = ? ORDER BY created_at DESC",
+                (dataset_id, target_column)
+            )
+            row = cursor.fetchone()
+            conn.close()
+            if not row:
+                return None
+            return json.loads(row["profile_json"])
+        else:
+            cursor.execute(
+                "SELECT profile_json FROM dip_profiles WHERE dataset_id = ? ORDER BY created_at DESC",
+                (dataset_id,)
+            )
+            rows = cursor.fetchall()
+            conn.close()
+            if not rows:
+                return None
+            if len(rows) > 1:
+                raise ValueError("target_column is required because multiple DIP profiles exist for this dataset.")
+            return json.loads(rows[0]["profile_json"])
 
     @staticmethod
     def create_experiment(
@@ -304,7 +379,7 @@ class DatabaseService:
         experiments = []
         for row in rows:
             progress = json.loads(row["progress_json"])
-            raw_score = progress.get("best_score", None)
+            raw_score = progress.get("best_score", None) if isinstance(progress, dict) else None
             best_score = None
             if raw_score is not None:
                 try:
@@ -322,7 +397,7 @@ class DatabaseService:
                 "mode": row["mode"],
                 "status": row["status"],
                 "best_score": best_score,
-                "runtime": progress.get("runtime", 0.0),
+                "runtime": progress.get("runtime", 0.0) if isinstance(progress, dict) else (float(progress) if isinstance(progress, (int, float)) else 0.0),
                 "error_message": row["error_message"],
                 "created_at": row["created_at"],
                 "completed_at": row["completed_at"]

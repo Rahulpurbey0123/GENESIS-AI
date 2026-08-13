@@ -10,6 +10,7 @@ import { ResultsPage } from './pages/ResultsPage';
 import { ExplainabilityPage } from './pages/ExplainabilityPage';
 import { AssistantPage } from './pages/AssistantPage';
 import { HistoryPage } from './pages/HistoryPage';
+import { AuditPage } from './pages/AuditPage';
 import { apiService } from './services/api';
 
 export default function App() {
@@ -90,36 +91,77 @@ export default function App() {
     } catch (e) {}
   };
 
+  // Explicit helper to wipe previous active and completed experiment state
+  const resetExperimentContext = () => {
+    setExperimentState(null);
+    setCompletedExpState(null);
+    try {
+      sessionStorage.removeItem('genesis_experiment');
+      sessionStorage.removeItem('genesis_completed_exp');
+    } catch (e) {}
+  };
+
   // Callback when dataset is uploaded and DIP profile is generated
   const handleDatasetUploaded = (dsData, target, profile) => {
+    resetExperimentContext();
     setDataset(dsData);
     setTargetColumn(target);
     setDipProfile(profile);
     setActiveTab('dip');
   };
 
-  // Callback when user completes or selects an experiment
+  // Callback when user completes or selects an experiment from History Inspect
   const handleSelectExperiment = async (exp) => {
-    setExperiment(exp);
-    const dsId = exp.dataset_id;
-    if (dsId && (!dataset || (dataset.id !== dsId && dataset.dataset_id !== dsId))) {
-      try {
+    try {
+      const fullExp = await apiService.getExperiment(exp.id);
+      const dsId = fullExp.dataset_id;
+      if (dsId) {
         const ds = await apiService.getDataset(dsId);
         setDataset(ds);
-        setTargetColumn(exp.target_column);
-        const profile = await apiService.getDatasetProfile(dsId);
+        setTargetColumn(fullExp.target_column);
+        const profile = await apiService.getDatasetProfile(dsId, fullExp.target_column);
         setDipProfile(profile);
-      } catch (e) {
-        console.warn('Could not auto-fetch dataset metadata for selected experiment:', e);
+      }
+      setExperiment(fullExp);
+      if (fullExp.status === 'COMPLETED') {
+        setCompletedExp(fullExp);
+        setActiveTab('results');
+      } else {
+        setCompletedExp(null);
+        setActiveTab('optimization');
+      }
+    } catch (e) {
+      console.warn('Could not fetch selected experiment:', e);
+      // Fallback
+      setDataset(null);
+      setTargetColumn(exp.target_column);
+      setExperiment(exp);
+      if (exp.status === 'COMPLETED') {
+        setCompletedExp(exp);
+        setActiveTab('results');
+      } else {
+        setCompletedExp(null);
+        setActiveTab('optimization');
       }
     }
-    if (exp.status === 'COMPLETED') {
-      setCompletedExp(exp);
-      setActiveTab('results');
-    } else {
-      setActiveTab('optimization');
-    }
   };
+
+  // Dataset/Experiment context validation invariants
+  const currentDatasetId = dataset?.id || dataset?.dataset_id;
+
+  const isExperimentForContext = (exp, datasetId, targetCol) => {
+    if (!exp || !datasetId || !targetCol) return false;
+    return exp.dataset_id === datasetId && exp.target_column === targetCol;
+  };
+
+  const activeExperiment = isExperimentForContext(experiment, currentDatasetId, targetColumn) ? experiment : null;
+
+  let activeCompletedExp = null;
+  if (isExperimentForContext(completedExp, currentDatasetId, targetColumn) && completedExp.status === 'COMPLETED') {
+    activeCompletedExp = completedExp;
+  } else if (activeExperiment && activeExperiment.status === 'COMPLETED') {
+    activeCompletedExp = activeExperiment;
+  }
 
   return (
     <div className="min-h-screen flex flex-col justify-between">
@@ -129,8 +171,8 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         hasDataset={!!dataset}
-        hasExperiment={!!experiment}
-        hasCompletedExperiment={!!completedExp}
+        hasExperiment={!!activeExperiment}
+        hasCompletedExperiment={!!activeCompletedExp}
       />
 
       {/* Main Screen Content */}
@@ -152,6 +194,7 @@ export default function App() {
           <RecommendationsPage
             dataset={dataset}
             targetColumn={targetColumn}
+            experiment={activeExperiment}
             onStartOptimization={() => setActiveTab('optimization')}
           />
         )}
@@ -160,7 +203,7 @@ export default function App() {
           <OptimizationPage
             dataset={dataset}
             targetColumn={targetColumn}
-            currentExperiment={experiment}
+            currentExperiment={activeExperiment}
             onOptimizationComplete={(exp) => {
               setCompletedExp(exp);
               setExperiment(exp);
@@ -171,24 +214,40 @@ export default function App() {
 
         {activeTab === 'results' && (
           <ResultsPage
-            experiment={completedExp || experiment}
+            dataset={dataset}
+            experiment={activeCompletedExp || activeExperiment}
             onNavigateExplainability={() => setActiveTab('explainability')}
           />
         )}
 
         {activeTab === 'explainability' && (
           <ExplainabilityPage
-            experiment={completedExp || experiment}
+            dataset={dataset}
+            experiment={activeCompletedExp || activeExperiment}
             onNavigateAssistant={() => setActiveTab('assistant')}
           />
         )}
 
         {activeTab === 'assistant' && (
-          <AssistantPage experiment={completedExp || experiment} />
+          <AssistantPage
+            dataset={dataset}
+            experiment={activeCompletedExp || activeExperiment}
+          />
         )}
 
         {activeTab === 'history' && (
-          <HistoryPage onSelectExperiment={handleSelectExperiment} />
+          <HistoryPage
+            activeTab={activeTab}
+            onSelectExperiment={handleSelectExperiment}
+          />
+        )}
+
+        {activeTab === 'audit' && (
+          <AuditPage
+            dataset={dataset}
+            experiment={activeCompletedExp || activeExperiment}
+            dipProfile={dipProfile}
+          />
         )}
       </main>
 

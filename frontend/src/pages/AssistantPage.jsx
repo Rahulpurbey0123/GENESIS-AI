@@ -6,9 +6,23 @@ export function AssistantPage({ experiment }) {
   const [messages, setMessages] = useState([]);
   const [inputPrompt, setInputPrompt] = useState('');
   const [sending, setSending] = useState(false);
+  const [llmStatus, setLlmStatus] = useState(null);
   const messagesEndRef = useRef(null);
 
   const expId = experiment?.id || experiment?.experiment_id;
+
+  const fetchStatus = async () => {
+    try {
+      const status = await apiService.getLLMStatus();
+      setLlmStatus(status);
+    } catch (e) {
+      console.warn('Failed to fetch LLM status:', e);
+    }
+  };
+
+  useEffect(() => {
+    fetchStatus();
+  }, []);
 
   useEffect(() => {
     if (expId) {
@@ -31,46 +45,73 @@ export function AssistantPage({ experiment }) {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = async (e) => {
-    e?.preventDefault();
-    if (!inputPrompt.trim() || !expId || sending) return;
+  const executeSend = async (promptToSend) => {
+    if (!promptToSend.trim() || !expId || sending) return;
 
     const userMessage = {
       id: `user_${Date.now()}`,
       sender: 'user',
-      text: inputPrompt
+      text: promptToSend
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    const promptToSend = inputPrompt;
     setInputPrompt('');
     setSending(true);
 
     try {
       const response = await apiService.sendChatMessage(expId, promptToSend);
-      const assistantMessage = {
-        id: `assistant_${Date.now()}`,
-        sender: 'assistant',
-        text: response.explanation || 'No explanation generated.',
-        evidence: response.evidence_used || null,
-        warnings: response.warnings || [],
-        provider: response.llm_provider || 'mock',
-        model: response.llm_model || 'offline-deterministic',
-        intent: response.question_intent || 'GENERAL_EXPERIMENT'
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
+      if (response.warnings && response.warnings.some(w => w.includes('is missing') || w.includes('Unsupported') || w.includes('error'))) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `assistant_${Date.now()}`,
+            sender: 'assistant',
+            text: response.explanation || 'AI Assistant unavailable.',
+            evidence: response.evidence_used || null,
+            error: true,
+            retryPrompt: promptToSend,
+            provider: response.llm_provider || 'mock',
+            model: response.llm_model || 'N/A'
+          }
+        ]);
+      } else {
+        const assistantMessage = {
+          id: `assistant_${Date.now()}`,
+          sender: 'assistant',
+          text: response.explanation || 'No explanation generated.',
+          evidence: response.evidence_used || null,
+          warnings: response.warnings || [],
+          provider: response.llm_provider || 'mock',
+          model: response.llm_model || 'offline-deterministic',
+          intent: response.question_intent || 'GENERAL_EXPERIMENT',
+          isFallback: Boolean(response.is_fallback || response.validation_status === 'FALLBACK')
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+      }
     } catch (err) {
       setMessages((prev) => [
         ...prev,
         {
           id: `err_${Date.now()}`,
           sender: 'assistant',
-          text: `I don't have enough information in the stored experiment to answer that. (${err.message})`,
-          error: true
+          text: 'The AI Assistant is temporarily unavailable. The configured LLM provider could not process this request. Please try again.',
+          error: true,
+          retryPrompt: promptToSend
         }
       ]);
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleSend = (e) => {
+    e?.preventDefault();
+    executeSend(inputPrompt);
+  };
+
+  const handleRetry = (promptToRetry) => {
+    if (promptToRetry) {
+      executeSend(promptToRetry);
     }
   };
 
@@ -92,7 +133,33 @@ export function AssistantPage({ experiment }) {
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">Evidence-Grounded AI Assistant</h2>
-            <p className="text-xs text-slate-400">Week 6 Grounded LLM Explanation Service</p>
+            <p className="text-xs text-slate-400">
+              {llmStatus ? (
+                llmStatus.provider === 'openrouter' && llmStatus.configured ? (
+                  <span className="text-emerald-400 flex items-center gap-1 font-medium">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    ● Real LLM — OpenRouter ({llmStatus.model})
+                  </span>
+                ) : llmStatus.provider === 'openrouter' && !llmStatus.configured ? (
+                  <span className="text-amber-400 flex items-center gap-1 font-medium">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    ⚠ OpenRouter not configured
+                  </span>
+                ) : llmStatus.provider === 'mock' ? (
+                  <span className="text-slate-400 flex items-center gap-1 font-medium">
+                    <span className="w-2 h-2 rounded-full bg-slate-500"></span>
+                    ● Offline Mock Mode
+                  </span>
+                ) : (
+                  <span className="text-rose-400 flex items-center gap-1 font-medium">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    ⚠ Unsupported provider configuration
+                  </span>
+                )
+              ) : (
+                'Loading LLM Provider Status...'
+              )}
+            </p>
           </div>
         </div>
 
@@ -128,6 +195,8 @@ export function AssistantPage({ experiment }) {
                 className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-white font-bold text-xs ${
                   msg.sender === 'user'
                     ? 'bg-indigo-600'
+                    : msg.error
+                    ? 'bg-rose-600'
                     : 'bg-gradient-to-tr from-sky-600 to-indigo-600'
                 }`}
               >
@@ -138,14 +207,49 @@ export function AssistantPage({ experiment }) {
                 className={`max-w-[80%] p-4 rounded-2xl text-xs leading-relaxed space-y-2 ${
                   msg.sender === 'user'
                     ? 'bg-indigo-600 text-white rounded-tr-none'
+                    : msg.error
+                    ? 'bg-slate-900 border border-rose-500/40 text-slate-200 rounded-tl-none'
                     : 'bg-slate-900/90 border border-slate-800 text-slate-200 rounded-tl-none'
                 }`}
               >
-                <p>{msg.text}</p>
+                {msg.error ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-1.5 text-rose-400 font-semibold text-xs">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>AI Assistant unavailable</span>
+                    </div>
+                    <p className="text-slate-300">{msg.text}</p>
+                    {msg.retryPrompt && (
+                      <button
+                        onClick={() => handleRetry(msg.retryPrompt)}
+                        className="mt-2 px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold flex items-center gap-1 transition-colors shadow"
+                      >
+                        <span>Try Again</span>
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <p>{msg.text}</p>
+                )}
 
-                {msg.sender === 'assistant' && msg.provider && (
+                {msg.sender === 'assistant' && msg.provider && !msg.error && (
                   <div className="flex items-center gap-2 pt-1 text-[10px] text-slate-400 border-t border-slate-800/60">
-                    <span className="px-1.5 py-0.5 rounded bg-slate-800 font-mono text-sky-300 uppercase">{msg.provider}</span>
+                    {msg.isFallback ? (
+                      <span className="px-1.5 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-800/50 font-medium flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                        Grounded Fallback — Real LLM Unavailable
+                      </span>
+                    ) : msg.provider === 'openrouter' ? (
+                      <span className="px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/50 font-medium flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        Real LLM — OpenRouter
+                      </span>
+                    ) : (
+                      <span className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-medium flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                        Offline Mock Mode
+                      </span>
+                    )}
                     <span className="font-mono text-slate-400">{msg.model}</span>
                     {msg.intent && (
                       <span className="px-1.5 py-0.5 rounded bg-indigo-950 text-indigo-300 font-mono">{msg.intent}</span>
@@ -153,7 +257,7 @@ export function AssistantPage({ experiment }) {
                   </div>
                 )}
 
-                {msg.evidence && (
+                {msg.evidence && !msg.error && (
                   <div className="mt-2 pt-2 border-t border-slate-800 text-[10px] text-slate-400 space-y-1">
                     <span className="font-semibold text-sky-400 block">Grounded Experiment Evidence Used:</span>
                     <pre className="p-2 rounded bg-slate-950/60 font-mono text-[9px] overflow-x-auto text-slate-300">

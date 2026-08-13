@@ -62,6 +62,18 @@ Instructions for User Question:
 Address the user's question directly, clearly, and specifically using ONLY the factual evidence provided inside the VERIFIED FACTUAL EVIDENCE block. Do not invent facts or metrics outside the evidence.
 """
 
+        # Format DIP summary
+        dip_summary = evidence.get("dip_summary", {})
+        dip_summary_lines = []
+        if isinstance(dip_summary, dict) and dip_summary:
+            rows = dip_summary.get("rows", "N/A")
+            cols = dip_summary.get("columns", "N/A")
+            c_score = dip_summary.get("complexity_score", "N/A")
+            q_grade = dip_summary.get("quality_grade", "N/A")
+            dip_summary_lines.append(f"DIP SUMMARY:\n  - Rows: {rows}, Columns: {cols}, Complexity Score: {c_score}, Quality Grade: {q_grade}")
+        else:
+            dip_summary_lines.append("DIP SUMMARY:\n  - (No explicit DIP profile summary provided)")
+
         # Format recommendation summary
         rec_summary = evidence.get("recommendation_summary", {})
         rec_summary_lines = []
@@ -133,21 +145,41 @@ Address the user's question directly, clearly, and specifically using ONLY the f
         score_val = evidence.get("model_score")
         score_str = f"{score_val:.4f}" if isinstance(score_val, (int, float)) else "N/A"
 
+        exp_id = evidence.get("experiment_id", "N/A")
+        ds_name = evidence.get("dataset_name") or evidence.get("dataset_id", "N/A")
+        ds_id = evidence.get("dataset_id", "N/A")
+        target_col = evidence.get("target_column", "N/A")
+        mode_val = str(evidence.get("mode", "GENESIS")).upper()
+        model_name = evidence.get("model_name", "Unknown Estimator")
+        pipeline_id = evidence.get("pipeline_id", "custom_pipeline")
+
+        metrics_dict = evidence.get("metrics", {})
+        if isinstance(metrics_dict, dict) and metrics_dict:
+            metrics_summary_str = ", ".join([f"{k.upper()}: {v}" for k, v in metrics_dict.items()])
+        else:
+            metrics_summary_str = f"{metric_raw}: {score_str}"
+
         # Assemble evidence block
         evidence_block = f"""
 BEGIN VERIFIED EVIDENCE
-Dataset: {evidence.get("dataset_id", "unknown_dataset.csv")}
-Pipeline ID: {evidence.get("pipeline_id", "custom_pipeline")}
-Model: {evidence.get("model_name", "Unknown Estimator")}
+Experiment ID: {exp_id}
+Dataset: {ds_name} (ID: {ds_id})
+Target Column: {target_col}
+Optimization Mode: {mode_val}
+Model: {model_name} (Pipeline ID: {pipeline_id})
 Task Type: {evidence.get("task_type", "classification")}
 Evaluation Metric: {metric_raw}
 Evaluation Score ({metric_raw}): {score_str}
+Evaluation Metrics: {metrics_summary_str}
 Explanation Strategy: {evidence.get("method", "unsupported")}
+
+{chr(10).join(dip_summary_lines)}
 
 {chr(10).join(rec_summary_lines)}
 
 {chr(10).join(eff_summary_lines)}
 
+EXPLAINABILITY EVIDENCE:
 GLOBAL FEATURE IMPORTANCES:
 {chr(10).join(global_summary_lines)}
 

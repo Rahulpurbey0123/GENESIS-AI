@@ -87,7 +87,18 @@ class LLMService:
         try:
             raw_llm_response = effective_client.generate(prompt=full_user_prompt, system_instruction=system_instruction)
         except Exception as e:
-            all_warnings.append(f"LLM provider generation error ({effective_client.provider_name}): {str(e)}")
+            from backend.llm.client import _sanitize_text
+            api_key = getattr(effective_client.config, "api_key", None)
+            clean_err = _sanitize_text(str(e), api_key)
+            logger.error(
+                f"LLM provider generation failed. Provider: '{effective_client.provider_name}', "
+                f"Model: '{effective_client.model_name}', Error: {clean_err}",
+                exc_info=True
+            )
+            if "missing" in clean_err.lower():
+                all_warnings.append(f"LLM provider generation error ({effective_client.provider_name}): OpenRouter API key is missing.")
+            else:
+                all_warnings.append(f"LLM provider generation error ({effective_client.provider_name}): Provider unavailable. Grounded fallback active.")
             # Detect question intent for question-aware fallback
             from backend.llm.client import MockLLMClient
             intent_detector = MockLLMClient()
@@ -122,10 +133,9 @@ class LLMService:
                 important_features=top_feats,
                 limitations=["Provider call failed; output contains question-aware fallback evidence summary."],
                 evidence_used=["dataset_id", "model_name", "metric", "model_score"],
-                unsupported_claims=[f"Provider error: {str(e)}"],
+                unsupported_claims=["LLM provider unavailable; output contains grounded fallback response."],
                 question_intent=intent
             )
-
 
             end_time = time.perf_counter()
             return LLMExplanationOutput(
@@ -137,7 +147,7 @@ class LLMService:
                 llm_provider=effective_client.provider_name,
                 llm_model=effective_client.model_name,
                 structured_explanation=fallback_response,
-                validation_status="FAILED",
+                validation_status="FALLBACK",
                 warnings=all_warnings,
                 metadata={
                     "runtime_seconds": round(end_time - start_time, 4),

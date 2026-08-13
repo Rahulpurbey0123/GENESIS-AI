@@ -2,6 +2,75 @@ import React from 'react';
 import { Upload, BarChart3, Cpu, BrainCircuit, Bot, ShieldCheck, ArrowRight, Layers, Sparkles } from 'lucide-react';
 
 export function HomePage({ onNavigate }) {
+  const featureCards = [
+    {
+      id: 'dip',
+      title: 'Dataset Intelligence Profile (DIP)',
+      description: 'Deterministic extraction of feature types, target missingness, imbalance ratio, Pearson correlations, and DIP complexity score heuristic.',
+      icon: BarChart3,
+      borderClass: 'border-indigo-500/20 hover:border-indigo-500/50 hover:shadow-indigo-500/10',
+      iconContainer: 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400',
+      tab: 'dip',
+      ctaText: 'Explore DIP Dashboard',
+      accessibleLabel: 'Open Dataset Intelligence Profile Dashboard',
+    },
+    {
+      id: 'recommendations',
+      title: 'Search-Space Reduction',
+      description: 'Rule-based filtering prunes incompatible pipelines and prioritizes high-suitability candidates, reducing GA search evaluation budget.',
+      icon: Layers,
+      borderClass: 'border-purple-500/20 hover:border-purple-500/50 hover:shadow-purple-500/10',
+      iconContainer: 'bg-purple-500/10 border-purple-500/20 text-purple-400',
+      tab: 'recommendations',
+      ctaText: 'View Candidate Recommendations',
+      accessibleLabel: 'Open Search-Space Reduction and Recommendations',
+    },
+    {
+      id: 'optimization',
+      title: 'Evolutionary Optimization',
+      description: 'Genetic algorithm optimizes pipeline selection, preprocessing steps, and model hyperparameters across generations.',
+      icon: Cpu,
+      borderClass: 'border-emerald-500/20 hover:border-emerald-500/50 hover:shadow-emerald-500/10',
+      iconContainer: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
+      tab: 'optimization',
+      ctaText: 'Configure Optimization',
+      accessibleLabel: 'Open Evolutionary Optimization Setup',
+    },
+    {
+      id: 'explainability',
+      title: 'Post-Hoc Explainability',
+      description: 'Permutation and native SHAP feature importance summary, local instance contributions, and classification diagnostic metrics.',
+      icon: BrainCircuit,
+      borderClass: 'border-pink-500/20 hover:border-pink-500/50 hover:shadow-pink-500/10',
+      iconContainer: 'bg-pink-500/10 border-pink-500/20 text-pink-400',
+      tab: 'explainability',
+      ctaText: 'View Model Interpretability',
+      accessibleLabel: 'Open Post-Hoc Explainability Page',
+    },
+    {
+      id: 'assistant',
+      title: 'Grounded LLM Assistant',
+      description: 'Evidence-grounded explanations powered strictly by stored experiment facts. No hallucinated metrics or unauthorized retraining.',
+      icon: Bot,
+      borderClass: 'border-sky-500/20 hover:border-sky-500/50 hover:shadow-sky-500/10',
+      iconContainer: 'bg-sky-500/10 border-sky-500/20 text-sky-400',
+      tab: 'assistant',
+      ctaText: 'Ask AI Assistant',
+      accessibleLabel: 'Open Evidence-Grounded LLM Assistant',
+    },
+    {
+      id: 'audit',
+      title: 'Honest Science & Auditing',
+      description: 'Strict statistical rules, deterministic recommendation weights, transparent heuristics, and full experiment history preservation.',
+      icon: ShieldCheck,
+      borderClass: 'border-amber-500/20 hover:border-amber-500/50 hover:shadow-amber-500/10',
+      iconContainer: 'bg-amber-500/10 border-amber-500/20 text-amber-400',
+      tab: 'audit',
+      ctaText: 'Inspect Scientific Audit',
+      accessibleLabel: 'Open Honest Science and Audit Dashboard',
+    },
+  ];
+
   return (
     <div className="max-w-6xl mx-auto py-8 px-4 space-y-12">
       
@@ -43,67 +112,35 @@ export function HomePage({ onNavigate }) {
 
       {/* Feature Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
-        
-        <div className="glass-panel glass-panel-hover p-6 rounded-2xl space-y-3 border-indigo-500/20">
-          <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-            <BarChart3 className="w-6 h-6" />
-          </div>
-          <h3 className="text-lg font-bold text-white">Dataset Intelligence Profile (DIP)</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Deterministic extraction of feature types, target missingness, imbalance ratio, Pearson correlations, and DIP complexity score heuristic.
-          </p>
-        </div>
+        {featureCards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <button
+              key={card.id}
+              type="button"
+              onClick={() => onNavigate(card.tab)}
+              aria-label={card.accessibleLabel}
+              className={`group text-left glass-panel p-6 rounded-2xl space-y-4 border ${card.borderClass} transition-all duration-200 hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-950 active:scale-[0.98] cursor-pointer flex flex-col justify-between`}
+            >
+              <div className="space-y-3">
+                <div className={`w-12 h-12 rounded-xl border flex items-center justify-center ${card.iconContainer}`}>
+                  <Icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-bold text-white group-hover:text-indigo-200 transition-colors">
+                  {card.title}
+                </h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  {card.description}
+                </p>
+              </div>
 
-        <div className="glass-panel glass-panel-hover p-6 rounded-2xl space-y-3 border-purple-500/20">
-          <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
-            <Layers className="w-6 h-6" />
-          </div>
-          <h3 className="text-lg font-bold text-white">Search-Space Reduction</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Rule-based filtering prunes incompatible pipelines and prioritizes high-suitability candidates, reducing GA search evaluation budget.
-          </p>
-        </div>
-
-        <div className="glass-panel glass-panel-hover p-6 rounded-2xl space-y-3 border-emerald-500/20">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-            <Cpu className="w-6 h-6" />
-          </div>
-          <h3 className="text-lg font-bold text-white">Evolutionary Optimization</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Genetic algorithm optimizes pipeline selection, preprocessing steps, and model hyperparameters across generations.
-          </p>
-        </div>
-
-        <div className="glass-panel glass-panel-hover p-6 rounded-2xl space-y-3 border-pink-500/20">
-          <div className="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400">
-            <BrainCircuit className="w-6 h-6" />
-          </div>
-          <h3 className="text-lg font-bold text-white">Post-Hoc Explainability</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Permutation and native SHAP feature importance summary, local instance contributions, and classification diagnostic metrics.
-          </p>
-        </div>
-
-        <div className="glass-panel glass-panel-hover p-6 rounded-2xl space-y-3 border-sky-500/20">
-          <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
-            <Bot className="w-6 h-6" />
-          </div>
-          <h3 className="text-lg font-bold text-white">Grounded LLM Assistant</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Evidence-grounded explanations powered strictly by stored experiment facts. No hallucinated metrics or unauthorized retraining.
-          </p>
-        </div>
-
-        <div className="glass-panel glass-panel-hover p-6 rounded-2xl space-y-3 border-amber-500/20">
-          <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
-            <ShieldCheck className="w-6 h-6" />
-          </div>
-          <h3 className="text-lg font-bold text-white">Honest Science & Auditing</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Strict statistical rules, deterministic recommendation weights, transparent heuristics, and full experiment history preservation.
-          </p>
-        </div>
-
+              <div className="pt-2 border-t border-slate-800/60 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-indigo-400 transition-colors">
+                <span>{card.ctaText}</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+              </div>
+            </button>
+          );
+        })}
       </div>
 
     </div>

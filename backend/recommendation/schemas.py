@@ -151,5 +151,6 @@ class RecommendationReport(BaseModel):
     top_k_selection_ratio: float
     search_space_reduction: float  # Deprecated alias equal to filtering_reduction
     recommendations: List[RecommendationItem]
+    excluded_candidates: List[Dict[str, Any]] = Field(default_factory=list)
     warnings: List[str]
     dataset_summary: Dict[str, Any]

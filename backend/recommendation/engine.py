@@ -17,7 +17,7 @@ from backend.recommendation.schemas import (
 )
 from backend.recommendation.registry import PipelineRegistry
 from backend.recommendation.normalizer import normalize_dip_signals
-from backend.recommendation.filters import apply_compatibility_filters
+from backend.recommendation.filters import apply_compatibility_filters, apply_compatibility_filters_with_reasons
 from backend.recommendation.scorer import compute_pipeline_score
 from backend.recommendation.ranker import rank_candidates
 
@@ -74,7 +74,7 @@ class RecommendationEngine:
         candidate_count_before = len(all_candidates)
 
         # Step 3: Stage 1 Compatibility Filtering (Hard Filters)
-        compatible_candidates, warnings = apply_compatibility_filters(all_candidates, signals)
+        compatible_candidates, warnings, excluded_candidates = apply_compatibility_filters_with_reasons(all_candidates, signals)
         candidate_count_after = len(compatible_candidates)
 
         if candidate_count_after == 0:
@@ -139,6 +139,7 @@ class RecommendationEngine:
             top_k_selection_ratio=top_k_selection_ratio,
             search_space_reduction=search_space_reduction,
             recommendations=recommendations,
+            excluded_candidates=excluded_candidates,
             warnings=warnings,
             dataset_summary=dataset_summary,
         )

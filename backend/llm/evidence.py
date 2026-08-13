@@ -16,7 +16,11 @@ logger = logging.getLogger("genesis.llm.evidence")
 
 # Strict allowlist of approved evidence fields
 ALLOWED_EVIDENCE_FIELDS: Set[str] = {
+    "experiment_id",
     "dataset_id",
+    "dataset_name",
+    "target_column",
+    "mode",
     "pipeline_id",
     "model_name",
     "task_type",
@@ -98,9 +102,13 @@ class EvidenceValidator:
         warnings: List[str] = []
         cleaned: Dict[str, Any] = {}
 
-        # Check dataset_id
-        ds_id = str(evidence.get("dataset_id", "unknown_dataset.csv"))
+        # Check experiment_id, dataset_id, dataset_name, target_column, mode
+        cleaned["experiment_id"] = str(evidence.get("experiment_id", "N/A"))
+        ds_id = str(evidence.get("dataset_id", "unknown_dataset"))
         cleaned["dataset_id"] = ds_id
+        cleaned["dataset_name"] = str(evidence.get("dataset_name", ds_id))
+        cleaned["target_column"] = str(evidence.get("target_column", "N/A"))
+        cleaned["mode"] = str(evidence.get("mode", "GENESIS")).upper()
 
         # Check task_type
         task_type = str(evidence.get("task_type", "classification")).lower()

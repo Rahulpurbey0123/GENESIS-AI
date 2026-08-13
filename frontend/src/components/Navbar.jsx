@@ -9,7 +9,8 @@ import {
   BrainCircuit, 
   Bot, 
   History,
-  Sparkles
+  Sparkles,
+  ShieldCheck
 } from 'lucide-react';
 
 export function Navbar({ activeTab, setActiveTab, hasDataset, hasExperiment, hasCompletedExperiment }) {
@@ -23,6 +24,7 @@ export function Navbar({ activeTab, setActiveTab, hasDataset, hasExperiment, has
     { id: 'explainability', label: 'Explainability', icon: BrainCircuit, enabled: hasCompletedExperiment },
     { id: 'assistant', label: 'AI Assistant', icon: Bot, enabled: hasCompletedExperiment },
     { id: 'history', label: 'History', icon: History, enabled: true },
+    { id: 'audit', label: 'Audit', icon: ShieldCheck, enabled: true },
   ];
 
   return (

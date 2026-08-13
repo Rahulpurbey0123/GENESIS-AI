@@ -59,8 +59,27 @@ export const apiService = {
   /**
    * Get stored DIP profile
    */
-  async getDatasetProfile(datasetId) {
-    const res = await fetch(`${API_BASE_URL}/api/datasets/${datasetId}/profile`);
+  async getDatasetProfile(datasetId, targetColumn) {
+    const url = targetColumn
+      ? `${API_BASE_URL}/api/datasets/${datasetId}/profile?target_column=${encodeURIComponent(targetColumn)}`
+      : `${API_BASE_URL}/api/datasets/${datasetId}/profile`;
+    const res = await fetch(url);
+    return await handleResponse(res);
+  },
+
+  /**
+   * Get LLM configuration status
+   */
+  async getLLMConfig() {
+    const res = await fetch(`${API_BASE_URL}/api/config/llm`);
+    return await handleResponse(res);
+  },
+
+  /**
+   * Get LLM provider status
+   */
+  async getLLMStatus() {
+    const res = await fetch(`${API_BASE_URL}/api/llm/status`);
     return await handleResponse(res);
   },
 

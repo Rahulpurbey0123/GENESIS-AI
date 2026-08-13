@@ -308,6 +308,39 @@ class ExplainabilityEngine:
         end_time = time.perf_counter()
         elapsed_sec = round(end_time - start_time, 4)
 
+        # Target leakage validation check
+        target_name = None
+        if y_val is not None:
+            if hasattr(y_val, "name") and y_val.name:
+                target_name = str(y_val.name)
+            elif isinstance(y_val, pd.Series) and y_val.name:
+                target_name = str(y_val.name)
+
+        if target_name:
+            leakage_detected = False
+            for fi in formatted_global:
+                if str(fi.feature) == target_name:
+                    leakage_detected = True
+                    break
+
+            for loc in local_recs:
+                if hasattr(loc, "contributions") and loc.contributions:
+                    for contrib in loc.contributions:
+                        if str(contrib.feature) == target_name:
+                            leakage_detected = True
+                            break
+                elif isinstance(loc, dict) and "contributions" in loc:
+                    for contrib in loc["contributions"]:
+                        c_feat = contrib.get("feature") if isinstance(contrib, dict) else getattr(contrib, "feature", None)
+                        if str(c_feat) == target_name:
+                            leakage_detected = True
+                            break
+
+            if leakage_detected:
+                error_msg = f"Target leakage detected: Target column '{target_name}' was found in the model's feature explanations."
+                logger.error(error_msg)
+                raise ValueError(error_msg)
+
         output = ExplanationOutput(
             dataset_id=dataset_id,
             pipeline_id=pipeline_id,

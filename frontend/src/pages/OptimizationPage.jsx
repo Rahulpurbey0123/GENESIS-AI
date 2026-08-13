@@ -5,21 +5,45 @@ import { PlotViewer } from '../components/PlotViewer';
 
 export function OptimizationPage({ dataset, targetColumn, currentExperiment, onOptimizationComplete }) {
   const [mode, setMode] = useState('genesis');
+  const [topK, setTopK] = useState(2);
   const [generations, setGenerations] = useState(10);
   const [populationSize, setPopulationSize] = useState(20);
   const [maxEvaluations, setMaxEvaluations] = useState(200);
 
   const [activeExp, setActiveExp] = useState(currentExperiment);
-  const [statusData, setStatusData] = useState(null);
+  const [statusData, setStatusData] = useState(currentExperiment);
   const [isRunning, setIsRunning] = useState(false);
+  const [starting, setStarting] = useState(false);
   const [error, setError] = useState(null);
   const [fitnessHistory, setFitnessHistory] = useState([]);
+
+  // Sync activeExp if currentExperiment prop changes or resets
+  useEffect(() => {
+    setActiveExp(currentExperiment);
+    setStatusData(currentExperiment);
+    if (!currentExperiment) {
+      setIsRunning(false);
+      setFitnessHistory([]);
+      setError(null);
+    } else {
+      setIsRunning(currentExperiment.status === 'RUNNING');
+      setError(currentExperiment.status === 'FAILED' ? currentExperiment.error_message : null);
+      if (currentExperiment.progress?.history && Array.isArray(currentExperiment.progress.history)) {
+        setFitnessHistory(currentExperiment.progress.history.map(h => ({ gen: h.gen, fitness: h.best_score })));
+      } else if (currentExperiment.progress?.best_score !== undefined && currentExperiment.progress?.best_score !== null) {
+        setFitnessHistory([{ gen: currentExperiment.progress.current_generation || 1, fitness: currentExperiment.progress.best_score }]);
+      } else {
+        setFitnessHistory([]);
+      }
+    }
+  }, [currentExperiment]);
 
   // Start Optimization Experiment
   const handleStart = async () => {
     const dsId = dataset?.id || dataset?.dataset_id;
-    if (!dsId || !targetColumn) return;
+    if (!dsId || !targetColumn || starting) return;
     setError(null);
+    setStarting(true);
     setIsRunning(true);
     setFitnessHistory([]);
 
@@ -28,14 +52,18 @@ export function OptimizationPage({ dataset, targetColumn, currentExperiment, onO
         datasetId: dsId,
         targetColumn: targetColumn,
         mode: mode,
+        topK: topK,
         populationSize: populationSize,
         generations: generations,
         maxEvaluations: maxEvaluations
       });
       setActiveExp(newExp);
+      setStatusData(newExp);
     } catch (err) {
       setError(err.message || 'Failed to start optimization experiment.');
       setIsRunning(false);
+    } finally {
+      setStarting(false);
     }
   };
 
@@ -43,6 +71,11 @@ export function OptimizationPage({ dataset, targetColumn, currentExperiment, onO
   useEffect(() => {
     const expId = activeExp?.id || activeExp?.experiment_id;
     if (!expId) return;
+
+    if (activeExp.status === 'COMPLETED' || activeExp.status === 'FAILED') {
+      setIsRunning(false);
+      return;
+    }
 
     let intervalId = null;
     async function pollStatus() {
@@ -81,7 +114,10 @@ export function OptimizationPage({ dataset, targetColumn, currentExperiment, onO
     return () => clearInterval(intervalId);
   }, [activeExp]);
 
-  const progress = statusData?.progress || {};
+  const effectiveExperiment = statusData || activeExp;
+  const currentStatus = effectiveExperiment?.status || (isRunning ? 'RUNNING' : null);
+
+  const progress = effectiveExperiment?.progress || {};
   const currentGen = progress.current_generation ?? null;
   const maxGen = progress.max_generations ?? generations;
   const evaluatedCount = progress.evaluated_pipelines ?? null;
@@ -103,6 +139,19 @@ export function OptimizationPage({ dataset, targetColumn, currentExperiment, onO
     }
   ];
 
+  const getModeDescription = (m) => {
+    switch (m) {
+      case 'genesis':
+        return 'GENESIS: DIP-guided search using top-K recommended candidates.';
+      case 'baseline':
+        return 'Baseline GA: GA over the broader compatible search space without DIP top-K guidance.';
+      case 'random':
+        return 'Random Search: random sampling without evolutionary crossover/tournament selection.';
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto py-8 px-4 space-y-8">
       
@@ -114,7 +163,7 @@ export function OptimizationPage({ dataset, targetColumn, currentExperiment, onO
         <h2 className="text-3xl font-extrabold text-white mt-1">Multi-Objective Optimization</h2>
       </div>
 
-      {!activeExp ? (
+      {!effectiveExperiment ? (
         /* Setup & Launch Form */
         <div className="glass-panel p-6 rounded-2xl space-y-6">
           <div className="space-y-1">
@@ -124,7 +173,7 @@ export function OptimizationPage({ dataset, targetColumn, currentExperiment, onO
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
             
             <div>
               <label className="text-xs font-semibold text-slate-300 block mb-1">Optimization Mode</label>
@@ -137,7 +186,24 @@ export function OptimizationPage({ dataset, targetColumn, currentExperiment, onO
                 <option value="baseline">Baseline GA</option>
                 <option value="random">Random Search</option>
               </select>
+              <span className="text-[10px] text-indigo-400 mt-1.5 block leading-relaxed">
+                {getModeDescription(mode)}
+              </span>
             </div>
+
+            {mode === 'genesis' && (
+              <div>
+                <label className="text-xs font-semibold text-slate-300 block mb-1">Top-K Candidates Pool</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  value={topK}
+                  onChange={(e) => setTopK(Math.max(1, parseInt(e.target.value) || 2))}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-semibold outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            )}
 
             <div>
               <label className="text-xs font-semibold text-slate-300 block mb-1">Generations</label>
@@ -173,11 +239,12 @@ export function OptimizationPage({ dataset, targetColumn, currentExperiment, onO
           )}
 
           <button
+            disabled={starting || !dataset}
             onClick={handleStart}
-            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-sm shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all"
+            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-sm shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Play className="w-4 h-4 fill-white" />
-            <span>Start Optimization Run</span>
+            {starting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4 fill-white" />}
+            <span>{starting ? 'Starting Optimization Run...' : 'Start Optimization Run'}</span>
           </button>
         </div>
       ) : (
@@ -186,37 +253,37 @@ export function OptimizationPage({ dataset, targetColumn, currentExperiment, onO
           
           {/* Status Tracker Banner */}
           <div className={`glass-panel p-6 rounded-2xl space-y-4 ${
-            statusData?.status === 'FAILED' ? 'border-red-500/40' : 'border-indigo-500/30'
+            currentStatus === 'FAILED' ? 'border-red-500/40' : 'border-indigo-500/30'
           }`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                {statusData?.status === 'FAILED' ? (
+                {currentStatus === 'FAILED' ? (
                   <AlertTriangle className="w-6 h-6 text-red-400" />
-                ) : isRunning ? (
+                ) : currentStatus === 'RUNNING' || isRunning ? (
                   <RefreshCw className="w-6 h-6 text-indigo-400 animate-spin" />
                 ) : (
                   <CheckCircle2 className="w-6 h-6 text-emerald-400" />
                 )}
                 <div>
                   <h3 className="text-lg font-bold text-white">
-                    {statusData?.status === 'FAILED'
+                    {currentStatus === 'FAILED'
                       ? 'Optimization Failed'
-                      : isRunning
+                      : currentStatus === 'RUNNING' || isRunning
                       ? 'Optimization in Progress...'
                       : 'Optimization Complete!'}
                   </h3>
-                  <p className="text-xs text-slate-400">Experiment ID: {activeExp.id}</p>
+                  <p className="text-xs text-slate-400">Experiment ID: {effectiveExperiment.id}</p>
                 </div>
               </div>
 
               <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                statusData?.status === 'FAILED'
+                currentStatus === 'FAILED'
                   ? 'bg-red-500/20 text-red-300 border border-red-500/30'
-                  : isRunning
+                  : currentStatus === 'RUNNING' || isRunning
                   ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
                   : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
               }`}>
-                {statusData?.status || 'RUNNING'}
+                {currentStatus || 'COMPLETED'}
               </span>
             </div>
 

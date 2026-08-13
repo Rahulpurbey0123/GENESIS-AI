@@ -71,7 +71,7 @@ class ExperimentJob:
 
 
             # Step 2: Ensure DIP profile is available
-            dip_profile = DatabaseService.get_dip_profile(dataset_id)
+            dip_profile = DatabaseService.get_dip_profile(dataset_id, target_column)
             if not dip_profile:
                 dip_profile = generate_dip(csv_bytes, target_column=target_column, dataset_name=dataset_name)
                 DatabaseService.save_dip_profile(dataset_id, target_column, dip_profile)

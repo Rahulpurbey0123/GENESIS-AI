@@ -149,5 +149,5 @@ def test_openrouter_configuration_and_missing_key_handling():
         user_prompt="Why did this model perform well?"
     )
     assert out.llm_provider == "openrouter"
-    assert out.validation_status == "FAILED"
+    assert out.validation_status in ("FAILED", "FALLBACK")
     assert "API key is missing" in out.warnings[0] or "provider communication error" in out.structured_explanation.summary.lower() or "performance fallback" in out.structured_explanation.summary.lower()

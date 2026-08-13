@@ -217,6 +217,55 @@ async def create_optimization(
         )
 
 
+@app.get("/config/llm", tags=["LLM Explanation"])
+@app.get("/api/config/llm", tags=["LLM Explanation"])
+@app.get("/llm/status", tags=["LLM Explanation"])
+@app.get("/api/llm/status", tags=["LLM Explanation"])
+async def get_llm_status_api() -> JSONResponse:
+    """Retrieve safe metadata for current LLM provider configuration status."""
+    raw_provider = os.getenv("LLM_PROVIDER", "mock").lower()
+    model = os.getenv("OPENROUTER_MODEL", "google/gemini-2.0-flash-001")
+    has_key = bool(os.getenv("OPENROUTER_API_KEY"))
+
+    if raw_provider in ("mock", "test", "offline"):
+        content = {
+            "provider": "mock",
+            "mode": "mock",
+            "configured": True,
+            "model": None,
+            "has_api_key": has_key
+        }
+    elif raw_provider == "openrouter":
+        if has_key:
+            content = {
+                "provider": "openrouter",
+                "mode": "real",
+                "configured": True,
+                "model": model,
+                "has_api_key": True
+            }
+        else:
+            content = {
+                "provider": "openrouter",
+                "mode": "real",
+                "configured": False,
+                "model": model,
+                "has_api_key": False,
+                "error": "LLM provider is not configured"
+            }
+    else:
+        content = {
+            "provider": raw_provider,
+            "mode": "invalid",
+            "configured": False,
+            "model": None,
+            "has_api_key": False,
+            "error": "Unsupported LLM provider configuration."
+        }
+
+    return JSONResponse(content=content, status_code=status.HTTP_200_OK)
+
+
 @app.post("/explain/llm", tags=["LLM Explanation"])
 async def generate_llm_explanation_endpoint(
     request: LLMExplanationRequest = Body(..., description="LLM Explanation Request payload with evidence and mode")
@@ -376,12 +425,18 @@ async def profile_dataset_api(
 
 @app.get("/datasets/{id}/profile", tags=["Dashboard DIP"])
 @app.get("/api/datasets/{id}/profile", tags=["Dashboard DIP"])
-async def get_dataset_profile_api(id: str) -> JSONResponse:
+async def get_dataset_profile_api(
+    id: str,
+    target_column: Optional[str] = None
+) -> JSONResponse:
     """Retrieve stored Dataset Intelligence Profile (DIP) for dataset."""
-    profile = DatabaseService.get_dip_profile(id)
-    if not profile:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DIP profile not found for dataset.")
-    return JSONResponse(content=profile, status_code=status.HTTP_200_OK)
+    try:
+        profile = DatabaseService.get_dip_profile(id, target_column)
+        if not profile:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="DIP profile not found for dataset.")
+        return JSONResponse(content=profile, status_code=status.HTTP_200_OK)
+    except ValueError as ve:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(ve))
 
 
 @app.get("/datasets/{id}/recommendations", tags=["Dashboard Recommendations"])
@@ -479,7 +534,7 @@ async def get_experiment_api(id: str) -> JSONResponse:
 @app.get("/experiments/{id}/recommendations", tags=["Dashboard Recommendations"])
 @app.get("/api/experiments/{id}/recommendations", tags=["Dashboard Recommendations"])
 async def get_experiment_recommendations_api(id: str) -> JSONResponse:
-    """Retrieve model recommendations and search-space reduction details for experiment."""
+    """Retrieve model recommendations and search-space reduction details for experiment using stored config."""
     experiment = DatabaseService.get_experiment(id)
     if not experiment:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Experiment not found.")
@@ -492,9 +547,27 @@ async def get_experiment_recommendations_api(id: str) -> JSONResponse:
         with open(dataset["filepath"], "rb") as f:
             csv_bytes = f.read()
 
+        exp_config = experiment.get("config", {})
+        exp_mode = str(experiment.get("mode", "genesis")).lower()
         engine = RecommendationEngine()
-        report = engine.recommend(csv_bytes, target_column=experiment["target_column"], dataset_name=dataset["name"])
-        return JSONResponse(content=report.model_dump(), status_code=status.HTTP_200_OK)
+
+        if exp_mode == "genesis":
+            top_k = exp_config.get("top_k", 2)
+            report = engine.recommend(csv_bytes, target_column=experiment["target_column"], dataset_name=dataset["name"], top_k=top_k)
+            report_dict = report.model_dump()
+            report_dict["mode"] = "genesis"
+            report_dict["recommendation_mode_context"] = f"Mode 'GENESIS' restricts search space to Top-K={top_k} recommended candidates."
+            report_dict["top_k_applied"] = True
+            report_dict["top_k"] = top_k
+        else:
+            report = engine.recommend(csv_bytes, target_column=experiment["target_column"], dataset_name=dataset["name"], top_k=100)
+            report_dict = report.model_dump()
+            report_dict["mode"] = exp_mode
+            report_dict["recommendation_mode_context"] = f"Mode '{exp_mode.upper()}' uses all compatible candidate pipelines ({report.candidate_count_after_filtering}) without GENESIS Top-K restriction."
+            report_dict["top_k_applied"] = False
+            report_dict["top_k"] = report.candidate_count_after_filtering
+
+        return JSONResponse(content=report_dict, status_code=status.HTTP_200_OK)
     except Exception as e:
         logger.error(f"Error fetching recommendations for experiment '{id}': {str(e)}", exc_info=True)
         raise HTTPException(
@@ -550,7 +623,7 @@ async def chat_experiment_api(
 
     results = DatabaseService.get_experiment_results(id) or {}
     explanations = DatabaseService.get_experiment_explanations(id) or {}
-    dip = DatabaseService.get_dip_profile(experiment["dataset_id"]) or {}
+    dip = DatabaseService.get_dip_profile(experiment["dataset_id"], experiment.get("target_column")) or {}
 
     # Safely fetch recommendation evidence if available for this dataset
     recommendations_summary = {}
@@ -590,7 +663,11 @@ async def chat_experiment_api(
     m_score = m_dict.get(m_primary)
 
     evidence = {
-        "dataset_id": experiment.get("dataset_name", "dataset.csv"),
+        "experiment_id": experiment.get("id"),
+        "dataset_id": experiment.get("dataset_id"),
+        "dataset_name": experiment.get("dataset_name"),
+        "target_column": experiment.get("target_column"),
+        "mode": experiment.get("mode"),
         "pipeline_id": best_pipe.get("pipeline_id", "custom_pipeline"),
         "model_name": best_pipe.get("model_name", "Unknown Estimator"),
         "task_type": "regression" if "rmse" in m_dict or "mae" in m_dict else "classification",
@@ -611,6 +688,39 @@ async def chat_experiment_api(
 
     chat_id = f"chat_{uuid.uuid4().hex[:8]}"
 
+    provider = os.getenv("LLM_PROVIDER", "mock").lower()
+    api_key = os.getenv("OPENROUTER_API_KEY")
+
+    if provider not in ("mock", "test", "offline", "openrouter"):
+        fallback_data = {
+            "explanation": "The AI Assistant is temporarily unavailable. Unsupported LLM provider configuration. Supported providers are 'mock' and 'openrouter'. Please try again.",
+            "evidence_used": evidence,
+            "llm_provider": provider,
+            "llm_model": None,
+            "question_intent": "GENERAL_EXPERIMENT",
+            "mode": "evidence_grounded",
+            "is_fallback": True,
+            "validation_status": "FALLBACK",
+            "warnings": ["Unsupported LLM provider configuration."]
+        }
+        DatabaseService.save_chat(experiment_id=id, chat_id=chat_id, prompt=prompt, response=fallback_data)
+        return JSONResponse(content=fallback_data, status_code=status.HTTP_200_OK)
+
+    if provider == "openrouter" and not api_key:
+        fallback_data = {
+            "explanation": "The AI Assistant is temporarily unavailable. The configured LLM provider could not process this request. Please try again.",
+            "evidence_used": evidence,
+            "llm_provider": "openrouter",
+            "llm_model": os.getenv("OPENROUTER_MODEL", "google/gemini-2.0-flash-001"),
+            "question_intent": "GENERAL_EXPERIMENT",
+            "mode": "evidence_grounded",
+            "is_fallback": True,
+            "validation_status": "FALLBACK",
+            "warnings": ["OPENROUTER_API_KEY is missing."]
+        }
+        DatabaseService.save_chat(experiment_id=id, chat_id=chat_id, prompt=prompt, response=fallback_data)
+        return JSONResponse(content=fallback_data, status_code=status.HTTP_200_OK)
+
     try:
         llm_service = LLMService()
         output: LLMExplanationOutput = llm_service.explain(
@@ -625,10 +735,18 @@ async def chat_experiment_api(
         response_data["llm_provider"] = output.llm_provider
         response_data["llm_model"] = output.llm_model
         response_data["question_intent"] = intent_val
+        response_data["is_fallback"] = output.metadata.get("is_fallback", False) if isinstance(output.metadata, dict) else False
+        response_data["validation_status"] = output.validation_status
         DatabaseService.save_chat(experiment_id=id, chat_id=chat_id, prompt=prompt, response=response_data)
         return JSONResponse(content=response_data, status_code=status.HTTP_200_OK)
     except Exception as e:
-        logger.warning(f"LLM explanation error: {str(e)}. Returning grounded fallback answer.", exc_info=True)
+        from backend.llm.client import _sanitize_text
+        clean_err = _sanitize_text(str(e), api_key)
+        logger.error(
+            f"LLM explanation endpoint error. Provider: '{provider}', Model: '{os.getenv('OPENROUTER_MODEL')}', "
+            f"Experiment: '{id}', Error: {clean_err}",
+            exc_info=True
+        )
         from backend.llm.client import MockLLMClient
         intent = MockLLMClient()._detect_intent(prompt)
         m = results.get("metrics", {}) or {}
@@ -640,13 +758,15 @@ async def chat_experiment_api(
                 break
 
         fallback_data = {
-            "explanation": f"The AI explanation service is temporarily unavailable. Based on verified experiment evidence for '{experiment.get('dataset_name')}', target column '{experiment.get('target_column')}' was evaluated using '{results.get('best_pipeline', {}).get('model_name', 'model')}'. {metric_str}",
+            "explanation": f"The AI Assistant is temporarily unavailable. Based on verified experiment evidence for '{experiment.get('dataset_name')}', target column '{experiment.get('target_column')}' was evaluated using '{results.get('best_pipeline', {}).get('model_name', 'model')}'. {metric_str}",
             "evidence_used": evidence,
-            "llm_provider": os.getenv("LLM_PROVIDER", "mock").lower(),
+            "llm_provider": provider,
             "llm_model": os.getenv("OPENROUTER_MODEL", "google/gemini-2.0-flash-001"),
             "question_intent": intent,
             "mode": "evidence_grounded",
-            "warnings": [f"LLM service endpoint fallback active: {str(e)}"]
+            "is_fallback": True,
+            "validation_status": "FALLBACK",
+            "warnings": ["LLM service endpoint unavailable. Grounded fallback active."]
         }
 
         DatabaseService.save_chat(experiment_id=id, chat_id=chat_id, prompt=prompt, response=fallback_data)
